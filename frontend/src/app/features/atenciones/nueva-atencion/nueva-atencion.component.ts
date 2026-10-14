@@ -10,6 +10,7 @@ import { AtencionesService } from '../../../core/services/atenciones.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { Paciente, PacientesService } from '../../../core/services/pacientes.service';
 import { UsuariosService } from '../../../core/services/usuarios.service';
+import { dniONombre } from '../../../shared/formularios/validacion';
 import { MiniCalendarioComponent } from '../../../shared/componentes/mini-calendario/mini-calendario.component';
 import { SelectorHorarioComponent } from '../../../shared/componentes/selector-horario/selector-horario.component';
 import { campoInvalido, mensajeDeError } from '../../../shared/formularios/validacion';
@@ -50,7 +51,7 @@ export class NuevaAtencionComponent implements OnInit {
   protected readonly errorBusqueda = signal<string | null>(null);
 
   protected readonly formularioBusqueda = new FormGroup({
-    dni: new FormControl('', { nonNullable: true, validators: [Validators.pattern(/^\d{8}$/)] }),
+    termino: new FormControl('', { nonNullable: true, validators: [dniONombre()] }),
   });
 
   protected readonly formulario = new FormGroup({
@@ -149,26 +150,27 @@ export class NuevaAtencionComponent implements OnInit {
   protected cerrarBuscador(): void {
     this.buscadorAbierto.set(false);
     this.resultados.set([]);
-    this.formularioBusqueda.reset({ dni: '' });
+    this.formularioBusqueda.reset({ termino: '' });
   }
 
-  protected buscarPorDni(): void {
+  /** Busca por DNI completo o por nombre y apellidos. */
+  protected buscarPaciente(): void {
     this.formularioBusqueda.markAllAsTouched();
-    const dni = this.formularioBusqueda.controls.dni.value.trim();
-    if (this.formularioBusqueda.invalid || dni === '') {
-      this.errorBusqueda.set('Escribe un DNI de 8 dígitos');
+    const termino = this.formularioBusqueda.controls.termino.value.trim();
+    if (this.formularioBusqueda.invalid || termino === '') {
+      this.errorBusqueda.set('Escribe un DNI de 8 dígitos o un nombre de al menos 3 letras');
       return;
     }
 
     this.buscando.set(true);
     this.errorBusqueda.set(null);
 
-    this.pacientesService.listar(dni).subscribe({
+    this.pacientesService.listar(termino).subscribe({
       next: (pacientes) => {
         this.buscando.set(false);
         this.resultados.set(pacientes);
         if (pacientes.length === 0) {
-          this.errorBusqueda.set('No existe un paciente con ese DNI');
+          this.errorBusqueda.set('No se encontraron pacientes con ese dato');
         }
       },
       error: (error: unknown) => {

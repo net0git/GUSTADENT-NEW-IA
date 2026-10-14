@@ -21,17 +21,16 @@
     }
 
     @if (buscadorAbierto()) {
-      <form class="buscador-dni" [formGroup]="formularioBusqueda" (ngSubmit)="buscarPorDni()" novalidate>
+      <form class="buscador-dni" [formGroup]="formularioBusqueda" (ngSubmit)="buscarPaciente()" novalidate>
         <div class="input-group">
           <span class="input-group-text"><i class="bi bi-person-vcard"></i></span>
           <input
             class="form-control"
             type="search"
-            inputmode="numeric"
-            maxlength="8"
-            placeholder="Ingrese el DNI del paciente"
-            aria-label="DNI del paciente"
-            formControlName="dni"
+            maxlength="60"
+            placeholder="DNI o nombre del paciente"
+            aria-label="Buscar paciente por DNI o nombre"
+            formControlName="termino"
           />
           <button class="btn btn-outline-primary" type="submit" [disabled]="buscando()">
             @if (buscando()) {
@@ -48,8 +47,8 @@
           }
         </div>
 
-        @if (mostrarCampoInvalido(formularioBusqueda.controls.dni)) {
-          <div class="invalid-feedback d-block">El DNI debe tener 8 dígitos</div>
+        @if (mostrarCampoInvalido(formularioBusqueda.controls.termino)) {
+          <div class="invalid-feedback d-block">{{ mensajeCampo(formularioBusqueda.controls.termino) }}</div>
         }
         @if (errorBusqueda()) {
           <div class="alerta-busqueda">{{ errorBusqueda() }}</div>

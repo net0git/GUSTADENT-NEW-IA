@@ -1,8 +1,26 @@
-import { AbstractControl } from '@angular/forms';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+
+const DNI_PATTERN = /^\d{8}$/;
+/** Nombres y apellidos con tildes y ñ. */
+const NOMBRE_PATTERN = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{3,60}$/;
+
+/** Se puede buscar por DNI completo o por nombre y apellidos. */
+export function dniONombre(): ValidatorFn {
+  return (control: AbstractControl) => {
+    const texto = (control.value ?? '').toString().trim();
+
+    if (DNI_PATTERN.test(texto) || NOMBRE_PATTERN.test(texto)) {
+      return null;
+    }
+
+    return { dniONombre: true } satisfies ValidationErrors;
+  };
+}
 
 export function mensajeDeError(control: AbstractControl): string {
   const errores = control.errors ?? {};
   if (errores['required']) return 'Este campo es obligatorio';
+  if (errores['dniONombre']) return 'Escribe un DNI de 8 dígitos o un nombre de al menos 3 letras';
   if (errores['excedeTotal']) return errores['excedeTotal'].mensaje;
   if (errores['min']) return `No puede ser menor que ${errores['min'].min}`;
   if (errores['maxlength']) return `No puede tener más de ${errores['maxlength'].requiredLength} caracteres`;
