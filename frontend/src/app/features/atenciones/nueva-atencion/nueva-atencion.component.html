@@ -126,6 +126,7 @@
       <div class="cita-horarios">
         <label class="form-label">Horario</label>
         <app-selector-horario
+          [compacto]="true"
           [horaSeleccionada]="formulario.controls.hora.value"
           (horarioElegido)="elegirHorarioCita($event)"
         />

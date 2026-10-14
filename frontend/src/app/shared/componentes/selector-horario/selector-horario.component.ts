@@ -24,6 +24,8 @@ function aTexto(horas: number, minutos: number): string {
 export class SelectorHorarioComponent {
   /** Hora seleccionada en formato HH:mm. */
   readonly horaSeleccionada = input<string | null>(null);
+  /** Botones mas chicos, para pantallas donde el horario comparte espacio. */
+  readonly compacto = input(false);
   readonly horarioElegido = output<string>();
 
   protected readonly seleccion = signal<string | null>(null);

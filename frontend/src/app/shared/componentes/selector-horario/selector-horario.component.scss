@@ -52,3 +52,27 @@ $color-borde: #e2e8f0;
     color: #fff;
   }
 }
+
+/* Version compacta: misma funcion, menos alto y menos ancho por boton. */
+.selector-compacto {
+  .franja {
+    margin-bottom: 0.3rem;
+    font-size: 0.78rem;
+
+    .rango {
+      font-size: 0.7rem;
+    }
+  }
+
+  .horarios {
+    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+    gap: 0.25rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .horario {
+    padding: 0.28rem 0.2rem;
+    border-radius: 6px;
+    font-size: 0.72rem;
+  }
+}
