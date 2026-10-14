@@ -1,0 +1,123 @@
+<section class="tarjeta">
+  @if (cargando()) {
+    <div class="estado-carga">
+      <div class="spinner-border spinner-border-sm" role="status"></div>
+      <span>Cargando formulario...</span>
+    </div>
+  } @else {
+    <form [formGroup]="formulario" (ngSubmit)="guardar()" novalidate>
+      <h2 class="formulario-titulo">Datos personales</h2>
+      <div class="fila">
+        <div class="campo campo-amplio">
+          <label for="nombreCompleto" class="form-label">Nombre completo</label>
+          <input id="nombreCompleto" class="form-control" formControlName="nombreCompleto"
+            [class.is-invalid]="mostrarCampoInvalido(formulario.controls.nombreCompleto)" />
+          @if (mostrarCampoInvalido(formulario.controls.nombreCompleto)) {
+            <div class="invalid-feedback">{{ mensajeCampo(formulario.controls.nombreCompleto) }}</div>
+          }
+        </div>
+        <div class="campo">
+          <label for="dni" class="form-label">DNI</label>
+          <input id="dni" class="form-control" inputmode="numeric" maxlength="8" formControlName="dni"
+            [class.is-invalid]="mostrarCampoInvalido(formulario.controls.dni)" />
+          @if (mostrarCampoInvalido(formulario.controls.dni)) {
+            <div class="invalid-feedback">{{ mensajeCampo(formulario.controls.dni) }}</div>
+          }
+        </div>
+      </div>
+
+      <div class="fila">
+        <div class="campo">
+          <label for="especialidad" class="form-label">Especialidad</label>
+          <input id="especialidad" class="form-control" formControlName="especialidad"
+            [class.is-invalid]="mostrarCampoInvalido(formulario.controls.especialidad)" />
+          @if (mostrarCampoInvalido(formulario.controls.especialidad)) {
+            <div class="invalid-feedback">{{ mensajeCampo(formulario.controls.especialidad) }}</div>
+          }
+        </div>
+        <div class="campo">
+          <label for="telefono" class="form-label">Teléfono</label>
+          <input id="telefono" class="form-control" formControlName="telefono"
+            [class.is-invalid]="mostrarCampoInvalido(formulario.controls.telefono)" />
+          @if (mostrarCampoInvalido(formulario.controls.telefono)) {
+            <div class="invalid-feedback">{{ mensajeCampo(formulario.controls.telefono) }}</div>
+          }
+        </div>
+      </div>
+
+      <h2 class="formulario-titulo">Acceso y perfil</h2>
+      <div class="fila">
+        <div class="campo">
+          <label for="username" class="form-label">Usuario</label>
+          <input id="username" class="form-control" autocomplete="off" formControlName="username"
+            [class.is-invalid]="mostrarCampoInvalido(formulario.controls.username)" />
+          @if (mostrarCampoInvalido(formulario.controls.username)) {
+            <div class="invalid-feedback">{{ mensajeCampo(formulario.controls.username) }}</div>
+          }
+        </div>
+        <div class="campo">
+          <label for="perfil" class="form-label">Perfil</label>
+          <select id="perfil" class="form-select" formControlName="perfil">
+            @for (perfil of perfiles; track perfil) {
+              <option [value]="perfil">{{ etiquetasPerfil[perfil] }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      @if (!esEdicion) {
+        <div class="fila">
+          <div class="campo">
+            <label for="password" class="form-label">Contraseña</label>
+            <input id="password" type="password" class="form-control" autocomplete="new-password"
+              formControlName="password"
+              [class.is-invalid]="mostrarCampoInvalido(formulario.controls.password)" />
+            @if (mostrarCampoInvalido(formulario.controls.password)) {
+              <div class="invalid-feedback">{{ mensajeCampo(formulario.controls.password) }}</div>
+            }
+          </div>
+          <div class="campo">
+            <label for="confirmarPassword" class="form-label">Confirmar contraseña</label>
+            <input id="confirmarPassword" type="password" class="form-control" autocomplete="new-password"
+              formControlName="confirmarPassword"
+              [class.is-invalid]="
+                mostrarCampoInvalido(formulario.controls.confirmarPassword) ||
+                (formulario.hasError('noCoinciden') && formulario.controls.confirmarPassword.touched)
+              " />
+            @if (formulario.hasError('noCoinciden') && formulario.controls.confirmarPassword.touched) {
+              <div class="invalid-feedback">Las contraseñas no coinciden</div>
+            } @else if (mostrarCampoInvalido(formulario.controls.confirmarPassword)) {
+              <div class="invalid-feedback">Este campo es obligatorio</div>
+            }
+          </div>
+        </div>
+      }
+
+      <h2 class="formulario-titulo">Sucursales que atiende</h2>
+      @if (sinSucursales()) {
+        <p class="aviso">No hay sucursales activas. Regístralas antes de asignarlas.</p>
+      } @else {
+        <div class="sucursales">
+          @for (sucursal of sucursales(); track sucursal.id) {
+            <label class="sucursal">
+              <input class="form-check-input" type="checkbox"
+                [checked]="estaSeleccionada(sucursal.id)"
+                (change)="alternarSucursal(sucursal.id, $any($event.target).checked)" />
+              <span>{{ sucursal.nombre }}</span>
+            </label>
+          }
+        </div>
+      }
+
+      <div class="acciones">
+        <a class="btn btn-outline-secondary" routerLink="/usuarios">Cancelar</a>
+        <button type="submit" class="btn btn-primary" [disabled]="guardando()">
+          @if (guardando()) {
+            <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+          }
+          {{ esEdicion ? 'Guardar cambios' : 'Crear usuario' }}
+        </button>
+      </div>
+    </form>
+  }
+</section>

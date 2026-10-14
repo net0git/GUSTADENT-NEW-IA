@@ -1,0 +1,189 @@
+<section class="tarjeta">
+  <header class="cabecera">
+    <h1 class="titulo">Nueva cita</h1>
+    <p class="subtitulo">Registro de procedimiento y control clínico</p>
+  </header>
+
+  <section class="bloque-paciente">
+    <h2 class="seccion-titulo mt-0">Paciente</h2>
+
+    @if (nombrePaciente(); as nombre) {
+      <div class="paciente">
+        <span class="avatar">{{ iniciales(nombre) }}</span>
+        <div class="datos">
+          <strong>{{ nombre }}</strong>
+          <small> Paciente de esta atención</small>
+        </div>
+        <button type="button" class="btn btn-sm btn-outline-secondary ms-auto" (click)="abrirBuscador()">
+          <i class="bi bi-arrow-repeat me-1"></i> Cambiar
+        </button>
+      </div>
+    }
+
+    @if (buscadorAbierto()) {
+      <form class="buscador-dni" [formGroup]="formularioBusqueda" (ngSubmit)="buscarPorDni()" novalidate>
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-person-vcard"></i></span>
+          <input
+            class="form-control"
+            type="search"
+            inputmode="numeric"
+            maxlength="8"
+            placeholder="Ingrese el DNI del paciente"
+            aria-label="DNI del paciente"
+            formControlName="dni"
+          />
+          <button class="btn btn-outline-primary" type="submit" [disabled]="buscando()">
+            @if (buscando()) {
+              <span class="spinner-border spinner-border-sm" role="status"></span>
+            } @else {
+              Buscar
+            }
+          </button>
+          @if (nombrePaciente()) {
+            <button class="btn btn-outline-secondary" type="button" title="Cerrar búsqueda" (click)="cerrarBuscador()">
+              <i class="bi bi-x-lg"></i>
+              <span class="visually-hidden">Cerrar</span>
+            </button>
+          }
+        </div>
+
+        @if (mostrarCampoInvalido(formularioBusqueda.controls.dni)) {
+          <div class="invalid-feedback d-block">El DNI debe tener 8 dígitos</div>
+        }
+        @if (errorBusqueda()) {
+          <div class="alerta-busqueda">{{ errorBusqueda() }}</div>
+        }
+
+        @if (resultados().length > 0) {
+          <ul class="resultados">
+            @for (paciente of resultados(); track paciente.id) {
+              <li>
+                <button type="button" class="resultado" (click)="elegirPaciente(paciente)">
+                  <span class="resultado-avatar">{{ iniciales(paciente.nombreCompleto) }}</span>
+                  <span class="resultado-datos">
+                    <strong>{{ paciente.nombreCompleto }}</strong>
+                    <small>DNI {{ paciente.dni }}</small>
+                  </span>
+                  <i class="bi bi-chevron-right"></i>
+                </button>
+              </li>
+            }
+          </ul>
+        }
+      </form>
+
+      <p class="sin-paciente">
+        ¿El paciente aún no está registrado?
+        <a routerLink="/pacientes/nuevo">Regístralo aquí</a>.
+      </p>
+    }
+  </section>
+
+  <form [formGroup]="formulario" (ngSubmit)="crear()" novalidate>
+    <h2 class="seccion-titulo">Datos de la atención</h2>
+    <div class="fila">
+      <div class="campo">
+        <label for="idSucursal" class="form-label">Sucursal</label>
+        <select id="idSucursal" class="form-select" formControlName="idSucursal">
+          <option [ngValue]="null">Seleccione una sucursal</option>
+          @for (sucursal of sucursales(); track sucursal.id) {
+            <option [ngValue]="sucursal.id">{{ sucursal.nombre }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="campo">
+        <label for="idUsuario" class="form-label">Odontólogo responsable</label>
+        <select id="idUsuario" class="form-select" formControlName="idUsuario">
+          <option [ngValue]="null">Seleccione un profesional</option>
+          @for (odontologo of odontologos(); track odontologo.id) {
+            <option [ngValue]="odontologo.id">
+              {{ odontologo.nombreCompleto }}
+              @if (odontologo.especialidad) {
+                ({{ odontologo.especialidad }})
+              }
+            </option>
+          }
+        </select>
+        @if (odontologos().length === 0) {
+          <div class="invalid-feedback d-block">
+            No hay odontólogos activos registrados.
+          </div>
+        }
+      </div>
+
+      <div class="campo campo-corto">
+        <label for="fecha" class="form-label">Fecha</label>
+        <input id="fecha" type="date" class="form-control" formControlName="fecha" />
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Horario de la cita</label>
+      <app-selector-horario
+        [horaSeleccionada]="formulario.controls.hora.value"
+        (horarioElegido)="elegirHorarioCita($event)"
+      />
+      @if (mostrarCampoInvalido(formulario.controls.hora)) {
+        <div class="text-danger small mt-1">Selecciona un horario para la cita</div>
+      }
+    </div>
+
+    <details class="selector-calendario">
+      <summary class="selector-resumen">
+        <i class="bi bi-calendar3"></i> Elegir la fecha en el calendario
+      </summary>
+      <div class="selector-cuerpo">
+        <app-mini-calendario
+          [fechaSeleccionada]="formulario.controls.fecha.value"
+          (cambioFecha)="elegirFechaDelCalendario($event)"
+        />
+      </div>
+    </details>
+
+    <div class="mb-3">
+      <label for="descripcion" class="form-label">Descripción del procedimiento</label>
+      <textarea
+        id="descripcion"
+        class="form-control"
+        rows="3"
+        formControlName="descripcion"
+        placeholder="Escriba aquí los detalles del tratamiento..."
+      ></textarea>
+    </div>
+
+    <h2 class="seccion-titulo">Costos</h2>
+    <div class="fila">
+      <div class="campo">
+        <label for="costo" class="form-label">Costo del tratamiento (S/)</label>
+        <input id="costo" type="number" min="0" step="0.01" class="form-control" formControlName="costo" />
+      </div>
+      <div class="campo">
+        <label for="descuento" class="form-label">Descuento aplicado (S/)</label>
+        <input
+          id="descuento"
+          type="number"
+          min="0"
+          step="0.01"
+          class="form-control"
+          formControlName="descuento"
+        />
+      </div>
+    </div>
+
+    <div class="acciones">
+      <a class="btn btn-outline-secondary" routerLink="/atenciones">Cancelar</a>
+      <button
+        type="submit"
+        class="btn btn-success"
+        [disabled]="guardando() || formulario.controls.idPaciente.value === null"
+      >
+        @if (guardando()) {
+          <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+        }
+        <i class="bi bi-check-lg me-1"></i> Crear atención
+      </button>
+    </div>
+  </form>
+</section>

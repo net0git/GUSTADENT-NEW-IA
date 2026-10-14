@@ -1,0 +1,98 @@
+<section class="cabecera-seccion">
+  <div class="filtros">
+    <select class="form-select form-select-sm" aria-label="Filtrar por perfil"
+      [value]="filtroPerfil()" (change)="cambiarFiltroPerfil($any($event.target).value)">
+      <option value="">Todos los perfiles</option>
+      @for (perfil of perfiles; track perfil) {
+        <option [value]="perfil">{{ etiquetasPerfil[perfil] }}</option>
+      }
+    </select>
+
+    <select class="form-select form-select-sm" aria-label="Filtrar por estado"
+      [value]="filtroEstado()" (change)="cambiarFiltroEstado($any($event.target).value)">
+      <option value="">Todos los estados</option>
+      <option value="true">Activos</option>
+      <option value="false">Inactivos</option>
+    </select>
+  </div>
+
+  <a class="btn btn-primary btn-sm" routerLink="/usuarios/nuevo">
+    <i class="bi bi-plus-lg me-1"></i> Nuevo usuario
+  </a>
+</section>
+
+@if (cargando()) {
+  <div class="estado-vacio">
+    <div class="spinner-border spinner-border-sm" role="status"></div>
+    <span>Cargando usuarios...</span>
+  </div>
+} @else if (usuarios().length === 0) {
+  <div class="estado-vacio">
+    <i class="bi bi-people fs-2"></i>
+    <p class="mb-0">No hay usuarios que coincidan con los filtros.</p>
+  </div>
+} @else {
+  <div class="tabla-contenedor">
+    <table class="table table-hover align-middle mb-0">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Usuario</th>
+          <th>DNI</th>
+          <th>Perfil</th>
+          <th>Sucursales</th>
+          <th>Estado</th>
+          <th class="text-end">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (usuario of usuarios(); track usuario.id) {
+          <tr>
+            <td>
+              <strong>{{ usuario.nombreCompleto }}</strong>
+              @if (usuario.especialidad) {
+                <div class="texto-suave">{{ usuario.especialidad }}</div>
+              }
+            </td>
+            <td>{{ usuario.username }}</td>
+            <td>{{ usuario.dni }}</td>
+            <td><span class="badge text-bg-light">{{ etiquetasPerfil[usuario.perfil] }}</span></td>
+            <td class="texto-suave">{{ sucursalesDe(usuario) }}</td>
+            <td>
+              @if (usuario.activo) {
+                <span class="badge text-bg-success">Activo</span>
+              } @else {
+                <span class="badge text-bg-secondary">Inactivo</span>
+              }
+            </td>
+            <td class="text-end acciones-celda">
+              <a class="btn btn-outline-primary btn-sm me-1" [routerLink]="['/usuarios', usuario.id, 'editar']">
+                <i class="bi bi-pencil"></i> Editar
+              </a>
+              <button
+                type="button"
+                class="btn btn-outline-warning btn-sm me-1"
+                title="Generar una contraseña temporal"
+                [disabled]="enProceso() === usuario.id"
+                (click)="pedirResetearPassword(usuario)"
+              >
+                <i class="bi bi-key"></i>
+              </button>
+              <button
+                type="button"
+                class="btn btn-sm"
+                [class.btn-outline-danger]="usuario.activo"
+                [class.btn-outline-success]="!usuario.activo"
+                [disabled]="esUsuarioActual(usuario) || enProceso() === usuario.id"
+                [title]="esUsuarioActual(usuario) ? 'No puedes desactivar tu propia cuenta' : ''"
+                (click)="alternarEstado(usuario)"
+              >
+                {{ usuario.activo ? 'Desactivar' : 'Activar' }}
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

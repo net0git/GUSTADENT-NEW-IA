@@ -1,0 +1,82 @@
+<section class="cabecera-seccion">
+  <form class="buscador" [formGroup]="formularioBusqueda" (ngSubmit)="buscar()" novalidate>
+    <div class="input-group">
+      <span class="input-group-text"><i class="bi bi-search"></i></span>
+      <input
+        class="form-control"
+        type="search"
+        placeholder="Buscar por DNI, nombres o apellidos"
+        aria-label="Buscar paciente"
+        formControlName="termino"
+      />
+      <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+      @if (hayBusqueda()) {
+        <button class="btn btn-outline-secondary" type="button" title="Limpiar búsqueda" (click)="limpiarBusqueda()">
+          <i class="bi bi-x-lg"></i>
+          <span class="visually-hidden">Limpiar</span>
+        </button>
+      }
+    </div>
+  </form>
+
+  <a class="btn btn-primary btn-sm" routerLink="/pacientes/nuevo">
+    <i class="bi bi-person-plus me-1"></i> Nuevo paciente
+  </a>
+</section>
+
+@if (cargando()) {
+  <div class="estado-vacio">
+    <div class="spinner-border spinner-border-sm" role="status"></div>
+    <span>Cargando pacientes...</span>
+  </div>
+} @else if (pacientes().length === 0) {
+  <div class="estado-vacio">
+    <i class="bi bi-person-x fs-2"></i>
+    @if (hayBusqueda()) {
+      <p class="mb-0">No se encontraron pacientes con "{{ formularioBusqueda.controls.termino.value }}".</p>
+    } @else {
+      <p class="mb-0">Aún no hay pacientes registrados.</p>
+    }
+  </div>
+} @else {
+  <div class="tabla-contenedor">
+    <table class="table table-hover align-middle mb-0">
+      <thead>
+        <tr>
+          <th>Paciente</th>
+          <th>DNI</th>
+          <th>Edad</th>
+          <th>Sexo</th>
+          <th>Teléfono</th>
+          <th>Procedencia</th>
+          <th class="text-end acciones-celda">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (paciente of pacientes(); track paciente.id) {
+          <tr>
+            <td>
+              <div class="celda-paciente">
+                <span class="avatar">{{ iniciales(paciente) }}</span>
+                <span class="datos-paciente">
+                  <strong>{{ paciente.nombreCompleto }}</strong>
+                  <small>{{ paciente.nombres }} {{ paciente.apPaterno }}{{ paciente.apMaterno ? ' ' + paciente.apMaterno : '' }}</small>
+                </span>
+              </div>
+            </td>
+            <td>{{ paciente.dni }}</td>
+            <td class="texto-suave">{{ edad(paciente) }}</td>
+            <td>{{ paciente.sexo === 'M' ? 'Masculino' : paciente.sexo === 'F' ? 'Femenino' : '-' }}</td>
+            <td class="texto-suave">{{ paciente.telefono || '-' }}</td>
+            <td class="texto-suave">{{ paciente.procedencia || '-' }}</td>
+            <td class="text-end acciones-celda">
+              <a class="btn btn-outline-primary btn-sm" [routerLink]="['/pacientes', paciente.id, 'editar']">
+                <i class="bi bi-pencil"></i> Editar
+              </a>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

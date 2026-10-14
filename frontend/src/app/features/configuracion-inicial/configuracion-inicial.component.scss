@@ -1,0 +1,156 @@
+$color-primario: #2563eb;
+$color-texto: #1e293b;
+$color-texto-suave: #64748b;
+$color-borde: #e2e8f0;
+$color-fondo: #f1f5f9;
+
+.configuracion-pagina {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background: $color-fondo;
+}
+
+.configuracion-tarjeta {
+  width: 100%;
+  max-width: 760px;
+  background: #fff;
+  border: 1px solid $color-borde;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+  padding: 2rem;
+}
+
+.configuracion-cabecera {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.marca {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  color: $color-texto;
+}
+
+.marca-icono {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: $color-primario;
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+.titulo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: $color-texto;
+  margin: 0;
+}
+
+.subtitulo {
+  color: $color-texto-suave;
+  margin: 0.25rem 0 0;
+}
+
+.estado-carga {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 2rem 0;
+  color: $color-texto-suave;
+}
+
+.pasos {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem;
+}
+
+.paso {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: $color-texto-suave;
+  font-weight: 500;
+}
+
+.paso-numero {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid $color-borde;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.paso-activo {
+  color: $color-primario;
+
+  .paso-numero {
+    border-color: $color-primario;
+    background: $color-primario;
+    color: #fff;
+  }
+}
+
+.paso-completado {
+  color: #16a34a;
+
+  .paso-numero {
+    border-color: #16a34a;
+    background: #16a34a;
+    color: #fff;
+  }
+}
+
+.token-bloque {
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  background: $color-fondo;
+  border-radius: 8px;
+}
+
+.formulario-titulo {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: $color-texto;
+  margin: 0 0 1rem;
+}
+
+.fila {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.campo {
+  flex: 1 1 200px;
+  min-width: 0;
+}
+
+.campo-amplio {
+  flex: 2 1 320px;
+}
+
+.acciones {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}

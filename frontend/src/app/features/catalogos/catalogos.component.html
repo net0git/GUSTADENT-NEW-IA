@@ -1,0 +1,147 @@
+<section class="pestanas" role="tablist">
+  <button
+    type="button"
+    class="pestana"
+    role="tab"
+    [attr.aria-selected]="pestana() === 'sucursales'"
+    [class.pestana-activa]="pestana() === 'sucursales'"
+    (click)="cambiarPestana('sucursales')"
+  >
+    <i class="bi bi-building"></i> Sucursales
+  </button>
+  <button
+    type="button"
+    class="pestana"
+    role="tab"
+    [attr.aria-selected]="pestana() === 'procedencias'"
+    [class.pestana-activa]="pestana() === 'procedencias'"
+    (click)="cambiarPestana('procedencias')"
+  >
+    <i class="bi bi-geo-alt"></i> Procedencias
+  </button>
+</section>
+
+<div class="contenido-catalogo">
+  <div class="panel-formulario">
+    <h2 class="panel-titulo">
+      {{ editandoId() === null ? 'Nuevo registro' : 'Editar registro' }}
+    </h2>
+
+    <form id="formulario-catalogo" [formGroup]="formulario" (ngSubmit)="guardar()" novalidate>
+      <div class="mb-3">
+        <label for="nombreCatalogo" class="form-label">Nombre</label>
+        <input
+          id="nombreCatalogo"
+          class="form-control"
+          formControlName="nombre"
+          [class.is-invalid]="mostrarCampoInvalido(formulario.controls.nombre)"
+        />
+        @if (mostrarCampoInvalido(formulario.controls.nombre)) {
+          <div class="invalid-feedback">{{ mensajeCampo(formulario.controls.nombre) }}</div>
+        }
+      </div>
+
+      @if (pestana() === 'sucursales') {
+        <div class="mb-3">
+          <label for="direccionCatalogo" class="form-label">Dirección</label>
+          <input
+            id="direccionCatalogo"
+            class="form-control"
+            formControlName="direccion"
+            [class.is-invalid]="mostrarCampoInvalido(formulario.controls.direccion)"
+          />
+          @if (mostrarCampoInvalido(formulario.controls.direccion)) {
+            <div class="invalid-feedback">{{ mensajeCampo(formulario.controls.direccion) }}</div>
+          }
+        </div>
+      }
+
+      <div class="acciones">
+        @if (editandoId() !== null) {
+          <button type="button" class="btn btn-outline-secondary" (click)="cancelarEdicion()" [disabled]="guardando()">
+            Cancelar
+          </button>
+        }
+        <button type="submit" class="btn btn-primary" [disabled]="guardando()">
+          @if (guardando()) {
+            <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+          }
+          {{ editandoId() === null ? 'Agregar' : 'Guardar cambios' }}
+        </button>
+      </div>
+    </form>
+
+    <p class="nota">
+      Los registros no se eliminan. Desactívalos para que dejen de aparecer en los formularios,
+      sin afectar la información que ya los referencia.
+    </p>
+  </div>
+
+  <div class="panel-lista">
+    <div class="lista-cabecera">
+      <h2 class="panel-titulo mb-0">
+        {{ pestana() === 'sucursales' ? 'Sucursales' : 'Procedencias' }}
+        <span class="contador">{{ itemsVisibles().length }}</span>
+      </h2>
+      <select
+        class="form-select form-select-sm"
+        aria-label="Filtrar por estado"
+        [value]="filtroEstado()"
+        (change)="filtroEstado.set($any($event.target).value)"
+      >
+        <option value="">Todos</option>
+        <option value="true">Activos</option>
+        <option value="false">Inactivos</option>
+      </select>
+    </div>
+
+    @if (cargando()) {
+      <div class="estado-vacio">
+        <div class="spinner-border spinner-border-sm" role="status"></div>
+        <span>Cargando...</span>
+      </div>
+    } @else if (itemsVisibles().length === 0) {
+      <div class="estado-vacio">
+        <i class="bi bi-inbox fs-2"></i>
+        <p class="mb-0">No hay registros para mostrar.</p>
+      </div>
+    } @else {
+      <ul class="lista">
+        @for (item of itemsVisibles(); track item.id) {
+          <li class="item" [class.item-inactivo]="!item.activo">
+            <div class="item-datos">
+              <strong>{{ item.nombre }}</strong>
+              @if (pestana() === 'sucursales' && direccionDe(item)) {
+                <small>{{ direccionDe(item) }}</small>
+              }
+              <span class="badge" [class.text-bg-success]="item.activo" [class.text-bg-secondary]="!item.activo">
+                {{ item.activo ? 'Activo' : 'Inactivo' }}
+              </span>
+            </div>
+            <div class="item-acciones">
+              <button
+                type="button"
+                class="btn btn-sm btn-outline-primary"
+                [disabled]="accionPendiente(item.id)"
+                (click)="editar(item)"
+              >
+                <i class="bi bi-pencil"></i>
+                <span class="visually-hidden">Editar</span>
+              </button>
+              <button
+                type="button"
+                class="btn btn-sm"
+                [class.btn-outline-danger]="item.activo"
+                [class.btn-outline-success]="!item.activo"
+                [disabled]="accionPendiente(item.id)"
+                (click)="alternarEstado(item)"
+              >
+                {{ item.activo ? 'Desactivar' : 'Activar' }}
+              </button>
+            </div>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+</div>

@@ -1,0 +1,22 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Etiquetas de los formularios dentro de las ventanas de SweetAlert2.
+   SweetAlert2 se dibuja fuera de los componentes, asi que el estilo va aqui. */
+.swal2-popup .swal2-label {
+  display: block;
+  margin: 0.9rem 0 0.3rem;
+  text-align: left;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.swal2-popup .swal2-label:first-child {
+  margin-top: 0;
+}
+
+.swal2-popup input.swal2-input,
+.swal2-popup textarea.swal2-textarea {
+  width: 100%;
+  margin: 0;
+}

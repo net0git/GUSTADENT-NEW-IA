@@ -1,0 +1,118 @@
+<div class="app-contenedor">
+  <aside class="barra-lateral" [class.abierta]="menuAbierto()">
+    <div class="marca">
+      <span class="marca-icono"><i class="bi bi-grid-3x3-gap-fill"></i></span>
+      <span class="marca-nombre">GUSTADENT</span>
+    </div>
+
+    <section class="acciones-rapidas">
+      <p class="seccion-titulo">Acciones rápidas</p>
+      <button type="button" class="accion" (click)="nuevaCita()" title="Registrar una atención">
+        <span class="accion-icono"><i class="bi bi-plus-lg"></i></span>
+        <span>
+          <strong>Nueva cita</strong>
+          <small>Registrar atención</small>
+        </span>
+      </button>
+      <button type="button" class="accion" (click)="abrirBusquedaPaciente()">
+        <span class="accion-icono"><i class="bi bi-search"></i></span>
+        <span>
+          <strong>Búsqueda</strong>
+          <small>Encontrar paciente</small>
+        </span>
+      </button>
+    </section>
+
+    @if (esAdministrador) {
+      <nav class="navegacion">
+        <p class="seccion-titulo">Administración</p>
+        <a class="enlace" routerLink="/atenciones" routerLinkActive="enlace-activo">
+          <i class="bi bi-clipboard2-pulse"></i>
+          <span>Atenciones</span>
+        </a>
+        <a class="enlace" routerLink="/pacientes" routerLinkActive="enlace-activo">
+          <i class="bi bi-people"></i>
+          <span>Pacientes</span>
+        </a>
+        <a class="enlace" routerLink="/catalogos" routerLinkActive="enlace-activo">
+          <i class="bi bi-building"></i>
+          <span>Catálogos</span>
+        </a>
+        <a class="enlace" routerLink="/usuarios" routerLinkActive="enlace-activo">
+          <i class="bi bi-person-badge"></i>
+          <span>Usuarios</span>
+        </a>
+        <a class="enlace" routerLink="/reportes" routerLinkActive="enlace-activo">
+          <i class="bi bi-graph-up-arrow"></i>
+          <span>Reportes</span>
+        </a>
+      </nav>
+    }
+
+    <app-mini-calendario [fechaSeleccionada]="fechaActiva()" (cambioFecha)="filtrarPorFecha($event)" />
+
+    <footer class="usuario-pie">
+      <a class="usuario-enlace" routerLink="/mi-cuenta" title="Cambiar contraseña">
+        <span class="avatar">{{ iniciales }}</span>
+        <span class="usuario-datos">
+          <strong>{{ usuario?.nombreCompleto }}</strong>
+          <small>{{ etiquetaPerfil }}</small>
+        </span>
+        <i class="bi bi-key usuario-llave"></i>
+      </a>
+    </footer>
+  </aside>
+
+  @if (menuAbierto()) {
+    <div class="fondo-menu" (click)="alternarMenu()"></div>
+  }
+
+  <div class="area-principal">
+    <header class="cabecera">
+      <button type="button" class="btn-menu" aria-label="Abrir menú" (click)="alternarMenu()">
+        <i class="bi bi-list"></i>
+      </button>
+
+      <div class="cabecera-titulo">
+        <h1 class="titulo">{{ titulo() }}</h1>
+        @if (subtitulo()) {
+          <p class="subtitulo">{{ subtitulo() }}</p>
+        }
+      </div>
+
+      <div class="cabecera-acciones">
+        <button
+          type="button"
+          class="btn-icono"
+          title="Buscar paciente"
+          aria-label="Buscar paciente"
+          (click)="abrirBusquedaPaciente()"
+        >
+          <i class="bi bi-search"></i>
+        </button>
+        <button
+          type="button"
+          class="btn-icono btn-salir"
+          title="Cerrar sesión"
+          aria-label="Cerrar sesión"
+          [disabled]="cerrando()"
+          (click)="cerrarSesion()"
+        >
+          <i class="bi bi-box-arrow-right"></i>
+        </button>
+      </div>
+    </header>
+
+    <main class="contenido">
+      <router-outlet />
+    </main>
+  </div>
+
+  @if (busquedaPacienteAbierta()) {
+    <app-busqueda-pacientes-modal
+      [abierto]="busquedaPacienteAbierta()"
+      (cerrado)="cerrarBusquedaPaciente()"
+      (nuevaCitaSolicitada)="crearCita($event)"
+    />
+  }
+</div>

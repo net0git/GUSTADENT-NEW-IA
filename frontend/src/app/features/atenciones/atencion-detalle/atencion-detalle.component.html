@@ -1,0 +1,272 @@
+@if (cargando()) {
+  <div class="estado-vacio">
+    <div class="spinner-border spinner-border-sm" role="status"></div>
+    <span>Cargando atención...</span>
+  </div>
+} @else {
+  @let actual = atencion();
+  @if (actual) {
+  <div class="acciones-volver">
+    <a class="volver" routerLink="/atenciones">
+      <i class="bi bi-arrow-left"></i> Volver al control
+    </a>
+
+    <div class="acciones-principales">
+      @if (editable()) {
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          [disabled]="procesando()"
+          (click)="guardarBorrador()"
+        >
+          <i class="bi bi-file-earmark me-1"></i> Guardar Borrador
+        </button>
+        <button
+          type="button"
+          class="btn btn-success"
+          [disabled]="procesando()"
+          (click)="finalizar()"
+        >
+          <i class="bi bi-check-circle me-1"></i> Finalizar Atención
+        </button>
+      }
+      @if (puedeAnular()) {
+        <button
+          type="button"
+          class="btn btn-outline-danger"
+          [disabled]="procesando()"
+          (click)="anular()"
+        >
+          <i class="bi bi-x-octagon me-1"></i> Anular
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="rejilla">
+    <div class="columna-principal">
+      <section class="tarjeta paciente">
+        <span class="avatar">{{ iniciales(actual.nombreCompletoPaciente) }}</span>
+        <div class="paciente-datos">
+          <strong>{{ actual.nombreCompletoPaciente }}</strong>
+          <small>
+            <i class="bi bi-card-text"></i> DNI: {{ actual.dniPaciente }}
+            <span class="separador">·</span>
+            <i class="bi bi-geo-alt"></i> {{ actual.nombreSucursal }}
+          </small>
+        </div>
+        <span class="badge-estado" [class]="'estado-' + actual.estado">
+          {{ etiquetasEstadoAtencion[actual.estado] }}
+        </span>
+        <div class="atencion-meta">
+          <span>ATENCIÓN N° {{ actual.id }}</span>
+          <strong>{{ fechaLegible(actual.fecha) }}</strong>
+          <span class="hora-cita">
+            <i class="bi bi-clock"></i> {{ horaCitaLegible(actual.hora) }}
+          </span>
+          <small>Dr. {{ actual.nombreMedico }}</small>
+        </div>
+      </section>
+
+      <section class="tarjeta">
+        <h2 class="tarjeta-titulo">
+          <i class="bi bi-file-medical"></i> Detalles de la Clínica
+        </h2>
+
+        <form [formGroup]="formularioAtencion" (ngSubmit)="guardarBorrador()" novalidate>
+          <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripción del procedimiento</label>
+            <textarea
+              id="descripcion"
+              class="form-control"
+              rows="4"
+              formControlName="descripcion"
+              placeholder="Escriba aquí los detalles del tratamiento realizado..."
+              [class.is-invalid]="mostrarCampoInvalido(formularioAtencion.controls.descripcion)"
+            ></textarea>
+            @if (mostrarCampoInvalido(formularioAtencion.controls.descripcion)) {
+              <div class="invalid-feedback">
+                {{ mensajeCampo(formularioAtencion.controls.descripcion) }}
+              </div>
+            }
+          </div>
+
+          <div class="fila">
+            <div class="campo">
+              <label for="costo" class="form-label">Costo del tratamiento (S/)</label>
+              <input
+                id="costo"
+                type="number"
+                min="0"
+                step="0.01"
+                class="form-control"
+                formControlName="costo"
+                [class.is-invalid]="mostrarCampoInvalido(formularioAtencion.controls.costo)"
+              />
+              @if (mostrarCampoInvalido(formularioAtencion.controls.costo)) {
+                <div class="invalid-feedback">{{ mensajeCampo(formularioAtencion.controls.costo) }}</div>
+              }
+              @if (errorTotal()) {
+                <div class="invalid-feedback d-block">{{ errorTotal() }}</div>
+              }
+            </div>
+            <div class="campo">
+              <label for="descuento" class="form-label">Descuento aplicado (S/)</label>
+              <input
+                id="descuento"
+                type="number"
+                min="0"
+                step="0.01"
+                class="form-control"
+                formControlName="descuento"
+                [class.is-invalid]="mostrarCampoInvalido(formularioAtencion.controls.descuento)"
+              />
+              @if (mostrarCampoInvalido(formularioAtencion.controls.descuento)) {
+                <div class="invalid-feedback">{{ mensajeCampo(formularioAtencion.controls.descuento) }}</div>
+              }
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <section class="tarjeta">
+        <div class="tarjeta-cabecera">
+          <h2 class="tarjeta-titulo mb-0">Cronograma de Sesiones</h2>
+          @if (editable()) {
+            <button type="button" class="btn btn-sm btn-light" (click)="nuevaSesion()">
+              <i class="bi bi-plus-lg me-1"></i> Nueva Sesión
+            </button>
+          }
+        </div>
+
+        @if (actual.sesiones.length === 0) {
+          <p class="estado-vacio-texto">Aún no hay sesiones registradas.</p>
+        } @else {
+          <ul class="sesiones">
+            @for (sesion of actual.sesiones; track sesion.id) {
+              <li class="sesion" [class.sesion-inactiva]="sesion.estado === 'cancelado'">
+                <div class="sesion-cabecera">
+                  <span class="sesion-icono"><i class="bi bi-calendar-check"></i></span>
+                  <div class="sesion-info">
+                    <strong>
+                      Sesión {{ sesion.numero }}:
+                      {{ sesion.tipo === 'primera' ? 'Apertura de Historia' : 'Control' }}
+                    </strong>
+                    <span class="badge-estado" [class]="claseEstadoSesion(sesion.estado)">
+                      {{ etiquetasEstadoSesion[sesion.estado] }}
+                    </span>
+                  </div>
+                  <div class="sesion-fecha">
+                    <strong>{{ fechaLegible(sesion.fechaHora) }}</strong>
+                    <small>{{ horaLegible(sesion.fechaHora) }}</small>
+                  </div>
+                </div>
+
+                <p class="sesion-observaciones">
+                  {{ sesion.observaciones || 'No se han registrado observaciones para esta sesión.' }}
+                </p>
+
+                <div class="sesion-pie">
+                  <span class="sesion-monto">
+                    MONTO: <strong>{{ monto(sesion.monto) }}</strong>
+                    @if (sesion.nombreUsuario) {
+                      <small>· {{ sesion.nombreUsuario }}</small>
+                    }
+                  </span>
+
+                  <span class="sesion-acciones">
+                    @if (editable() && sesion.estado !== 'atendido') {
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-primary"
+                        [disabled]="procesando()"
+                        (click)="atender(sesion)"
+                      >
+                        <i class="bi bi-check-lg me-1"></i> Atender
+                      </button>
+                    }
+                    @if (editable() && sesion.estado === 'programado') {
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-outline-secondary"
+                        [disabled]="procesando()"
+                        (click)="cancelarSesion(sesion)"
+                      >
+                        Cancelar
+                      </button>
+                    }
+                    @if (editable()) {
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-outline-primary"
+                        [disabled]="procesando()"
+                        (click)="editarSesion(sesion)"
+                      >
+                        <i class="bi bi-pencil"></i>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-outline-danger"
+                        [disabled]="procesando()"
+                        title="Eliminar sesión"
+                        (click)="eliminarSesion(sesion)"
+                      >
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    }
+                  </span>
+                </div>
+              </li>
+            }
+          </ul>
+        }
+      </section>
+    </div>
+
+    <aside class="columna-lateral">
+      <section class="tarjeta resumen">
+        <h2 class="resumen-titulo">RESUMEN DE CUENTA</h2>
+
+        <div class="resumen-linea">
+          <span>Monto total</span>
+          <strong>{{ monto(actual.resumen.costo) }}</strong>
+        </div>
+        <div class="resumen-linea">
+          <span>Descuento</span>
+          <strong class="negativo">- {{ monto(actual.resumen.descuento) }}</strong>
+        </div>
+        <div class="resumen-linea resumen-pagado">
+          <span>Pagado</span>
+          <strong>{{ monto(actual.resumen.pagado) }}</strong>
+        </div>
+
+        <div class="deuda">
+          <div class="deuda-cabecera">
+            <span>ESTADO DE DEUDA</span>
+            <span class="badge-estado" [class]="actual.resumen.deuda > 0 ? 'estado-pendiente' : 'estado-pagado'">
+              {{ actual.resumen.deuda > 0 ? 'PENDIENTE' : 'PAGADO' }}
+            </span>
+          </div>
+          <strong class="deuda-monto">{{ monto(actual.resumen.deuda) }}</strong>
+        </div>
+
+        <a class="btn btn-sm btn-outline-secondary w-100 mt-3" routerLink="/atenciones">
+          Volver al control
+        </a>
+      </section>
+    </aside>
+  </div>
+  }
+}
+
+@if (formSesionVisible()) {
+  <app-sesion-modal
+    [visible]="formSesionVisible()"
+    [sesion]="sesionSeleccionada()"
+    [fechaSugerida]="fechaSesionSugerida()"
+    [numSesiones]="atencion()?.sesiones?.length ?? 0"
+    [limite]="limiteDeSesion(sesionSeleccionada())"
+    (cerrado)="cerrarFormSesion()"
+    (guardado)="guardarSesion($event)"
+  />
+}

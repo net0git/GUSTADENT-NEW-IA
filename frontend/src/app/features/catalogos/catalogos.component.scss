@@ -1,0 +1,155 @@
+$color-primario: #2563eb;
+$color-texto: #1e293b;
+$color-texto-suave: #64748b;
+$color-borde: #e2e8f0;
+
+.pestanas {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid $color-borde;
+}
+
+.pestana {
+  border: 0;
+  background: transparent;
+  padding: 0.5rem 0.9rem;
+  color: $color-texto-suave;
+  font-size: 0.9rem;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+
+  &:hover {
+    color: $color-texto;
+  }
+}
+
+.pestana-activa {
+  color: $color-primario;
+  border-bottom-color: $color-primario;
+  font-weight: 600;
+}
+
+.contenido-catalogo {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.panel-formulario,
+.panel-lista {
+  background: #fff;
+  border: 1px solid $color-borde;
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.panel-titulo {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: $color-texto;
+  margin: 0 0 1rem;
+}
+
+.lista-cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+
+  select {
+    width: auto;
+  }
+}
+
+.contador {
+  display: inline-block;
+  padding: 0.05rem 0.45rem;
+  border-radius: 999px;
+  background: #e2e8f0;
+  color: $color-texto-suave;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid $color-borde;
+
+  &:last-child {
+    border-bottom: 0;
+  }
+}
+
+.item-inactivo {
+  opacity: 0.65;
+}
+
+.item-datos {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  min-width: 0;
+
+  strong {
+    color: $color-texto;
+  }
+
+  small {
+    color: $color-texto-suave;
+  }
+}
+
+.item-acciones {
+  display: flex;
+  gap: 0.35rem;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.nota {
+  margin: 1.25rem 0 0;
+  font-size: 0.78rem;
+  color: $color-texto-suave;
+  border-top: 1px solid $color-borde;
+  padding-top: 0.75rem;
+}
+
+.estado-vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 2.5rem 1rem;
+  color: $color-texto-suave;
+}
+
+@media (max-width: 992px) {
+  .contenido-catalogo {
+    grid-template-columns: 1fr;
+  }
+
+  .item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

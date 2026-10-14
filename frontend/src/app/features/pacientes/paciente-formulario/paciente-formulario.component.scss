@@ -1,0 +1,55 @@
+$color-texto: #1e293b;
+$color-texto-suave: #64748b;
+$color-borde: #e2e8f0;
+
+.tarjeta {
+  max-width: 820px;
+  background: #fff;
+  border: 1px solid $color-borde;
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.estado-carga {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 2rem 0;
+  color: $color-texto-suave;
+}
+
+.formulario-titulo {
+  font-size: 1rem;
+  font-weight: 600;
+  color: $color-texto;
+  margin: 1.25rem 0 0.75rem;
+}
+
+.fila {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.campo {
+  flex: 1 1 200px;
+  min-width: 0;
+}
+
+.campo-amplio {
+  flex: 2 1 320px;
+}
+
+.aviso {
+  color: $color-texto-suave;
+  margin: 0;
+}
+
+.acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}

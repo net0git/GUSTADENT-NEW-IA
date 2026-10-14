@@ -1,0 +1,472 @@
+<section class="pestanas" role="tablist">
+  <button
+    type="button"
+    class="pestana"
+    role="tab"
+    [attr.aria-selected]="pestana() === 'atenciones'"
+    [class.pestana-activa]="pestana() === 'atenciones'"
+    (click)="cambiarPestana('atenciones')"
+  >
+    <i class="bi bi-clipboard2-check"></i> Atenciones
+  </button>
+  <button
+    type="button"
+    class="pestana"
+    role="tab"
+    [attr.aria-selected]="pestana() === 'ingresos'"
+    [class.pestana-activa]="pestana() === 'ingresos'"
+    (click)="cambiarPestana('ingresos')"
+  >
+    <i class="bi bi-cash-stack"></i> Ingresos por sesión
+  </button>
+  <button
+    type="button"
+    class="pestana"
+    role="tab"
+    [attr.aria-selected]="pestana() === 'productividad'"
+    [class.pestana-activa]="pestana() === 'productividad'"
+    (click)="cambiarPestana('productividad')"
+  >
+    <i class="bi bi-person-badge"></i> Productividad
+  </button>
+  <button
+    type="button"
+    class="pestana"
+    role="tab"
+    [attr.aria-selected]="pestana() === 'cuentas'"
+    [class.pestana-activa]="pestana() === 'cuentas'"
+    (click)="cambiarPestana('cuentas')"
+  >
+    <i class="bi bi-receipt"></i> Cuentas por cobrar
+  </button>
+  <button
+    type="button"
+    class="pestana"
+    role="tab"
+    [attr.aria-selected]="pestana() === 'mensual'"
+    [class.pestana-activa]="pestana() === 'mensual'"
+    (click)="cambiarPestana('mensual')"
+  >
+    <i class="bi bi-graph-up"></i> Atenciones por mes
+  </button>
+</section>
+
+<form class="filtros" [formGroup]="formulario" (ngSubmit)="filtrar()" novalidate>
+  @if (usaRango()) {
+    <input
+      type="date"
+      class="form-control form-control-sm"
+      aria-label="Desde"
+      formControlName="desde"
+    />
+    <input
+      type="date"
+      class="form-control form-control-sm"
+      aria-label="Hasta"
+      formControlName="hasta"
+    />
+    <div class="rapidos">
+      <button type="button" class="btn-chip" [class.chip-activo]="rangoRapido() === 'mes'" (click)="aplicarRango('mes')">
+        Este mes
+      </button>
+      <button type="button" class="btn-chip" [class.chip-activo]="rangoRapido() === 'ultimos30'" (click)="aplicarRango('ultimos30')">
+        Últimos 30 días
+      </button>
+      <button type="button" class="btn-chip" [class.chip-activo]="rangoRapido() === 'mesAnterior'" (click)="aplicarRango('mesAnterior')">
+        Mes anterior
+      </button>
+      <button type="button" class="btn-chip" [class.chip-activo]="rangoRapido() === 'anio'" (click)="aplicarRango('anio')">
+        Este año
+      </button>
+    </div>
+  }
+
+  <select
+    class="form-select form-select-sm"
+    aria-label="Filtrar por sucursal"
+    formControlName="sucursal"
+  >
+    <option [ngValue]="null">Todas las sucursales</option>
+    @for (sucursal of sucursales(); track sucursal.id) {
+      <option [ngValue]="sucursal.id">{{ sucursal.nombre }}</option>
+    }
+  </select>
+
+  @if (usaRango()) {
+    <select class="form-select form-select-sm" aria-label="Filtrar por odontólogo" formControlName="medico">
+      <option [ngValue]="null">Todos los médicos</option>
+      @for (medico of odontologos(); track medico.id) {
+        <option [ngValue]="medico.id">{{ medico.nombreCompleto }}</option>
+      }
+    </select>
+  }
+
+  <button type="submit" class="btn btn-sm btn-primary">Aplicar</button>
+</form>
+
+<p class="contexto">
+  <i class="bi bi-funnel"></i> {{ textoResumen() }}
+  @if (!usaRango()) {
+    <span class="nota"> · State actual, no depende del rango de fechas</span>
+  }
+</p>
+
+@if (cargando()) {
+  <div class="estado-vacio">
+    <div class="spinner-border spinner-border-sm" role="status"></div>
+    <span>Calculando el reporte...</span>
+  </div>
+}
+
+@if (!cargando() && pestana() === 'atenciones' && resumen(); as datos) {
+  @if (datos.total === 0) {
+    <div class="estado-vacio">
+      <i class="bi bi-inbox fs-2"></i>
+      <p class="mb-0">No hay atenciones en el periodo seleccionado.</p>
+    </div>
+  } @else {
+    <div class="tarjetas-cifra">
+      <article class="cifarjeta">
+        <span class="cifra-etiqueta">Atenciones creadas</span>
+        <strong class="cifra-valor">{{ datos.total }}</strong>
+        <span class="cifra-pie">{{ datos.pacientes }} pacientes</span>
+      </article>
+      <article class="cifarjeta">
+        <span class="cifra-etiqueta">Finalizadas</span>
+        <strong class="cifra-valor verde">{{ datos.finalizado }}</strong>
+        <span class="cifra-pie">{{ datos.activo }} activas · {{ datos.borrador }} en borrador</span>
+      </article>
+      <article class="cifarjeta">
+        <span class="cifra-etiqueta">Anuladas</span>
+        <strong class="cifra-valor gris">{{ datos.anulado }}</strong>
+        <span class="cifra-pie">No suman a los totales</span>
+      </article>
+      <article class="cifarjeta">
+        <span class="cifra-etiqueta">Costo total</span>
+        <strong class="cifra-valor">{{ monto(datos.costo) }}</strong>
+        <span class="cifra-pie">Descuento {{ monto(datos.descuento) }}</span>
+      </article>
+      <article class="cifarjeta">
+        <span class="cifra-etiqueta">Pagado</span>
+        <strong class="cifra-valor verde">{{ monto(datos.pagado) }}</strong>
+        <span class="cifra-pie">Suma de los montos de las sesiones</span>
+      </article>
+      <article class="cifarjeta">
+        <span class="cifra-etiqueta">Deuda generada</span>
+        <strong class="cifra-valor rojo">{{ monto(datos.deuda) }}</strong>
+        <span class="cifra-pie">Costo menos descuento y pagado</span>
+      </article>
+    </div>
+  }
+}
+
+@if (!cargando() && pestana() === 'ingresos' && ingresos(); as reporte) {
+  <div class="tarjetas-cifra">
+    <article class="cifarjeta">
+      <span class="cifra-etiqueta">Sesiones del periodo</span>
+      <strong class="cifra-valor">{{ reporte.resumen.total }}</strong>
+      <span class="cifra-pie">{{ reporte.resumen.citas }} citas · {{ reporte.resumen.continuaciones }} sesiones</span>
+    </article>
+    <article class="cifarjeta">
+      <span class="cifra-etiqueta">Atendidas</span>
+      <strong class="cifra-valor verde">{{ reporte.resumen.atendidas }}</strong>
+      <span class="cifra-pie">{{ reporte.resumen.programadas }} programadas</span>
+    </article>
+    <article class="cifarjeta">
+      <span class="cifra-etiqueta">Canceladas</span>
+      <strong class="cifra-valor gris">{{ reporte.resumen.canceladas }}</strong>
+      <span class="cifra-pie">No suman al monto</span>
+    </article>
+    <article class="cifarjeta">
+      <span class="cifra-etiqueta">Ingreso atendido</span>
+      <strong class="cifra-valor verde">{{ monto(reporte.resumen.montoAtendido) }}</strong>
+      <span class="cifra-pie">Por sesiones ya atendidas</span>
+    </article>
+    <article class="cifarjeta">
+      <span class="cifra-etiqueta">Por atender</span>
+      <strong class="cifra-valor">{{ monto(reporte.resumen.montoProgramado) }}</strong>
+      <span class="cifra-pie">Monto de las programadas</span>
+    </article>
+  </div>
+
+  <section class="panel">
+    <h2 class="panel-titulo">{{ tituloGraficaSesiones() }}</h2>
+    @if (maximoDia() === 0) {
+      <p class="sin-datos">No hubo sesiones en el periodo.</p>
+    } @else {
+      <div class="grafica">
+        @for (punto of puntosSesiones(); track punto.etiqueta + punto.total) {
+          <div
+            class="grafica-columna"
+            [title]="punto.etiqueta + ': ' + punto.total + ' sesiones, ' + punto.atendidas + ' atendidas'"
+          >
+            <div class="grafica-barras">
+              @if (punto.total > 0) {
+                <span
+                  class="barra atendida"
+                  [style.height.%]="porcentaje(punto.atendidas, maximoDia())"
+                ></span>
+                <span
+                  class="barra pendiente"
+                  [style.height.%]="porcentaje(punto.total - punto.atendidas, maximoDia())"
+                ></span>
+              }
+            </div>
+            <small>{{ rotulo($index) }}</small>
+          </div>
+        }
+      </div>
+      <p class="leyenda">
+        <span><i class="punto verde"></i> Atendidas</span>
+        <span><i class="punto azul"></i> Programadas</span>
+        @if (puntosSesiones().length < reporte.porDia.length) {
+          <span class="texto-suave">Rango largo: cada barra es una semana</span>
+        }
+      </p>
+    }
+  </section>
+}
+
+@if (!cargando() && pestana() === 'productividad') {
+  @if (productividad().length === 0) {
+    <div class="estado-vacio">
+      <i class="bi bi-inbox fs-2"></i>
+      <p class="mb-0">No hay sesiones registradas en el periodo.</p>
+    </div>
+  } @else {
+    <div class="tabla-contenedor">
+      <table class="table table-hover align-middle mb-0">
+        <thead>
+          <tr>
+            <th>Odontólogo</th>
+            <th class="text-end">Sesiones</th>
+            <th class="text-end">Atendidas</th>
+            <th class="text-end">Programadas</th>
+            <th class="text-end">Canceladas</th>
+            <th class="text-end">Pacientes</th>
+            <th class="text-end">Monto atendido</th>
+            <th class="text-end">Promedio</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (fila of productividad(); track fila.idUsuario) {
+            <tr>
+              <td>
+                <div class="celda-paciente">
+                  <span class="avatar">{{ iniciales(fila.nombre) }}</span>
+                  <span class="datos-paciente">
+                    <strong>{{ fila.nombre }}</strong>
+                    <small>{{ etiquetaPerfil(fila.perfil) }}</small>
+                  </span>
+                </div>
+              </td>
+              <td class="text-end">{{ fila.total }}</td>
+              <td class="text-end">{{ fila.atendidas }}</td>
+              <td class="text-end">{{ fila.programadas }}</td>
+              <td class="text-end">{{ fila.canceladas }}</td>
+              <td class="text-end">{{ fila.pacientes }}</td>
+              <td class="text-end monto-verde">{{ monto(fila.montoAtendido) }}</td>
+              <td class="text-end texto-suave">{{ monto(fila.promedio) }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+}
+
+@if (!cargando() && pestana() === 'cuentas' && cuentas(); as reporte) {
+  <div class="tarjetas-cifra">
+    <article class="cifarjeta">
+      <span class="cifra-etiqueta">Pacientes con deuda</span>
+      <strong class="cifra-valor">{{ reporte.totalPacientes }}</strong>
+      <span class="cifra-pie">Atenciones vigentes con saldo</span>
+    </article>
+    <article class="cifarjeta">
+      <span class="cifra-etiqueta">Deuda total</span>
+      <strong class="cifra-valor rojo">{{ monto(reporte.totalDeuda) }}</strong>
+      <span class="cifra-pie">Pendiente de cobro</span>
+    </article>
+  </div>
+
+  @if (reporte.filas.length === 0) {
+    <div class="estado-vacio">
+      <i class="bi bi-emoji-smile fs-2"></i>
+      <p class="mb-0">No hay deudas pendientes.</p>
+    </div>
+  } @else {
+    @if (reporte.truncado) {
+      <p class="aviso">
+        <i class="bi bi-info-circle"></i>
+        Se muestran los 100 pacientes con mayor deuda; el total cubre a todos.
+      </p>
+    }
+
+    <div class="tabla-contenedor">
+      <table class="table table-hover align-middle mb-0">
+        <thead>
+          <tr>
+            <th>Paciente</th>
+            <th class="text-end">Atenciones</th>
+            <th class="text-end">Total</th>
+            <th class="text-end">Pagado</th>
+            <th class="text-end">Deuda</th>
+            <th class="text-end acciones-celda">Detalle</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (fila of reporte.filas; track fila.idPaciente) {
+            <tr>
+              <td>
+                <div class="celda-paciente">
+                  <span class="avatar">{{ iniciales(fila.nombreCompleto) }}</span>
+                  <span class="datos-paciente">
+                    <strong>{{ fila.nombreCompleto }}</strong>
+                    <small>DNI {{ fila.dni }} @if (fila.telefono) { · {{ fila.telefono }} }</small>
+                  </span>
+                </div>
+              </td>
+              <td class="text-end">{{ fila.atenciones }}</td>
+              <td class="text-end">{{ monto(fila.total) }}</td>
+              <td class="text-end monto-verde">{{ monto(fila.pagado) }}</td>
+              <td class="text-end monto-rojo">{{ monto(fila.deuda) }}</td>
+              <td class="text-end acciones-celda">
+                <button type="button" class="btn btn-sm btn-outline-primary" (click)="alternarDetalle(fila.idPaciente)">
+                  <i class="bi" [class.bi-chevron-down]="pacienteAbierto() !== fila.idPaciente" [class.bi-chevron-up]="pacienteAbierto() === fila.idPaciente"></i>
+                  Ver
+                </button>
+              </td>
+            </tr>
+            @if (pacienteAbierto() === fila.idPaciente) {
+              <tr class="fila-detalle">
+                <td colspan="6">
+                  <table class="table table-sm mb-0">
+                    <thead>
+                      <tr>
+                        <th>Atención</th>
+                        <th>Fecha</th>
+                        <th>Sucursal</th>
+                        <th>Médico</th>
+                        <th>Estado</th>
+                        <th class="text-end">Total</th>
+                        <th class="text-end">Pagado</th>
+                        <th class="text-end">Deuda</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (atencion of fila.detalle; track atencion.id) {
+                        <tr>
+                          <td>
+                            <a [routerLink]="['/atenciones', atencion.id]">N° {{ atencion.id }}</a>
+                          </td>
+                          <td class="texto-suave">{{ atencion.fecha }}</td>
+                          <td class="texto-suave">{{ atencion.sucursal }}</td>
+                          <td class="texto-suave">{{ atencion.medico }}</td>
+                          <td>
+                            <span class="badge-estado" [class]="'estado-' + atencion.estado">
+                              {{ etiquetasEstado[atencion.estado] }}
+                            </span>
+                          </td>
+                          <td class="text-end">{{ monto(atencion.total) }}</td>
+                          <td class="text-end monto-verde">{{ monto(atencion.pagado) }}</td>
+                          <td class="text-end monto-rojo">{{ monto(atencion.deuda) }}</td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+}
+
+@if (!cargando() && pestana() === 'mensual') {
+  @if (mensual().length === 0) {
+    <div class="estado-vacio">
+      <i class="bi bi-inbox fs-2"></i>
+      <p class="mb-0">No hay meses en el periodo seleccionado.</p>
+    </div>
+  } @else {
+    <div class="tarjetas-cifra">
+      <article class="cifarjeta">
+        <span class="cifra-etiqueta">Atenciones del periodo</span>
+        <strong class="cifra-valor">{{ totalMensualAtenciones() }}</strong>
+        <span class="cifra-pie">{{ mensual().length }} meses</span>
+      </article>
+      <article class="cifarjeta">
+        <span class="cifra-etiqueta">Sesiones programadas</span>
+        <strong class="cifra-valor">{{ totalMensualSesiones() }}</strong>
+        <span class="cifra-pie">En el rango elegido</span>
+      </article>
+    </div>
+
+    <section class="panel">
+      <h2 class="panel-titulo">Sesiones por mes</h2>
+      @if (maximoMes() === 0) {
+        <p class="sin-datos">No hubo sesiones en el periodo.</p>
+      } @else {
+        <div class="grafica">
+          @for (punto of puntosMes(); track punto.etiqueta) {
+            <div
+              class="grafica-columna"
+              [title]="punto.etiqueta + ': ' + punto.total + ' sesiones, ' + punto.atendidas + ' atendidas'"
+            >
+              <div class="grafica-barras">
+                @if (punto.total > 0) {
+                  <span
+                    class="barra atendida"
+                    [style.height.%]="porcentaje(punto.atendidas, maximoMes())"
+                  ></span>
+                  <span
+                    class="barra pendiente"
+                    [style.height.%]="porcentaje(punto.total - punto.atendidas, maximoMes())"
+                  ></span>
+                }
+              </div>
+              <small>{{ rotulo($index) }}</small>
+            </div>
+          }
+        </div>
+        <p class="leyenda">
+          <span><i class="punto verde"></i> Atendidas</span>
+          <span><i class="punto azul"></i> Programadas</span>
+        </p>
+      }
+    </section>
+
+    <div class="tabla-contenedor">
+      <table class="table table-hover align-middle mb-0">
+        <thead>
+          <tr>
+            <th>Mes</th>
+            <th class="text-end">Atenciones</th>
+            <th class="text-end">Finalizadas</th>
+            <th class="text-end">Sesiones</th>
+            <th class="text-end">Atendidas</th>
+            <th class="text-end">Costo</th>
+            <th class="text-end">Ingresado</th>
+            <th class="text-end">Deuda</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (fila of mensual(); track fila.anio + '-' + fila.mes) {
+            <tr>
+              <td class="mes">{{ etiquetaMes(fila) }}</td>
+              <td class="text-end">{{ fila.atenciones }}</td>
+              <td class="text-end">{{ fila.finalizadas }}</td>
+              <td class="text-end">{{ fila.sesiones }}</td>
+              <td class="text-end">{{ fila.atendidas }}</td>
+              <td class="text-end">{{ monto(fila.costo) }}</td>
+              <td class="text-end monto-verde">{{ monto(fila.monto) }}</td>
+              <td class="text-end monto-rojo">{{ monto(fila.deuda) }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+}

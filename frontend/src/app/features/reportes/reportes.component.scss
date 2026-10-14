@@ -1,0 +1,400 @@
+$color-primario: #2563eb;
+$color-verde: #16a34a;
+$color-rojo: #b91c1c;
+$color-texto: #1e293b;
+$color-texto-suave: #64748b;
+$color-borde: #e2e8f0;
+
+.pestanas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid $color-borde;
+}
+
+.pestana {
+  border: 0;
+  background: transparent;
+  padding: 0.5rem 0.9rem;
+  color: $color-texto-suave;
+  font-size: 0.9rem;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  white-space: nowrap;
+
+  &:hover {
+    color: $color-texto;
+  }
+}
+
+.pestana-activa {
+  color: $color-primario;
+  border-bottom-color: $color-primario;
+  font-weight: 600;
+}
+
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+
+  input,
+  select {
+    width: auto;
+    min-width: 150px;
+  }
+}
+
+.rapidos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.btn-chip {
+  border: 1px solid $color-borde;
+  background: #fff;
+  color: $color-texto-suave;
+  border-radius: 999px;
+  padding: 0.2rem 0.7rem;
+  font-size: 0.78rem;
+
+  &:hover {
+    color: $color-texto;
+    border-color: #cbd5e1;
+  }
+}
+
+.chip-activo {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1d4ed8;
+  font-weight: 600;
+}
+
+.contexto {
+  margin: 0.75rem 0 1rem;
+  font-size: 0.85rem;
+  color: $color-texto-suave;
+
+  .nota {
+    font-style: italic;
+  }
+}
+
+.tarjetas-cifra {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.cifarjeta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  background: #fff;
+  border: 1px solid $color-borde;
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+}
+
+.cifra-etiqueta {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: $color-texto-suave;
+}
+
+.cifra-valor {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: $color-texto;
+  line-height: 1.2;
+
+  &.verde {
+    color: $color-verde;
+  }
+
+  &.rojo {
+    color: $color-rojo;
+  }
+
+  &.gris {
+    color: $color-texto-suave;
+  }
+}
+
+.cifra-pie {
+  font-size: 0.76rem;
+  color: $color-texto-suave;
+}
+
+.panel {
+  background: #fff;
+  border: 1px solid $color-borde;
+  border-radius: 12px;
+  padding: 1rem 1.1rem 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.panel-titulo {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: $color-texto;
+  margin: 0 0 0.75rem;
+}
+
+.sin-datos {
+  font-size: 0.85rem;
+  color: $color-texto-suave;
+  margin: 0.5rem 0 0.25rem;
+}
+
+/* Grafica de barras: cada columna apila lo atendido sobre lo programado. */
+
+.grafica {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 2px;
+  height: 170px;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+}
+
+.grafica-columna {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1 1 0;
+  max-width: 38px;
+  min-width: 12px;
+  height: 100%;
+
+  small {
+    font-size: 0.6rem;
+    color: $color-texto-suave;
+    margin-top: 0.2rem;
+    white-space: nowrap;
+  }
+}
+
+.grafica-barras {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+}
+
+.barra {
+  display: block;
+  width: 100%;
+  min-height: 2px;
+
+  &.atendida {
+    background: $color-verde;
+  }
+
+  &.pendiente {
+    background: #93c5fd;
+  }
+}
+
+.leyenda {
+  display: flex;
+  gap: 1rem;
+  margin: 0.5rem 0 0;
+  font-size: 0.76rem;
+  color: $color-texto-suave;
+}
+
+.punto {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 0.25rem;
+
+  &.verde {
+    background: $color-verde;
+  }
+
+  &.azul {
+    background: #93c5fd;
+  }
+}
+
+.tabla-contenedor {
+  background: #fff;
+  border: 1px solid $color-borde;
+  border-radius: 12px;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+
+  table {
+    min-width: 760px;
+  }
+
+  th {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: $color-texto-suave;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+  }
+}
+
+.fila-detalle {
+  background: #f8fafc;
+
+  td {
+    padding: 0.5rem 0.75rem;
+  }
+
+  table {
+    min-width: 640px;
+  }
+
+  th {
+    font-size: 0.7rem;
+  }
+
+  td.texto-suave {
+    white-space: nowrap;
+  }
+}
+
+.celda-paciente {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: $color-primario;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.datos-paciente {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+
+  strong {
+    color: $color-texto;
+    white-space: nowrap;
+  }
+
+  small {
+    color: $color-texto-suave;
+    font-size: 0.78rem;
+    white-space: nowrap;
+  }
+}
+
+.texto-suave {
+  font-size: 0.85rem;
+  color: $color-texto-suave;
+}
+
+.monto-verde {
+  color: $color-verde;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.monto-rojo {
+  color: $color-rojo;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.mes {
+  font-weight: 600;
+  color: $color-texto;
+  white-space: nowrap;
+}
+
+.acciones-celda {
+  white-space: nowrap;
+}
+
+.badge-estado {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: #e2e8f0;
+  color: $color-texto-suave;
+}
+
+.estado-borrador,
+.estado-programado {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.estado-activo,
+.estado-atendido,
+.estado-finalizado {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.estado-anulado,
+.estado-cancelado {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.aviso {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0 0 0.75rem;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid #bfdbfe;
+  border-radius: 10px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 0.82rem;
+}
+
+.estado-vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 2.5rem 1rem;
+  color: $color-texto-suave;
+}
+
+@media (max-width: 768px) {
+  .tarjetas-cifra {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+
+  .filtros input,
+  .filtros select {
+    width: 100%;
+  }
+}

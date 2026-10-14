@@ -1,0 +1,105 @@
+<section class="tarjeta">
+  @if (cargando()) {
+    <div class="estado-carga">
+      <div class="spinner-border spinner-border-sm" role="status"></div>
+      <span>Cargando formulario...</span>
+    </div>
+  } @else {
+    <form [formGroup]="formulario" (ngSubmit)="guardar()" novalidate>
+      <h2 class="formulario-titulo">Identificación</h2>
+      <div class="fila">
+        <div class="campo">
+          <label for="dni" class="form-label">DNI</label>
+          <input id="dni" class="form-control" inputmode="numeric" maxlength="8" formControlName="dni"
+            [class.is-invalid]="mostrarCampoInvalido(formulario.controls.dni)" />
+          @if (mostrarCampoInvalido(formulario.controls.dni)) {
+            <div class="invalid-feedback">El DNI debe tener 8 dígitos</div>
+          }
+        </div>
+
+        <div class="campo campo-amplio">
+          <label for="nombres" class="form-label">Nombres</label>
+          <input id="nombres" class="form-control" formControlName="nombres"
+            [class.is-invalid]="mostrarCampoInvalido(formulario.controls.nombres)" />
+          @if (mostrarCampoInvalido(formulario.controls.nombres)) {
+            <div class="invalid-feedback">{{ mensajeCampo(formulario.controls.nombres) }}</div>
+          }
+        </div>
+      </div>
+
+      <div class="fila">
+        <div class="campo">
+          <label for="apPaterno" class="form-label">Apellido paterno</label>
+          <input id="apPaterno" class="form-control" formControlName="apPaterno"
+            [class.is-invalid]="mostrarCampoInvalido(formulario.controls.apPaterno)" />
+          @if (mostrarCampoInvalido(formulario.controls.apPaterno)) {
+            <div class="invalid-feedback">{{ mensajeCampo(formulario.controls.apPaterno) }}</div>
+          }
+        </div>
+
+        <div class="campo">
+          <label for="apMaterno" class="form-label">Apellido materno</label>
+          <input id="apMaterno" class="form-control" formControlName="apMaterno"
+            [class.is-invalid]="mostrarCampoInvalido(formulario.controls.apMaterno)" />
+          @if (mostrarCampoInvalido(formulario.controls.apMaterno)) {
+            <div class="invalid-feedback">{{ mensajeCampo(formulario.controls.apMaterno) }}</div>
+          }
+        </div>
+      </div>
+
+      <h2 class="formulario-titulo">Datos personales</h2>
+      <div class="fila">
+        <div class="campo">
+          <label for="fechaNacimiento" class="form-label">Fecha de nacimiento</label>
+          <input id="fechaNacimiento" type="date" class="form-control" formControlName="fechaNacimiento"
+            [min]="'1900-01-01'" [max]="fechaMaxima" />
+        </div>
+
+        <div class="campo">
+          <label for="sexo" class="form-label">Sexo</label>
+          <select id="sexo" class="form-select" formControlName="sexo">
+            <option value="">Sin especificar</option>
+            <option value="M">Masculino</option>
+            <option value="F">Femenino</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label for="telefono" class="form-label">Teléfono</label>
+          <input id="telefono" class="form-control" formControlName="telefono"
+            [class.is-invalid]="mostrarCampoInvalido(formulario.controls.telefono)" />
+          @if (mostrarCampoInvalido(formulario.controls.telefono)) {
+            <div class="invalid-feedback">{{ mensajeCampo(formulario.controls.telefono) }}</div>
+          }
+        </div>
+      </div>
+
+      <h2 class="formulario-titulo">Procedencia</h2>
+      @if (procedencias().length === 0) {
+        <p class="aviso">
+          No hay procedencias activas. Puedes registrar al paciente igualmente y asignarla luego.
+        </p>
+      } @else {
+        <div class="campo">
+          <label for="idProcedencia" class="form-label">Procedencia</label>
+          <select id="idProcedencia" class="form-select" formControlName="idProcedencia">
+            <option [ngValue]="null">Sin especificar</option>
+            @for (procedencia of procedencias(); track procedencia.id) {
+              <option [ngValue]="procedencia.id">{{ procedencia.nombre }}</option>
+            }
+          </select>
+        </div>
+      }
+
+      <div class="acciones">
+        <a class="btn btn-outline-secondary" routerLink="/pacientes">Cancelar</a>
+        <button type="submit" class="btn btn-primary" [disabled]="guardando()">
+          @if (guardando()) {
+            <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+          }
+          {{ esEdicion ? 'Guardar cambios' : 'Registrar paciente' }}
+        </button>
+      </div>
+    </form>
+  }
+</section>

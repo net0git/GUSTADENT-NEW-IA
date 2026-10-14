@@ -1,0 +1,102 @@
+# Instrucciones generales para el desarrollo del proyecto web
+
+## 1. Tecnologías obligatorias
+- **Frontend:** Angular con componentes standalone y TypeScript.
+- **Backend:** Node.js con Express y TypeScript.
+- **Base de datos:** PostgreSQL.
+- **Estilos:** Bootstrap 5, Bootstrap Icons y CSS/SCSS nativo.
+- **Validaciones y notificaciones:** validar los datos tanto en el frontend como en el backend; utilizar SweetAlert2 para alertas y confirmaciones cuando corresponda.
+
+No incorpores tecnologías adicionales, librerías o frameworks sin justificar su necesidad y solicitar aprobación cuando impliquen un cambio relevante en la arquitectura.
+
+## 2. Arquitectura del proyecto
+Organiza el código para mantener una separación clara de responsabilidades.
+
+### Frontend Angular
+- Utiliza componentes standalone.
+- Separa páginas, componentes reutilizables, servicios, modelos, interfaces, guards e interceptors.
+- Mantén la lógica de negocio fuera de los componentes cuando corresponda.
+- Utiliza Angular Signals cuando sean apropiados para gestionar el estado local.
+- Centraliza las llamadas HTTP en servicios.
+- Implementa rutas y protección de páginas según los permisos del usuario.
+- Mantén una interfaz responsive, accesible y consistente.
+
+- El sistema debe permitir registro de pacientes y medicos
+
+### Backend Node.js
+- Utiliza TypeScript en modo estricto.
+- Aplica arquitectura hexagonal para el dominio.
+- Separa módulos, dominio, casos de uso, infraestructura y presentación.
+- Mantén las rutas, controladores, servicios de aplicación y repositorios con responsabilidades definidas.
+- Centraliza el manejo de errores y la validación de solicitudes.
+- Utiliza variables de entorno para la configuración.
+- No mezcles consultas SQL con controladores ni expongas detalles internos de la base de datos en las respuestas HTTP.
+
+## 3. Base de datos PostgreSQL
+- utiliza el archivo bd.txt
+- datos de conexión: user: "neto",
+    password: "12345",
+    host: "localhost",
+    port: 5432,
+    database: "GUSTADENT",
+
+## 4. Seguridad
+- Valida y normaliza los datos recibidos en el servidor.
+- Implementa autenticación y autorización de acuerdo con los requisitos del proyecto.
+- Protege las contraseñas mediante algoritmos seguros de hash.
+- No almacenes contraseñas en texto plano.
+- Protege los endpoints según los permisos requeridos.
+- No expongas credenciales, secretos, tokens ni información sensible en el código, logs o respuestas.
+- Aplica CORS, Helmet, límites de solicitudes y otras medidas de seguridad según el contexto.
+- Utiliza consultas SQL parametrizadas y evita construir sentencias concatenando entradas del usuario.
+
+## 5. Calidad del código
+- Evita duplicación de código y funciones excesivamente grandes.
+- Utiliza nombres descriptivos para variables, funciones, clases y archivos.
+- Define interfaces y tipos explícitos; evita `any` salvo que exista una justificación.
+- Mantén funciones con responsabilidades claras.
+- No introduzcas abstracciones innecesarias.
+- Respeta las convenciones de Angular, TypeScript, Node.js y PostgreSQL.
+- No dupliques funcionalidades que ya existan en el proyecto.
+
+## 6. Interfaz de usuario
+- Utiliza Bootstrap 5 y SCSS/CSS nativo.
+- No utilices Angular Material ni Tailwind CSS.
+- Mantén consistencia visual entre formularios, tablas, botones, diálogos y páginas.
+- Implementa estados de carga, mensajes de error, confirmaciones y estados vacíos.
+- Prioriza una interfaz profesional, sencilla, responsive y fácil de mantener.
+- utiliza el estilo de las imágenes que están en la carpeta plan, (img1, img2)
+
+## 7. Forma de trabajo
+Antes de implementar una funcionalidad:
+1. Examina la estructura actual del proyecto y los archivos relacionados.
+2. Identifica las funcionalidades existentes y las dependencias utilizadas.
+3. Determina qué componentes, servicios, endpoints y tablas deben intervenir.
+4. Explica brevemente el plan de implementación cuando el cambio sea relevante.
+5. Implementa la solución siguiendo las convenciones existentes.
+
+Después de implementar:
+1. Ejecuta las comprobaciones de TypeScript y compilación disponibles.
+2. Ejecuta las pruebas pertinentes si existen.
+3. Corrige los errores introducidos por los cambios.
+4. Resume los archivos modificados y las decisiones técnicas relevantes.
+5. Indica cualquier tarea pendiente o comprobación que no haya sido posible realizar.
+
+## 8. Restricciones importantes
+- No inventes requisitos funcionales.
+- No sobrescribas archivos ni reestructures el proyecto sin necesidad.
+- No elimines código funcional sin comprobar sus dependencias.
+- No cambies contratos de API existentes sin evaluar su impacto.
+- No afirmes que una funcionalidad funciona si no has realizado las comprobaciones pertinentes.
+- No instales dependencias innecesarias.
+- No ejecutes comandos destructivos ni operaciones irreversibles sin autorización.
+- Si falta información indispensable, pregunta antes de tomar decisiones que puedan afectar la arquitectura o los datos.
+
+## 9. Prioridad de implementación
+Prioriza, en este orden:
+1. Corrección funcional.
+2. Seguridad e integridad de datos.
+3. Mantenibilidad y claridad del código.
+4. Rendimiento.
+5. Experiencia de usuario.
+

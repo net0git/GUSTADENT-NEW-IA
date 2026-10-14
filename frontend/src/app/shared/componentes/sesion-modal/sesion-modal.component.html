@@ -1,0 +1,81 @@
+<div class="modal-fondo" (click)="pedirCierre()">
+  <div class="modal-caja" role="dialog" aria-modal="true" aria-labelledby="titulo-sesion" (click)="$event.stopPropagation()">
+    <header class="modal-cabecera">
+      <h2 class="modal-titulo" id="titulo-sesion">
+        <i class="bi" [class.bi-calendar-plus]="!esEdicion()" [class.bi-pencil]="esEdicion()"></i>
+        {{ titulo() }}
+      </h2>
+      <button type="button" class="cerrar" aria-label="Cerrar" [disabled]="guardando()" (click)="pedirCierre()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </header>
+
+    <form class="modal-cuerpo" [formGroup]="formulario" (ngSubmit)="enviar()" novalidate>
+      <div class="fila">
+        <div class="campo">
+          <label for="sesionFecha" class="form-label">Fecha</label>
+          <input
+            id="sesionFecha"
+            type="date"
+            class="form-control"
+            formControlName="fecha"
+            [class.is-invalid]="mostrarCampoInvalido(formulario.controls.fecha)"
+          />
+          @if (mostrarCampoInvalido(formulario.controls.fecha)) {
+            <div class="invalid-feedback">Selecciona la fecha de la sesión</div>
+          }
+        </div>
+
+        <div class="campo campo-corto">
+          <label for="sesionMonto" class="form-label">Monto (S/)</label>
+          <input
+            id="sesionMonto"
+            type="number"
+            min="0"
+            step="0.01"
+            class="form-control"
+            formControlName="monto"
+            [class.is-invalid]="mostrarCampoInvalido(formulario.controls.monto)"
+          />
+          @if (mostrarCampoInvalido(formulario.controls.monto)) {
+            <div class="invalid-feedback">{{ mensajeCampo(formulario.controls.monto) }}</div>
+          }
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Horario de la sesión</label>
+        <app-selector-horario
+          [horaSeleccionada]="formulario.controls.hora.value"
+          (horarioElegido)="formulario.patchValue({ hora: $event })"
+        />
+        @if (mostrarCampoInvalido(formulario.controls.hora)) {
+          <div class="text-danger small mt-1">Selecciona un horario</div>
+        }
+      </div>
+
+      <div class="mb-3">
+        <label for="sesionObs" class="form-label">Observaciones</label>
+        <textarea
+          id="sesionObs"
+          class="form-control"
+          rows="3"
+          formControlName="observaciones"
+          placeholder="Notas de la sesión (opcional)"
+        ></textarea>
+      </div>
+
+      <div class="modal-acciones">
+        <button type="button" class="btn btn-outline-secondary" [disabled]="guardando()" (click)="pedirCierre()">
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="guardando()">
+          @if (guardando()) {
+            <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+          }
+          {{ esEdicion() ? 'Guardar cambios' : 'Agregar sesión' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

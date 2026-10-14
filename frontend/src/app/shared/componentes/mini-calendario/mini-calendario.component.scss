@@ -1,0 +1,99 @@
+$color-primario: #2563eb;
+$color-texto: #1e293b;
+$color-texto-suave: #94a3b8;
+
+.calendario-cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.calendario-titulo {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: $color-texto;
+}
+
+.calendario-navegacion {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.btn-navegacion {
+  border: 0;
+  background: transparent;
+  color: $color-texto-suave;
+  padding: 0 0.25rem;
+  font-size: 0.75rem;
+
+  &:hover {
+    color: $color-texto;
+  }
+}
+
+.calendario-rejilla {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  text-align: center;
+}
+
+.dia-nombre {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: $color-texto-suave;
+  padding-bottom: 0.25rem;
+}
+
+.dia {
+  position: relative;
+  border: 0;
+  background: transparent;
+  font-size: 0.7rem;
+  color: $color-texto;
+  height: 24px;
+  border-radius: 6px;
+
+  &:hover {
+    background: #e2e8f0;
+  }
+}
+
+/* Punto en la esquina superior derecha: hay citas que todavia no se atendieron. */
+.dia-con-citas::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: $color-primario;
+}
+
+.dia-con-citas.dia-seleccionado::after {
+  background: #fff;
+}
+
+.dia-fuera-mes.dia-con-citas::after {
+  background: #cbd5e1;
+}
+
+.dia-fuera-mes {
+  color: #cbd5e1;
+}
+
+.dia-hoy {
+  font-weight: 700;
+  color: $color-primario;
+}
+
+.dia-seleccionado {
+  background: $color-primario;
+  color: #fff;
+
+  &:hover {
+    background: $color-primario;
+  }
+}

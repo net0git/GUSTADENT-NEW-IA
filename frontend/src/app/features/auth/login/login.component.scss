@@ -1,0 +1,54 @@
+$color-primario: #2563eb;
+$color-texto: #1e293b;
+$color-texto-suave: #64748b;
+$color-borde: #e2e8f0;
+$color-fondo: #f1f5f9;
+
+.login-pagina {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background: $color-fondo;
+}
+
+.login-tarjeta {
+  width: 100%;
+  max-width: 400px;
+  background: #fff;
+  border: 1px solid $color-borde;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+  padding: 2rem;
+}
+
+.login-cabecera {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.marca-icono {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: $color-primario;
+  color: #fff;
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.titulo {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: $color-texto;
+  margin: 0;
+}
+
+.subtitulo {
+  color: $color-texto-suave;
+  margin: 0.25rem 0 0;
+}

@@ -1,0 +1,81 @@
+<section class="tarjeta">
+  <header class="cabecera">
+    <span class="avatar">{{ iniciales(usuario?.nombreCompleto ?? '') }}</span>
+    <div>
+      <h1 class="titulo">{{ usuario?.nombreCompleto }}</h1>
+      <p class="subtitulo">
+        {{ etiquetaPerfil }} · usuario {{ usuario?.username }}
+      </p>
+    </div>
+  </header>
+
+  <h2 class="seccion-titulo">Cambiar contraseña</h2>
+
+  <form [formGroup]="formulario" (ngSubmit)="cambiarPassword()" novalidate>
+    <div class="mb-3">
+      <label for="passwordActual" class="form-label">Contraseña actual</label>
+      <input
+        id="passwordActual"
+        type="password"
+        class="form-control"
+        autocomplete="current-password"
+        formControlName="passwordActual"
+        [class.is-invalid]="mostrarCampoInvalido(formulario.controls.passwordActual)"
+      />
+      @if (mostrarCampoInvalido(formulario.controls.passwordActual)) {
+        <div class="invalid-feedback">Ingresa tu contraseña actual</div>
+      }
+    </div>
+
+    <div class="mb-3">
+      <label for="passwordNueva" class="form-label">Nueva contraseña</label>
+      <input
+        id="passwordNueva"
+        type="password"
+        class="form-control"
+        autocomplete="new-password"
+        formControlName="passwordNueva"
+        [class.is-invalid]="mostrarCampoInvalido(formulario.controls.passwordNueva)"
+      />
+      @if (mostrarCampoInvalido(formulario.controls.passwordNueva)) {
+        <div class="invalid-feedback">{{ mensajeCampo(formulario.controls.passwordNueva) }}</div>
+      }
+      <div class="form-text">Debe tener al menos 8 caracteres.</div>
+    </div>
+
+    <div class="mb-3">
+      <label for="confirmarPassword" class="form-label">Confirmar nueva contraseña</label>
+      <input
+        id="confirmarPassword"
+        type="password"
+        class="form-control"
+        autocomplete="new-password"
+        formControlName="confirmarPassword"
+        [class.is-invalid]="
+          mostrarCampoInvalido(formulario.controls.confirmarPassword) ||
+          (formulario.hasError('noCoinciden') && formulario.controls.confirmarPassword.touched)
+        "
+      />
+      @if (formulario.hasError('noCoinciden') && formulario.controls.confirmarPassword.touched) {
+        <div class="invalid-feedback">Las contraseñas no coinciden</div>
+      } @else if (mostrarCampoInvalido(formulario.controls.confirmarPassword)) {
+        <div class="invalid-feedback">Confirma tu nueva contraseña</div>
+      }
+    </div>
+
+    <div class="aviso">
+      <i class="bi bi-shield-lock"></i>
+      Al cambiar la contraseña se cerrarán todas tus sesiones, incluida esta.
+      Tendrás que iniciar sesión de nuevo.
+    </div>
+
+    <div class="acciones">
+      <button type="submit" class="btn btn-primary" [disabled]="guardando()">
+        @if (guardando()) {
+          <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+        }
+        <i class="bi bi-key me-1"></i> Guardar contraseña
+      </button>
+    </div>
+  </form>
+</section>

@@ -1,0 +1,83 @@
+Table empresa {
+id_empresa integer [primary key, increment]
+nombre_empresa varchar(50)
+ruc varchar(11)
+direccion varchar(80)
+telefono varchar(16)
+}
+
+Table sucursales {
+  id_sucursal integer [primary key, increment]
+  sucursal varchar(20)
+  direccion varchar(80)
+  estado boolean
+}
+
+Table usuarios {
+  id_usuario integer [primary key, increment]
+  dni varchar(8)
+  nombre_completo varchar(80)
+  especialidad varchar(25)
+  telefono varchar(16)
+  username varchar(20)
+  password varchar(60)
+  perfil varchar(20)
+  estado boolean
+}
+
+Table procedencias {
+  id_procedencia integer [primary key, increment]
+  procedencia varchar(30)
+}
+
+Table pacientes {
+  id_paciente integer [primary key, increment]
+  dni varchar(8)
+  nombre varchar(20)
+  ap_paterno varchar(20)
+  ap_materno varchar(20)
+  fecha_nacimiento date
+  sexo char(1)
+  telefono varchar(16)
+  procedencia varchar(30)
+}
+
+Table tickets {
+  id_ticket integer [primary key, increment]
+  create_at timestamp
+  fecha date
+  descripcion varchar
+  costo decimal(10,2)
+  descuento decimal(10,2)
+  estado boolean
+  id_sucursal integer
+  id_paciente integer
+  
+}
+
+Table sesiones {
+  id_sesion integer [primary key, increment]
+  create_at timestamp
+  tipo char(1) //p: primera cita, s: sesion 
+  fecha date
+  hora string(5)
+  descripcion varchar
+  monto decimal(10,2)
+  forma_pago varchar(10)
+  estado boolean
+  id_sucursal integer
+  id_ticket integer
+  id_paciente integer
+}
+
+// relaciones
+// R1: varias sesiones con un ticket (N:1)
+ref: sesiones.id_ticket > tickets.id_ticket
+// R2: un paciente en varios tickets (1:N)
+ref: pacientes.id_paciente < tickets.id_paciente
+// R3: un paciente puede estar en varias sesiones (1:N)
+ref: pacientes.id_paciente < sesiones.id_paciente
+// R4: una sucursal en varios tickets (1:N)
+ref: sucursales.id_sucursal < tickets.id_sucursal
+// R5: una sucursal en varios sesiones (1:N)
+ref: sucursales.id_sucursal < sesiones.id_sucursal

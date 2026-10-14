@@ -1,0 +1,35 @@
+<div class="selector-horario">
+  <p class="franja">
+    <i class="bi bi-sun"></i> Mañana
+    <span class="rango">7:00 AM - 11:30 AM</span>
+  </p>
+  <div class="horarios">
+    @for (opcion of manana(); track opcion.valor) {
+      <button
+        type="button"
+        class="horario"
+        [class.horario-activo]="estaSeleccionada(opcion.valor)"
+        (click)="elegir(opcion)"
+      >
+        {{ opcion.etiqueta }}
+      </button>
+    }
+  </div>
+
+  <p class="franja">
+    <i class="bi bi-sunset"></i> Tarde
+    <span class="rango">12:00 PM - 8:00 PM</span>
+  </p>
+  <div class="horarios">
+    @for (opcion of tarde(); track opcion.valor) {
+      <button
+        type="button"
+        class="horario"
+        [class.horario-activo]="estaSeleccionada(opcion.valor)"
+        (click)="elegir(opcion)"
+      >
+        {{ opcion.etiqueta }}
+      </button>
+    }
+  </div>
+</div>

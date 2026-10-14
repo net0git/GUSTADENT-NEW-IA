@@ -1,0 +1,83 @@
+$color-primario: #2563eb;
+$color-texto: #1e293b;
+$color-texto-suave: #64748b;
+$color-borde: #e2e8f0;
+
+.modal-fondo {
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 8vh 1rem 2rem;
+  background: rgba(15, 23, 42, 0.45);
+  overflow-y: auto;
+}
+
+.modal-caja {
+  width: 100%;
+  max-width: 620px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.2);
+}
+
+.modal-cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid $color-borde;
+}
+
+.modal-titulo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: $color-texto;
+  margin: 0;
+}
+
+.cerrar {
+  border: 0;
+  background: transparent;
+  color: $color-texto-suave;
+  font-size: 0.85rem;
+
+  &:hover {
+    color: $color-texto;
+  }
+}
+
+.modal-cuerpo {
+  padding: 1.25rem;
+}
+
+.fila {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.campo {
+  flex: 1 1 200px;
+  min-width: 0;
+}
+
+.campo-corto {
+  flex: 0 1 170px;
+}
+
+.modal-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid $color-borde;
+  margin-top: 0.5rem;
+}

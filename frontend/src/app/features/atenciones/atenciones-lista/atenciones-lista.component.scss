@@ -1,0 +1,432 @@
+$color-primario: #2563eb;
+$color-verde: #16a34a;
+$color-texto: #1e293b;
+$color-texto-suave: #64748b;
+$color-borde: #e2e8f0;
+$color-fondo: #f1f5f9;
+
+.cabecera-seccion {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.buscador-atencion {
+  position: relative;
+  flex: 1 1 380px;
+  max-width: 520px;
+}
+
+.alerta-busqueda {
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.7rem;
+  border-radius: 8px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 0.83rem;
+}
+
+.resultados-busqueda {
+  position: absolute;
+  top: calc(100% + 0.25rem);
+  left: 0;
+  right: 0;
+  z-index: 20;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: #fff;
+  border: 1px solid $color-borde;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.resultado-busqueda {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border: 0;
+  background: #fff;
+  text-align: left;
+
+  &:hover {
+    background: $color-fondo;
+  }
+
+  strong {
+    display: block;
+    color: $color-texto;
+    font-size: 0.9rem;
+  }
+
+  small {
+    display: block;
+    color: $color-texto-suave;
+    font-size: 0.78rem;
+  }
+}
+
+.avatar-pequeno {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: $color-primario;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.filtros-zona {
+  display: block;
+}
+
+.tarjetas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1rem;
+}
+
+.tarjeta {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid $color-borde;
+  border-radius: 12px;
+  padding: 1rem 1.1rem;
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+
+  &:hover {
+    border-color: $color-primario;
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.12);
+  }
+}
+
+.tarjeta-cabecera {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid $color-borde;
+}
+
+.tarjeta-numero {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: $color-texto-suave;
+}
+
+.tarjeta-titulo {
+  font-size: 1rem;
+  font-weight: 700;
+  color: $color-texto;
+  margin: 0.1rem 0 0;
+}
+
+.tarjeta-datos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.9rem;
+  padding: 0.7rem 0;
+  font-size: 0.82rem;
+  color: $color-texto-suave;
+
+  i {
+    color: $color-primario;
+    margin-right: 0.2rem;
+  }
+}
+
+.tarjeta-sesiones {
+  flex: 1;
+}
+
+.tarjeta-subtitulo {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: $color-texto-suave;
+  margin: 0 0 0.4rem;
+}
+
+.sin-sesiones {
+  font-size: 0.82rem;
+  color: $color-texto-suave;
+  margin: 0;
+}
+
+.lista-sesiones {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.lista-sesiones li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding: 0.35rem 0;
+  border-bottom: 1px dashed $color-borde;
+  font-size: 0.8rem;
+}
+
+.sesion-numero {
+  font-weight: 600;
+  color: $color-texto;
+  white-space: nowrap;
+}
+
+.sesion-dato {
+  color: $color-texto-suave;
+  flex: 1;
+  white-space: nowrap;
+}
+
+.sesion-monto {
+  color: $color-verde;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badge-estado.pequeno {
+  font-size: 0.62rem;
+}
+
+.tarjeta-resumen {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid $color-borde;
+
+  div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  span {
+    font-size: 0.68rem;
+    color: $color-texto-suave;
+  }
+
+  strong {
+    font-size: 0.85rem;
+    color: $color-texto;
+  }
+
+  .negativo {
+    color: #dc2626;
+  }
+
+  .pagado {
+    color: $color-verde;
+  }
+
+  .deuda strong {
+    color: #b91c1c;
+  }
+}
+
+.tarjeta-abrir {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.75rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: $color-primario;
+}
+
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  input,
+  select {
+    width: auto;
+    min-width: 160px;
+  }
+}
+
+.filtro-activo {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  padding: 0.6rem 0.85rem;
+  margin-bottom: 0.75rem;
+  border: 1px solid #bfdbfe;
+  border-radius: 10px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 0.88rem;
+
+  .btn-link {
+    margin-left: auto;
+    padding: 0;
+    font-size: 0.82rem;
+    text-decoration: none;
+  }
+}
+
+.hora-lista {
+  display: block;
+  font-size: 0.78rem;
+  color: #1d4ed8;
+}
+
+.tipo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.tipo-cita {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.tipo-sesion {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.tabla-contenedor {
+  background: #fff;
+  border: 1px solid $color-borde;
+  border-radius: 12px;
+  overflow-x: auto;
+
+  table {
+    min-width: 900px;
+  }
+
+  th {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: $color-texto-suave;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+  }
+}
+
+.datos-paciente strong,
+td .texto-suave,
+td .hora-lista {
+  white-space: nowrap;
+}
+
+.celda-paciente {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: $color-primario;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.datos-paciente {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+
+  strong {
+    color: $color-texto;
+    white-space: nowrap;
+  }
+
+  small {
+    color: $color-texto-suave;
+    font-size: 0.78rem;
+  }
+}
+
+.texto-suave {
+  font-size: 0.85rem;
+  color: $color-texto-suave;
+}
+
+.texto-deuda {
+  color: #b91c1c;
+}
+
+.acciones-celda {
+  white-space: nowrap;
+}
+
+.badge-estado {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: #e2e8f0;
+  color: $color-texto-suave;
+}
+
+.estado-borrador,
+.estado-programado {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.estado-activo,
+.estado-atendido,
+.estado-finalizado {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.estado-anulado,
+.estado-cancelado {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.estado-vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 3rem 1rem;
+  background: #fff;
+  border: 1px dashed $color-borde;
+  border-radius: 12px;
+  color: $color-texto-suave;
+}

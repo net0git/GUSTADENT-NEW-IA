@@ -1,0 +1,250 @@
+<section class="cabecera-seccion">
+  <form class="buscador-atencion" [formGroup]="formularioBusqueda" (ngSubmit)="buscarPaciente()" novalidate>
+    <div class="input-group">
+      <span class="input-group-text"><i class="bi bi-search"></i></span>
+      <input
+        class="form-control"
+        type="search"
+        placeholder="Buscar atenciones por nombre o DNI del paciente"
+        aria-label="Buscar atenciones por paciente"
+        formControlName="termino"
+      />
+      <button class="btn btn-outline-primary" type="submit" [disabled]="buscando()">
+        @if (buscando()) {
+          <span class="spinner-border spinner-border-sm" role="status"></span>
+        } @else {
+          Buscar
+        }
+      </button>
+      @if (pacienteElegido()) {
+        <button class="btn btn-outline-secondary" type="button" (click)="salirDeBusqueda()">
+          Ver todas
+        </button>
+      }
+    </div>
+
+    @if (errorBusqueda()) {
+      <div class="alerta-busqueda">{{ errorBusqueda() }}</div>
+    }
+
+    @if (resultadosPaciente().length > 0) {
+      <ul class="resultados-busqueda">
+        @for (candidato of resultadosPaciente(); track candidato.id) {
+          <li>
+            <button type="button" class="resultado-busqueda" (click)="elegirPaciente(candidato)">
+              <span class="avatar-pequeno">{{ iniciales(candidato.nombreCompleto) }}</span>
+              <span class="resultado-texto">
+                <strong>{{ candidato.nombreCompleto }}</strong>
+                <small>DNI {{ candidato.dni }}</small>
+              </span>
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          </li>
+        }
+      </ul>
+    }
+  </form>
+
+  <a class="btn btn-sm btn-primary" routerLink="/atenciones/nueva">
+    <i class="bi bi-plus-lg me-1"></i> Nueva atención
+  </a>
+</section>
+
+@if (pacienteElegido(); as elegido) {
+  <div class="filtro-activo">
+    <span class="avatar-pequeno">{{ iniciales(elegido.nombreCompleto) }}</span>
+    Atenciones de <strong>{{ elegido.nombreCompleto }}</strong>
+    <span class="texto-suave">DNI {{ elegido.dni }}</span>
+  </div>
+
+  @if (cargandoAtenciones()) {
+    <div class="estado-vacio">
+      <div class="spinner-border spinner-border-sm" role="status"></div>
+      <span>Cargando atenciones...</span>
+    </div>
+  } @else if (atencionesPaciente().length === 0) {
+    <div class="estado-vacio">
+      <i class="bi bi-clipboard-x fs-2"></i>
+      <p class="mb-0">Este paciente no tiene atenciones registradas.</p>
+    </div>
+  } @else {
+    <div class="tarjetas">
+      @for (atencion of atencionesPaciente(); track atencion.id) {
+        <a class="tarjeta" [routerLink]="['/atenciones', atencion.id]">
+          <header class="tarjeta-cabecera">
+            <div class="tarjeta-identidad">
+              <span class="tarjeta-numero">ATENCIÓN N° {{ atencion.id }}</span>
+              <h3 class="tarjeta-titulo">{{ atencion.nombreCompletoPaciente }}</h3>
+              <span class="texto-suave">DNI {{ atencion.dniPaciente }}</span>
+            </div>
+            <span class="badge-estado" [class]="'estado-' + atencion.estado">
+              {{ etiquetasEstadoAtencion[atencion.estado] }}
+            </span>
+          </header>
+
+          <div class="tarjeta-datos">
+            <span><i class="bi bi-calendar3"></i> {{ fechaLegible(atencion.fecha) }}</span>
+            <span><i class="bi bi-clock"></i> {{ horaLegible(atencion.hora) }}</span>
+            <span><i class="bi bi-geo-alt"></i> {{ atencion.nombreSucursal }}</span>
+            <span><i class="bi bi-person-badge"></i> {{ atencion.nombreMedico }}</span>
+          </div>
+
+          <section class="tarjeta-sesiones">
+            <h4 class="tarjeta-subtitulo">
+              <i class="bi bi-calendar-check"></i> Sesiones ({{ atencion.sesiones.length }})
+            </h4>
+            @if (atencion.sesiones.length === 0) {
+              <p class="sin-sesiones">Sin sesiones registradas.</p>
+            } @else {
+              <ul class="lista-sesiones">
+                @for (sesion of atencion.sesiones; track sesion.id) {
+                  <li>
+                    <span class="sesion-numero">
+                      {{ sesion.tipo === 'primera' ? 'Cita' : 'Sesión' }} {{ sesion.numero }}
+                    </span>
+                    <span class="sesion-dato">
+                      {{ fechaLegible(sesion.fechaHora) }} · {{ horaDeSesion(sesion.fechaHora) }}
+                    </span>
+                    <span class="sesion-monto">{{ monto(sesion.monto) }}</span>
+                    <span class="badge-estado pequeno" [class]="'estado-' + sesion.estado">
+                      {{ etiquetasEstadoSesion[sesion.estado] }}
+                    </span>
+                  </li>
+                }
+              </ul>
+            }
+          </section>
+
+          <footer class="tarjeta-resumen">
+            <div>
+              <span>Total</span>
+              <strong>{{ monto(atencion.resumen.costo) }}</strong>
+            </div>
+            <div>
+              <span>Descuento</span>
+              <strong class="negativo">- {{ monto(atencion.resumen.descuento) }}</strong>
+            </div>
+            <div>
+              <span>Pagado</span>
+              <strong class="pagado">{{ monto(atencion.resumen.pagado) }}</strong>
+            </div>
+            <div class="deuda">
+              <span>Deuda</span>
+              <strong>{{ monto(atencion.resumen.deuda) }}</strong>
+            </div>
+          </footer>
+
+          <span class="tarjeta-abrir">
+            Abrir atención <i class="bi bi-arrow-right"></i>
+          </span>
+        </a>
+      }
+    </div>
+  }
+}
+
+@if (!pacienteElegido()) {
+  <form class="filtros" [formGroup]="formulario" (ngSubmit)="filtrar()">
+    <input
+      type="date"
+      class="form-control form-control-sm"
+      aria-label="Filtrar por fecha"
+      formControlName="fecha"
+    />
+
+    <select class="form-select form-select-sm" aria-label="Filtrar por sucursal" formControlName="sucursal">
+      <option value="">Todas las sucursales</option>
+      @for (sucursal of sucursales(); track sucursal.id) {
+        <option [ngValue]="sucursal.id">{{ sucursal.nombre }}</option>
+      }
+    </select>
+
+    <select class="form-select form-select-sm" aria-label="Filtrar por estado" formControlName="estado">
+      @for (opcion of estados; track opcion) {
+        <option [value]="opcion">
+          {{ opcion === '' ? 'Todos los estados' : etiquetasEstadoSesion[opcion] }}
+        </option>
+      }
+    </select>
+
+    <button type="submit" class="btn btn-sm btn-outline-secondary">Filtrar</button>
+    <button type="button" class="btn btn-sm btn-outline-secondary" (click)="limpiarFiltros()">Limpiar</button>
+  </form>
+
+  @if (formulario.controls.fecha.value) {
+    <div class="filtro-activo">
+      <i class="bi bi-calendar-event"></i>
+      Mostrando las citas del
+      <strong>{{ fechaLegible(formulario.controls.fecha.value) }}</strong>
+      <button type="button" class="btn btn-sm btn-link" (click)="quitarFiltroFecha()">Ver todo</button>
+    </div>
+  }
+
+  @if (cargando()) {
+    <div class="estado-vacio">
+      <div class="spinner-border spinner-border-sm" role="status"></div>
+      <span>Cargando citas...</span>
+    </div>
+  } @else if (filas().length === 0) {
+    <div class="estado-vacio">
+      <i class="bi bi-calendar-x fs-2"></i>
+      <p class="mb-0">No hay citas que coincidan con los filtros.</p>
+    </div>
+  } @else {
+    <div class="tabla-contenedor">
+      <table class="table table-hover align-middle mb-0">
+        <thead>
+          <tr>
+            <th>Tipo</th>
+            <th>N° sesión</th>
+            <th>Paciente</th>
+            <th>Fecha y hora</th>
+            <th>Sucursal</th>
+            <th>Médico</th>
+            <th>Estado</th>
+            <th class="text-end acciones-celda">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (fila of filas(); track fila.clave) {
+            <tr>
+              <td>
+                @if (fila.esPrimera) {
+                  <span class="tipo tipo-cita"><i class="bi bi-calendar-check"></i> Cita</span>
+                } @else {
+                  <span class="tipo tipo-sesion"><i class="bi bi-arrow-repeat"></i> Sesión</span>
+                }
+              </td>
+              <td class="texto-suave">{{ fila.numeroSesion }}</td>
+              <td>
+                <div class="celda-paciente">
+                  <span class="avatar">{{ iniciales(fila.nombreCompletoPaciente) }}</span>
+                  <span class="datos-paciente">
+                    <strong>{{ fila.nombreCompletoPaciente }}</strong>
+                    <small>DNI {{ fila.dniPaciente }}</small>
+                  </span>
+                </div>
+              </td>
+              <td>
+                <span class="texto-suave">{{ fechaLegible(fila.fecha) }}</span>
+                <small class="hora-lista">{{ horaLegible(fila.hora) }}</small>
+              </td>
+              <td class="texto-suave">{{ fila.sucursal }}</td>
+              <td class="texto-suave">{{ fila.medico }}</td>
+              <td>
+                <span class="badge-estado" [class]="'estado-' + fila.estado">
+                  {{ etiquetasEstadoSesion[fila.estado] }}
+                </span>
+              </td>
+              <td class="text-end acciones-celda">
+                <a class="btn btn-sm btn-outline-primary" [routerLink]="['/atenciones', fila.idAtencion]">
+                  <i class="bi bi-arrow-right"></i> Abrir
+                </a>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+}

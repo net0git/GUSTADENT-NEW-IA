@@ -1,0 +1,84 @@
+<div class="modal-fondo" (click)="cerrado.emit()">
+  <div class="modal-caja" role="dialog" aria-modal="true" aria-labelledby="titulo-busqueda" (click)="$event.stopPropagation()">
+    <header class="modal-cabecera">
+      <h2 class="modal-titulo" id="titulo-busqueda">
+        <i class="bi bi-search"></i> Buscar paciente
+      </h2>
+      <button type="button" class="cerrar" aria-label="Cerrar" (click)="cerrado.emit()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </header>
+
+    <form class="modal-cuerpo" [formGroup]="formulario" (ngSubmit)="buscar()" novalidate>
+      <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-search"></i></span>
+        <input
+          class="form-control"
+          type="search"
+          placeholder="DNI, nombres o apellidos"
+          aria-label="DNI, nombres o apellidos"
+          formControlName="termino"
+          autofocus
+        />
+        <button class="btn btn-primary" type="submit" [disabled]="cargando()">
+          @if (cargando()) {
+            <span class="spinner-border spinner-border-sm" role="status"></span>
+          }
+          Buscar
+        </button>
+      </div>
+
+      @if (mensajeError()) {
+        <p class="alerta">{{ mensajeError() }}</p>
+      }
+
+      @if (cargando()) {
+        <p class="estado">Buscando...</p>
+      } @else if (buscados()) {
+        @if (pacientes().length === 0) {
+          <p class="estado">No se encontraron pacientes con ese dato.</p>
+        } @else {
+          <p class="resumen">Se encontraron {{ pacientes().length }} paciente(s)</p>
+          <ul class="resultados">
+            @for (paciente of pacientes(); track paciente.id) {
+              <li class="resultado">
+                <span class="avatar">{{ iniciales(paciente) }}</span>
+
+                <span class="datos">
+                  <strong>{{ paciente.nombreCompleto }}</strong>
+                  <small>
+                    <i class="bi bi-card-text"></i> DNI {{ paciente.dni }}
+                    @if (paciente.fechaNacimiento) {
+                      <span class="separador">·</span>
+                      <i class="bi bi-calendar3"></i> {{ fechaNacimiento(paciente) }}
+                    }
+                  </small>
+                </span>
+
+                <span class="acciones">
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline-secondary"
+                    [title]="'Copiar DNI ' + paciente.dni"
+                    (click)="copiarDni(paciente)"
+                  >
+                    @if (dniCopiado() === paciente.id) {
+                      <i class="bi bi-check-lg me-1"></i> Copiado
+                    } @else {
+                      <i class="bi bi-clipboard me-1"></i> Copiar DNI
+                    }
+                  </button>
+                  <button type="button" class="btn btn-sm btn-primary" (click)="nuevaCita(paciente)">
+                    <i class="bi bi-calendar-plus me-1"></i> Nueva cita
+                  </button>
+                </span>
+              </li>
+            }
+          </ul>
+        }
+      } @else {
+        <p class="estado">Escribe un dato del paciente para comenzar.</p>
+      }
+    </form>
+  </div>
+</div>

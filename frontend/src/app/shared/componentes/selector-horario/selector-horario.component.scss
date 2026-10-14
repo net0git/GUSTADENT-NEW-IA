@@ -1,0 +1,54 @@
+$color-primario: #2563eb;
+$color-texto: #1e293b;
+$color-texto-suave: #64748b;
+$color-borde: #e2e8f0;
+
+.franja {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: $color-texto;
+
+  .rango {
+    margin-left: auto;
+    font-weight: 400;
+    font-size: 0.78rem;
+    color: $color-texto-suave;
+  }
+}
+
+.horarios {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+  gap: 0.4rem;
+  margin-bottom: 0.9rem;
+}
+
+.horario {
+  padding: 0.4rem 0.25rem;
+  border: 1px solid $color-borde;
+  border-radius: 8px;
+  background: #fff;
+  color: $color-texto;
+  font-size: 0.8rem;
+  font-weight: 500;
+  white-space: nowrap;
+
+  &:hover {
+    border-color: $color-primario;
+    color: $color-primario;
+  }
+}
+
+.horario-activo {
+  background: $color-primario;
+  border-color: $color-primario;
+  color: #fff;
+
+  &:hover {
+    color: #fff;
+  }
+}

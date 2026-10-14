@@ -1,0 +1,16 @@
+# Dependencias y compilados
+node_modules/
+dist/
+dist-test/
+.angular/
+*.log
+
+# Archivos con secretos: nunca se versionan. El .env.example si, para saber
+# que variables hacen falta.
+.env
+.env.*
+!.env.example
+
+# Sistema
+.DS_Store
+Thumbs.db
