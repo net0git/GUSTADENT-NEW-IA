@@ -172,34 +172,50 @@ $color-fondo: #f1f5f9;
   min-width: 0;
 }
 
-.campo-corto {
-  flex: 0 1 160px;
-}
-
-.selector-calendario {
-  margin: 0.75rem 0 1rem;
-  border: 1px solid $color-borde;
-  border-radius: 10px;
-  background: #fff;
-
-  &[open] {
-    background: $color-fondo;
+@media (max-width: 768px) {
+  .cita-rejilla {
+    grid-template-columns: 1fr;
   }
 }
 
-.selector-resumen {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.65rem 0.9rem;
-  font-size: 0.9rem;
-  color: $color-texto;
-  cursor: pointer;
+/* Fecha y horario en una sola seccion: el calendario a la izquierda y los
+   horarios a la derecha. */
+.cita-rejilla {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.25rem;
+  align-items: start;
+  padding: 1rem;
+  border: 1px solid $color-borde;
+  border-radius: 10px;
+  background: $color-fondo;
 }
 
-.selector-cuerpo {
-  max-width: 280px;
-  padding: 0.25rem 0.9rem 0.9rem;
+.cita-calendario {
+  background: #fff;
+  border: 1px solid $color-borde;
+  border-radius: 10px;
+  padding: 0.75rem;
+}
+
+.cita-horarios {
+  min-width: 0;
+}
+
+.fecha-elegida {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0.85rem 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px dashed $color-borde;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: $color-texto;
+
+  i {
+    color: $color-primario;
+  }
 }
 
 .acciones {

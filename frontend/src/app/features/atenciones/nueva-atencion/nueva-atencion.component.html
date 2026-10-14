@@ -112,35 +112,31 @@
           </div>
         }
       </div>
-
-      <div class="campo campo-corto">
-        <label for="fecha" class="form-label">Fecha</label>
-        <input id="fecha" type="date" class="form-control" formControlName="fecha" />
-      </div>
     </div>
 
-    <div class="mb-3">
-      <label class="form-label">Horario de la cita</label>
-      <app-selector-horario
-        [horaSeleccionada]="formulario.controls.hora.value"
-        (horarioElegido)="elegirHorarioCita($event)"
-      />
-      @if (mostrarCampoInvalido(formulario.controls.hora)) {
-        <div class="text-danger small mt-1">Selecciona un horario para la cita</div>
-      }
-    </div>
-
-    <details class="selector-calendario">
-      <summary class="selector-resumen">
-        <i class="bi bi-calendar3"></i> Elegir la fecha en el calendario
-      </summary>
-      <div class="selector-cuerpo">
+    <h2 class="seccion-titulo">Fecha y horario de la cita</h2>
+    <div class="cita-rejilla">
+      <div class="cita-calendario">
         <app-mini-calendario
           [fechaSeleccionada]="formulario.controls.fecha.value"
           (cambioFecha)="elegirFechaDelCalendario($event)"
         />
       </div>
-    </details>
+
+      <div class="cita-horarios">
+        <label class="form-label">Horario</label>
+        <app-selector-horario
+          [horaSeleccionada]="formulario.controls.hora.value"
+          (horarioElegido)="elegirHorarioCita($event)"
+        />
+        @if (mostrarCampoInvalido(formulario.controls.hora)) {
+          <div class="text-danger small mt-1">Selecciona un horario para la cita</div>
+        }
+        <p class="fecha-elegida">
+          <i class="bi bi-calendar-check"></i> Cita del {{ fechaLegible(formulario.controls.fecha.value) }}
+        </p>
+      </div>
+    </div>
 
     <div class="mb-3">
       <label for="descripcion" class="form-label">Descripción del procedimiento</label>

@@ -123,8 +123,17 @@ export class NuevaAtencionComponent implements OnInit {
     this.buscadorAbierto.set(true);
   }
 
-  protected elegirFechaDelCalendario(fecha: string): void {
+    protected elegirFechaDelCalendario(fecha: string): void {
     this.formulario.patchValue({ fecha });
+  }
+
+  protected fechaLegible(iso: string): string {
+    const base = iso.length === 10 ? `${iso}T00:00:00` : iso;
+    return new Date(base).toLocaleDateString('es-PE', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
   }
 
   protected elegirHorarioCita(hora: string): void {
