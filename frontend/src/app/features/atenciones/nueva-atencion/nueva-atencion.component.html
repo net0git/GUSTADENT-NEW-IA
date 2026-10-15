@@ -80,92 +80,96 @@
   </section>
 
   <form [formGroup]="formulario" (ngSubmit)="crear()" novalidate>
-    <h2 class="seccion-titulo">Datos de la atención</h2>
-    <div class="fila">
-      <div class="campo">
-        <label for="idSucursal" class="form-label">Sucursal</label>
-        <select id="idSucursal" class="form-select" formControlName="idSucursal">
-          <option [ngValue]="null">Seleccione una sucursal</option>
-          @for (sucursal of sucursales(); track sucursal.id) {
-            <option [ngValue]="sucursal.id">{{ sucursal.nombre }}</option>
-          }
-        </select>
-      </div>
-
-      <div class="campo">
-        <label for="idUsuario" class="form-label">Odontólogo responsable</label>
-        <select id="idUsuario" class="form-select" formControlName="idUsuario">
-          <option [ngValue]="null">Seleccione un profesional</option>
-          @for (odontologo of odontologos(); track odontologo.id) {
-            <option [ngValue]="odontologo.id">
-              {{ odontologo.nombreCompleto }}
-              @if (odontologo.especialidad) {
-                ({{ odontologo.especialidad }})
+    <div class="rejilla">
+      <div class="columna">
+        <h2 class="seccion-titulo">Datos de la atención</h2>
+        <div class="fila">
+          <div class="campo">
+            <label for="idSucursal" class="form-label">Sucursal</label>
+            <select id="idSucursal" class="form-select" formControlName="idSucursal">
+              <option [ngValue]="null">Seleccione una sucursal</option>
+              @for (sucursal of sucursales(); track sucursal.id) {
+                <option [ngValue]="sucursal.id">{{ sucursal.nombre }}</option>
               }
-            </option>
-          }
-        </select>
-        @if (odontologos().length === 0) {
-          <div class="invalid-feedback d-block">
-            No hay odontólogos activos registrados.
+            </select>
           </div>
-        }
-      </div>
-    </div>
 
-    <h2 class="seccion-titulo">Fecha y horario de la cita</h2>
-    <div class="cita-rejilla">
-      <div class="cita-calendario">
-        <app-mini-calendario
-          [fechaSeleccionada]="formulario.controls.fecha.value"
-          (cambioFecha)="elegirFechaDelCalendario($event)"
-        />
-      </div>
+          <div class="campo">
+            <label for="idUsuario" class="form-label">Odontólogo responsable</label>
+            <select id="idUsuario" class="form-select" formControlName="idUsuario">
+              <option [ngValue]="null">Seleccione un profesional</option>
+              @for (odontologo of odontologos(); track odontologo.id) {
+                <option [ngValue]="odontologo.id">
+                  {{ odontologo.nombreCompleto }}
+                  @if (odontologo.especialidad) {
+                    ({{ odontologo.especialidad }})
+                  }
+                </option>
+              }
+            </select>
+            @if (odontologos().length === 0) {
+              <div class="invalid-feedback d-block">
+                No hay odontólogos activos registrados.
+              </div>
+            }
+          </div>
+        </div>
 
-      <div class="cita-horarios">
-        <label class="form-label">Horario</label>
-        <app-selector-horario
-          [compacto]="true"
-          [horaSeleccionada]="formulario.controls.hora.value"
-          (horarioElegido)="elegirHorarioCita($event)"
-        />
-        @if (mostrarCampoInvalido(formulario.controls.hora)) {
-          <div class="text-danger small mt-1">Selecciona un horario para la cita</div>
-        }
-        <p class="fecha-elegida">
-          <i class="bi bi-calendar-check"></i> Cita del {{ fechaLegible(formulario.controls.fecha.value) }}
-        </p>
-      </div>
-    </div>
+        <h2 class="seccion-titulo">Costos</h2>
+        <div class="fila">
+          <div class="campo">
+            <label for="costo" class="form-label">Costo del tratamiento (S/)</label>
+            <input id="costo" type="number" min="0" step="0.01" class="form-control" formControlName="costo" />
+          </div>
+          <div class="campo">
+            <label for="descuento" class="form-label">Descuento aplicado (S/)</label>
+            <input
+              id="descuento"
+              type="number"
+              min="0"
+              step="0.01"
+              class="form-control"
+              formControlName="descuento"
+            />
+          </div>
+        </div>
 
-    <div class="mb-3">
-      <label for="descripcion" class="form-label">Descripción del procedimiento</label>
-      <textarea
-        id="descripcion"
-        class="form-control"
-        rows="3"
-        formControlName="descripcion"
-        placeholder="Escriba aquí los detalles del tratamiento..."
-      ></textarea>
-    </div>
-
-    <h2 class="seccion-titulo">Costos</h2>
-    <div class="fila">
-      <div class="campo">
-        <label for="costo" class="form-label">Costo del tratamiento (S/)</label>
-        <input id="costo" type="number" min="0" step="0.01" class="form-control" formControlName="costo" />
-      </div>
-      <div class="campo">
-        <label for="descuento" class="form-label">Descuento aplicado (S/)</label>
-        <input
-          id="descuento"
-          type="number"
-          min="0"
-          step="0.01"
+        <h2 class="seccion-titulo">Descripción del procedimiento</h2>
+        <textarea
+          id="descripcion"
           class="form-control"
-          formControlName="descuento"
-        />
+          rows="2"
+          formControlName="descripcion"
+          placeholder="Escriba aquí los detalles del tratamiento..."
+        ></textarea>
       </div>
+
+      <aside class="columna columna-cita">
+        <h2 class="seccion-titulo">Fecha y horario de la cita</h2>
+        <div class="cita-rejilla">
+          <div class="cita-calendario">
+            <app-mini-calendario
+              [fechaSeleccionada]="formulario.controls.fecha.value"
+              (cambioFecha)="elegirFechaDelCalendario($event)"
+            />
+          </div>
+
+          <div class="cita-horarios">
+            <label class="form-label">Horario</label>
+            <app-selector-horario
+              [compacto]="true"
+              [horaSeleccionada]="formulario.controls.hora.value"
+              (horarioElegido)="elegirHorarioCita($event)"
+            />
+            @if (mostrarCampoInvalido(formulario.controls.hora)) {
+              <div class="text-danger small mt-1">Selecciona un horario para la cita</div>
+            }
+            <p class="fecha-elegida">
+              <i class="bi bi-calendar-check"></i> Cita del {{ fechaLegible(formulario.controls.fecha.value) }}
+            </p>
+          </div>
+        </div>
+      </aside>
     </div>
 
     <div class="acciones">
