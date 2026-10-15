@@ -80,6 +80,88 @@ h6 {
   min-height: 0;
 }
 
+/* Tablas del sistema: filas con aire, separadores suaves y hover en celeste.
+   La clase duplicada le gana a Bootstrap sin tocar cada componente. */
+.tabla-contenedor.tabla-contenedor table {
+  margin-bottom: 0;
+}
+
+.tabla-contenedor.tabla-contenedor thead th {
+  border-bottom: 0;
+}
+
+.tabla-contenedor.tabla-contenedor tbody td {
+  padding: 0.7rem 0.75rem;
+  vertical-align: middle;
+  border-color: #e8f1f4;
+}
+
+.tabla-contenedor.tabla-contenedor .table-hover > tbody > tr:hover > * {
+  --bs-table-accent-bg: #eaf7fa;
+}
+
+/* Botones de accion de las tablas: tipo chip con fondo tenue que se
+   intensifica al pasar el cursor. */
+.tabla-contenedor .btn-sm {
+  border-radius: 999px;
+  font-weight: 600;
+  padding: 0.3rem 0.85rem;
+  border-width: 1px;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.tabla-contenedor .btn-outline-primary {
+  background: #dff7fa;
+  border-color: transparent;
+  color: #00768a;
+}
+
+.tabla-contenedor .btn-outline-primary:hover {
+  background: #008b9f;
+  border-color: #008b9f;
+  color: #fff;
+}
+
+.tabla-contenedor .btn-outline-secondary {
+  background: #f0f7f9;
+  border-color: transparent;
+  color: #526b7a;
+}
+
+.tabla-contenedor .btn-outline-secondary:hover {
+  background: #526b7a;
+  border-color: #526b7a;
+  color: #fff;
+}
+
+.tabla-contenedor .btn-outline-danger {
+  background: #fee2e2;
+  border-color: transparent;
+  color: #b91c1c;
+}
+
+.tabla-contenedor .btn-outline-danger:hover {
+  background: #b91c1c;
+  border-color: #b91c1c;
+  color: #fff;
+}
+
+.tabla-contenedor .btn-outline-warning {
+  background: #fef3c7;
+  border-color: transparent;
+  color: #92400e;
+}
+
+.tabla-contenedor .btn-outline-warning:hover {
+  background: #d97706;
+  border-color: #d97706;
+  color: #fff;
+}
+
+.tabla-contenedor .btn-primary {
+  box-shadow: 0 6px 14px -8px rgba(0, 139, 159, 0.7);
+}
+
 /* Etiquetas semibold oscuras, como en los formularios de referencia. */
 .form-label {
   font-weight: 600;
