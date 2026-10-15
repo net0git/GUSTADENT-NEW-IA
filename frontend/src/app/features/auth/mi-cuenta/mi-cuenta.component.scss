@@ -1,13 +1,14 @@
-$color-primario: #2563eb;
-$color-texto: #1e293b;
+$color-primario: #008b9f;
+$color-texto: #253844;
 $color-texto-suave: #64748b;
-$color-borde: #e2e8f0;
+$color-borde: #d7e7ee;
 
 .tarjeta {
   max-width: 560px;
   background: #fff;
   border: 1px solid $color-borde;
-  border-radius: 12px;
+  border-radius: 1rem;
+  box-shadow: 0 16px 32px -16px rgba(0, 139, 159, 0.22);
   padding: 1.5rem;
 }
 
@@ -58,9 +59,9 @@ $color-borde: #e2e8f0;
   gap: 0.5rem;
   padding: 0.7rem 0.85rem;
   border-radius: 8px;
-  background: #eff6ff;
-  border: 1px solid #bfdbfe;
-  color: #1d4ed8;
+  background: #dff7fa;
+  border: 1px solid #bdd6e0;
+  color: #008b9f;
   font-size: 0.83rem;
 }
 

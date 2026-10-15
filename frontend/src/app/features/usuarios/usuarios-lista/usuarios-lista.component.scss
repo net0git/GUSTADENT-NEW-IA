@@ -1,5 +1,5 @@
 $color-texto-suave: #64748b;
-$color-borde: #e2e8f0;
+$color-borde: #d7e7ee;
 
 .cabecera-seccion {
   display: flex;
@@ -24,13 +24,15 @@ $color-borde: #e2e8f0;
 .tabla-contenedor {
   background: #fff;
   border: 1px solid $color-borde;
-  border-radius: 12px;
+  border-radius: 1rem;
+  box-shadow: 0 16px 32px -16px rgba(0, 139, 159, 0.22);
   overflow: hidden;
 
-  th {
+  thead th {
     font-size: 0.8rem;
     font-weight: 600;
-    color: $color-texto-suave;
+    color: #fff;
+    background: #008b9f;
     text-transform: uppercase;
     letter-spacing: 0.03em;
     white-space: nowrap;
@@ -54,6 +56,7 @@ $color-borde: #e2e8f0;
   padding: 3rem 1rem;
   background: #fff;
   border: 1px dashed $color-borde;
-  border-radius: 12px;
+  border-radius: 1rem;
+  box-shadow: 0 16px 32px -16px rgba(0, 139, 159, 0.22);
   color: $color-texto-suave;
 }

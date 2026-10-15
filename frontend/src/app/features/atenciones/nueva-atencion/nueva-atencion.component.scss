@@ -1,8 +1,8 @@
-$color-primario: #2563eb;
-$color-texto: #1e293b;
+$color-primario: #008b9f;
+$color-texto: #253844;
 $color-texto-suave: #64748b;
-$color-borde: #e2e8f0;
-$color-fondo: #f1f5f9;
+$color-borde: #d7e7ee;
+$color-fondo: #f0f7f9;
 
 /* El formulario entra en una sola pantalla: dos columnas, con la fecha y el
    horario a la derecha. */
@@ -10,7 +10,8 @@ $color-fondo: #f1f5f9;
   max-width: 1180px;
   background: #fff;
   border: 1px solid $color-borde;
-  border-radius: 12px;
+  border-radius: 1rem;
+  box-shadow: 0 16px 32px -16px rgba(0, 139, 159, 0.22);
   padding: 1.1rem 1.25rem;
 }
 

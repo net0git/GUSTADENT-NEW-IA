@@ -1,5 +1,5 @@
-$color-primario: #2563eb;
-$color-texto: #1e293b;
+$color-primario: #008b9f;
+$color-texto: #253844;
 $color-texto-suave: #94a3b8;
 
 .calendario-cabecera {
@@ -56,7 +56,7 @@ $color-texto-suave: #94a3b8;
   border-radius: 6px;
 
   &:hover {
-    background: #e2e8f0;
+    background: #d7e7ee;
   }
 }
 
@@ -77,11 +77,11 @@ $color-texto-suave: #94a3b8;
 }
 
 .dia-fuera-mes.dia-con-citas::after {
-  background: #cbd5e1;
+  background: #d7e7ee;
 }
 
 .dia-fuera-mes {
-  color: #cbd5e1;
+  color: #d7e7ee;
 }
 
 .dia-hoy {

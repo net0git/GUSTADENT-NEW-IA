@@ -1,9 +1,9 @@
-$color-primario: #2563eb;
+$color-primario: #008b9f;
 $color-verde: #16a34a;
 $color-rojo: #b91c1c;
-$color-texto: #1e293b;
+$color-texto: #253844;
 $color-texto-suave: #64748b;
-$color-borde: #e2e8f0;
+$color-borde: #d7e7ee;
 
 .pestanas {
   display: flex;
@@ -63,14 +63,14 @@ $color-borde: #e2e8f0;
 
   &:hover {
     color: $color-texto;
-    border-color: #cbd5e1;
+    border-color: #d7e7ee;
   }
 }
 
 .chip-activo {
-  background: #eff6ff;
-  border-color: #bfdbfe;
-  color: #1d4ed8;
+  background: #dff7fa;
+  border-color: #bdd6e0;
+  color: #008b9f;
   font-weight: 600;
 }
 
@@ -97,7 +97,8 @@ $color-borde: #e2e8f0;
   gap: 0.15rem;
   background: #fff;
   border: 1px solid $color-borde;
-  border-radius: 12px;
+  border-radius: 1rem;
+  box-shadow: 0 16px 32px -16px rgba(0, 139, 159, 0.22);
   padding: 0.85rem 1rem;
 }
 
@@ -136,7 +137,8 @@ $color-borde: #e2e8f0;
 .panel {
   background: #fff;
   border: 1px solid $color-borde;
-  border-radius: 12px;
+  border-radius: 1rem;
+  box-shadow: 0 16px 32px -16px rgba(0, 139, 159, 0.22);
   padding: 1rem 1.1rem 0.75rem;
   margin-bottom: 1rem;
 }
@@ -203,7 +205,7 @@ $color-borde: #e2e8f0;
   }
 
   &.pendiente {
-    background: #93c5fd;
+    background: #61d6e6;
   }
 }
 
@@ -227,14 +229,15 @@ $color-borde: #e2e8f0;
   }
 
   &.azul {
-    background: #93c5fd;
+    background: #61d6e6;
   }
 }
 
 .tabla-contenedor {
   background: #fff;
   border: 1px solid $color-borde;
-  border-radius: 12px;
+  border-radius: 1rem;
+  box-shadow: 0 16px 32px -16px rgba(0, 139, 159, 0.22);
   overflow-x: auto;
   margin-bottom: 1rem;
 
@@ -242,10 +245,11 @@ $color-borde: #e2e8f0;
     min-width: 760px;
   }
 
-  th {
+  thead th {
     font-size: 0.78rem;
     font-weight: 600;
-    color: $color-texto-suave;
+    color: #fff;
+    background: $color-primario;
     text-transform: uppercase;
     letter-spacing: 0.03em;
     white-space: nowrap;
@@ -343,14 +347,14 @@ $color-borde: #e2e8f0;
   font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
-  background: #e2e8f0;
+  background: #d7e7ee;
   color: $color-texto-suave;
 }
 
 .estado-borrador,
 .estado-programado {
-  background: #dbeafe;
-  color: #1d4ed8;
+  background: #dff7fa;
+  color: #008b9f;
 }
 
 .estado-activo,
@@ -372,10 +376,10 @@ $color-borde: #e2e8f0;
   gap: 0.4rem;
   margin: 0 0 0.75rem;
   padding: 0.55rem 0.8rem;
-  border: 1px solid #bfdbfe;
+  border: 1px solid #bdd6e0;
   border-radius: 10px;
-  background: #eff6ff;
-  color: #1d4ed8;
+  background: #dff7fa;
+  color: #008b9f;
   font-size: 0.82rem;
 }
 

@@ -1,12 +1,13 @@
-$color-texto: #1e293b;
+$color-texto: #253844;
 $color-texto-suave: #64748b;
-$color-borde: #e2e8f0;
+$color-borde: #d7e7ee;
 
 .tarjeta {
   max-width: 860px;
   background: #fff;
   border: 1px solid $color-borde;
-  border-radius: 12px;
+  border-radius: 1rem;
+  box-shadow: 0 16px 32px -16px rgba(0, 139, 159, 0.22);
   padding: 1.5rem;
 }
 

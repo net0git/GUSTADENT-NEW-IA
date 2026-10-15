@@ -1,4 +1,82 @@
-/* You can add global styles to this file, and also import other style files */
+/* Tema visual inspirado en DoctoCliq: tipografias Nunito y Plus Jakarta Sans,
+   primario verde azulado, superficies claras, tarjetas con sombra suave y
+   botones tipo pildora. Solo se toma el lenguaje visual, no su marca. */
+
+:root {
+  --dc-teal: #008b9f;
+  --dc-teal-hover: #00a9c5;
+  --dc-celeste: #4cb0c2;
+  --dc-celeste-claro: #dff7fa;
+  --dc-gris: #d7e7ee;
+  --dc-mutado: #bdd6e0;
+  --dc-tinta: #253844;
+  --dc-sombra: rgba(0, 139, 159, 0.22);
+
+  --bs-primary: #008b9f;
+  --bs-primary-rgb: 0, 139, 159;
+  --bs-link-color: #008b9f;
+  --bs-link-color-rgb: 0, 139, 159;
+  --bs-link-hover-color: #00a9c5;
+  --bs-link-hover-color-rgb: 0, 169, 197;
+  --bs-border-color: #d7e7ee;
+  --bs-body-font-family: 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --bs-body-color: #253844;
+  --bs-body-bg: #f0f7f9;
+}
+
+body {
+  font-family: var(--bs-body-font-family);
+  color: var(--bs-body-color);
+  background: var(--bs-body-bg);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Plus Jakarta Sans', 'Nunito', 'Segoe UI', system-ui, sans-serif;
+}
+
+/* Botones tipo pildora. */
+.btn {
+  --bs-btn-border-radius: 999px;
+  font-family: 'Plus Jakarta Sans', 'Nunito', 'Segoe UI', system-ui, sans-serif;
+  font-weight: 600;
+}
+
+.btn-primary {
+  --bs-btn-bg: #008b9f;
+  --bs-btn-border-color: #008b9f;
+  --bs-btn-hover-bg: #00a9c5;
+  --bs-btn-hover-border-color: #00a9c5;
+  --bs-btn-active-bg: #00768a;
+  --bs-btn-active-border-color: #00768a;
+  --bs-btn-disabled-bg: #bdd6e0;
+  --bs-btn-disabled-border-color: #bdd6e0;
+}
+
+.btn-outline-primary {
+  --bs-btn-color: #008b9f;
+  --bs-btn-border-color: #008b9f;
+  --bs-btn-hover-bg: #008b9f;
+  --bs-btn-hover-border-color: #008b9f;
+  --bs-btn-active-bg: #00768a;
+  --bs-btn-active-border-color: #00768a;
+}
+
+/* Campos con borde suave y foco en teal. */
+.form-control,
+.form-select {
+  border-radius: 8px;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #008b9f;
+  box-shadow: 0 0 0 0.2rem rgba(0, 139, 159, 0.15);
+}
 
 /* Etiquetas de los formularios dentro de las ventanas de SweetAlert2.
    SweetAlert2 se dibuja fuera de los componentes, asi que el estilo va aqui. */

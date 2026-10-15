@@ -1,9 +1,9 @@
-$color-primario: #2563eb;
+$color-primario: #008b9f;
 $color-verde: #16a34a;
-$color-texto: #1e293b;
+$color-texto: #253844;
 $color-texto-suave: #64748b;
-$color-borde: #e2e8f0;
-$color-fondo: #f1f5f9;
+$color-borde: #d7e7ee;
+$color-fondo: #f0f7f9;
 
 .cabecera-seccion {
   display: flex;
@@ -102,7 +102,8 @@ $color-fondo: #f1f5f9;
   flex-direction: column;
   background: #fff;
   border: 1px solid $color-borde;
-  border-radius: 12px;
+  border-radius: 1rem;
+  box-shadow: 0 16px 32px -16px rgba(0, 139, 159, 0.22);
   padding: 1rem 1.1rem;
   text-decoration: none;
   color: inherit;
@@ -273,10 +274,10 @@ $color-fondo: #f1f5f9;
   flex-wrap: wrap;
   padding: 0.6rem 0.85rem;
   margin-bottom: 0.75rem;
-  border: 1px solid #bfdbfe;
+  border: 1px solid #bdd6e0;
   border-radius: 10px;
-  background: #eff6ff;
-  color: #1d4ed8;
+  background: #dff7fa;
+  color: #008b9f;
   font-size: 0.88rem;
 
   .btn-link {
@@ -290,7 +291,7 @@ $color-fondo: #f1f5f9;
 .hora-lista {
   display: block;
   font-size: 0.78rem;
-  color: #1d4ed8;
+  color: #008b9f;
 }
 
 .tipo {
@@ -317,17 +318,19 @@ $color-fondo: #f1f5f9;
 .tabla-contenedor {
   background: #fff;
   border: 1px solid $color-borde;
-  border-radius: 12px;
+  border-radius: 1rem;
+  box-shadow: 0 16px 32px -16px rgba(0, 139, 159, 0.22);
   overflow-x: auto;
 
   table {
     min-width: 900px;
   }
 
-  th {
+  thead th {
     font-size: 0.78rem;
     font-weight: 600;
-    color: $color-texto-suave;
+    color: #fff;
+    background: $color-primario;
     text-transform: uppercase;
     letter-spacing: 0.03em;
     white-space: nowrap;
@@ -396,14 +399,14 @@ td .hora-lista {
   font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
-  background: #e2e8f0;
+  background: #d7e7ee;
   color: $color-texto-suave;
 }
 
 .estado-borrador,
 .estado-programado {
-  background: #dbeafe;
-  color: #1d4ed8;
+  background: #dff7fa;
+  color: #008b9f;
 }
 
 .estado-activo,
@@ -427,6 +430,7 @@ td .hora-lista {
   padding: 3rem 1rem;
   background: #fff;
   border: 1px dashed $color-borde;
-  border-radius: 12px;
+  border-radius: 1rem;
+  box-shadow: 0 16px 32px -16px rgba(0, 139, 159, 0.22);
   color: $color-texto-suave;
 }

@@ -1,7 +1,7 @@
-$color-primario: #2563eb;
-$color-texto: #1e293b;
+$color-primario: #008b9f;
+$color-texto: #253844;
 $color-texto-suave: #64748b;
-$color-borde: #e2e8f0;
+$color-borde: #d7e7ee;
 
 .pestanas {
   display: flex;
@@ -41,7 +41,8 @@ $color-borde: #e2e8f0;
 .panel-lista {
   background: #fff;
   border: 1px solid $color-borde;
-  border-radius: 12px;
+  border-radius: 1rem;
+  box-shadow: 0 16px 32px -16px rgba(0, 139, 159, 0.22);
   padding: 1.25rem;
 }
 
@@ -68,7 +69,7 @@ $color-borde: #e2e8f0;
   display: inline-block;
   padding: 0.05rem 0.45rem;
   border-radius: 999px;
-  background: #e2e8f0;
+  background: #d7e7ee;
   color: $color-texto-suave;
   font-size: 0.75rem;
   font-weight: 600;
