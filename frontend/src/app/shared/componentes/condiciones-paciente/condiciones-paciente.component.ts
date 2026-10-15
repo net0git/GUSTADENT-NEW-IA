@@ -12,7 +12,6 @@ interface FilaCondicion {
   clave: string;
   texto: string;
   id: number | null;
-  autor: string | null;
 }
 
 /**
@@ -68,7 +67,6 @@ export class CondicionesPacienteComponent implements OnInit {
         clave: `local-${indice}`,
         texto,
         id: null,
-        autor: null,
       }));
     }
 
@@ -76,7 +74,6 @@ export class CondicionesPacienteComponent implements OnInit {
       clave: `base-${condicion.id}`,
       texto: condicion.descripcion,
       id: condicion.id,
-      autor: condicion.nombreUsuario,
     }));
   });
 
