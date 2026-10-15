@@ -14,6 +14,19 @@ export interface Paciente {
   nombreCompleto: string;
 }
 
+/**
+ * Una condicion del paciente: texto libre con lo que hay que saber antes de
+ * atenderlo. Quitar no borra, solo la desactiva.
+ */
+export interface CondicionPaciente {
+  id: number;
+  descripcion: string;
+  activo: boolean;
+  idAtencionAlta: number | null;
+  idUsuario: number | null;
+  nombreUsuario: string | null;
+}
+
 export interface DatosPaciente {
   dni: string;
   nombres: string;

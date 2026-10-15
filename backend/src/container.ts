@@ -43,7 +43,11 @@ import {
 import { PgPacientesRepository } from './modules/pacientes/infrastructure/pg-pacientes.repository';
 import {
   ActualizarPacienteUseCase,
+  ActualizarCondicionUseCase,
+  CambiarEstadoCondicionUseCase,
+  CrearCondicionUseCase,
   CrearPacienteUseCase,
+  ListarCondicionesUseCase,
   ListarPacientesUseCase,
   ObtenerPacienteUseCase,
 } from './modules/pacientes/application/use-cases/pacientes.use-cases';
@@ -111,6 +115,10 @@ export const pacientesContainer = {
   obtener: new ObtenerPacienteUseCase(pacientesRepository),
   crear: new CrearPacienteUseCase(pacientesRepository),
   actualizar: new ActualizarPacienteUseCase(pacientesRepository),
+  listarCondiciones: new ListarCondicionesUseCase(pacientesRepository),
+  crearCondicion: new CrearCondicionUseCase(pacientesRepository),
+  actualizarCondicion: new ActualizarCondicionUseCase(pacientesRepository),
+  cambiarEstadoCondicion: new CambiarEstadoCondicionUseCase(pacientesRepository),
 };
 
 const atencionesRepository = new PgAtencionesRepository();

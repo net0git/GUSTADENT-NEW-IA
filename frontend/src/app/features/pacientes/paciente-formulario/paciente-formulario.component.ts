@@ -8,13 +8,14 @@ import { CatalogosService } from '../../../core/services/catalogos.service';
 import { DatosPaciente, Paciente, PacientesService } from '../../../core/services/pacientes.service';
 import { campoInvalido, mensajeDeError } from '../../../shared/formularios/validacion';
 import { hoyIso } from '../../../shared/fechas/fechas';
+import { CondicionesPacienteComponent } from '../../../shared/componentes/condiciones-paciente/condiciones-paciente.component';
 
 const PATRON_DNI = /^\d{8}$/;
 const FECHA_MAXIMA = hoyIso();
 
 @Component({
   selector: 'app-paciente-formulario',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, CondicionesPacienteComponent],
   templateUrl: './paciente-formulario.component.html',
   styleUrl: './paciente-formulario.component.scss',
 })
@@ -28,8 +29,11 @@ export class PacienteFormularioComponent implements OnInit {
   protected readonly mostrarCampoInvalido = campoInvalido;
 
   private readonly idRuta = this.route.snapshot.paramMap.get('id');
-  protected readonly idPaciente = this.idRuta ? Number(this.idRuta) : null;
-  protected readonly esEdicion = this.idPaciente !== null;
+  protected readonly id = this.idRuta ? Number(this.idRuta) : null;
+  protected readonly esEdicion = this.id !== null;
+
+  /** Condiciones anotadas antes de que el paciente exista en la base. */
+  protected readonly condicionesPendientes = signal<string[]>([]);
 
   protected readonly cargando = signal(true);
   protected readonly guardando = signal(false);
@@ -81,18 +85,23 @@ export class PacienteFormularioComponent implements OnInit {
       return;
     }
 
-    const id = this.idPaciente;
+    const id = this.id;
     const peticion = id === null ? this.crear() : this.pacientesService.actualizar(id, this.datos());
 
     this.guardando.set(true);
     peticion.subscribe({
-      next: () => {
+      next: (paciente) => {
         this.guardando.set(false);
-        Swal.fire({
-          icon: 'success',
-          title: id === null ? 'Paciente registrado' : 'Paciente actualizado',
-          confirmButtonText: 'Aceptar',
-        }).then(() => this.router.navigateByUrl('/pacientes'));
+
+        // Las condiciones anotadas antes de crear el paciente se registran ahora
+        // que ya existe su id.
+        const pendientes = this.condicionesPendientes();
+        if (id === null && pendientes.length > 0) {
+          this.guardarCondiciones(paciente.id, pendientes);
+          return;
+        }
+
+        this.avisarGuardado(id === null);
       },
       error: (error: unknown) => {
         this.guardando.set(false);
@@ -110,6 +119,34 @@ export class PacienteFormularioComponent implements OnInit {
     return this.pacientesService.crear(this.datos());
   }
 
+  /** Registra una por una las condiciones que se anotaron antes de crear. */
+  private guardarCondiciones(idPaciente: number, descripciones: string[]): void {
+    const pendientes = [...descripciones];
+
+    const siguiente = (): void => {
+      const descripcion = pendientes.shift();
+      if (descripcion === undefined) {
+        this.avisarGuardado(true);
+        return;
+      }
+
+      this.pacientesService.crearCondicion(idPaciente, descripcion).subscribe({
+        next: siguiente,
+        error: (error: unknown) => this.finCargaConError(errorApi(error).mensaje),
+      });
+    };
+
+    siguiente();
+  }
+
+  private avisarGuardado(esNuevo: boolean): void {
+    Swal.fire({
+      icon: 'success',
+      title: esNuevo ? 'Paciente registrado' : 'Paciente actualizado',
+      confirmButtonText: 'Aceptar',
+    }).then(() => this.router.navigateByUrl('/pacientes'));
+  }
+
   private datos(): DatosPaciente {
     const valores = this.formulario.getRawValue();
     return {
@@ -125,7 +162,7 @@ export class PacienteFormularioComponent implements OnInit {
   }
 
   private cargarPaciente(): void {
-    const id = this.idPaciente;
+    const id = this.id;
     if (id === null) {
       this.cargando.set(false);
       return;

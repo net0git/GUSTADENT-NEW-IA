@@ -1,0 +1,98 @@
+<div class="condiciones">
+  @if (cargando()) {
+    <div class="estado-vacio">
+      <div class="spinner-border spinner-border-sm" role="status"></div>
+      <span>Cargando condiciones...</span>
+    </div>
+  }
+
+  @if (!cargando() && filas().length === 0) {
+    <p class="sin-condiciones">
+      <i class="bi bi-clipboard2-pulse"></i>
+      Sin condiciones registradas. Agrega alergias, enfermedades, medicamentos o cualquier
+      dato que el odontólogo deba saber antes de atender.
+    </p>
+  }
+
+  @if (filas().length > 0) {
+    <ul class="lista">
+      @for (fila of filas(); track fila.clave) {
+        <li class="item">
+          @if (editando(fila)) {
+            <form
+              class="editor"
+              [formGroup]="formularioEdicion"
+              (ngSubmit)="guardarEdicion(fila)"
+              novalidate
+            >
+              <textarea
+                class="form-control form-control-sm"
+                rows="2"
+                formControlName="descripcion"
+                [class.is-invalid]="mostrarCampoInvalido(formularioEdicion.controls.descripcion)"
+              ></textarea>
+              @if (mostrarCampoInvalido(formularioEdicion.controls.descripcion)) {
+                <div class="invalid-feedback d-block">
+                  {{ mensajeCampo(formularioEdicion.controls.descripcion) }}
+                </div>
+              }
+              <div class="editor-acciones">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline-secondary"
+                  (click)="cancelarEdicion()"
+                >
+                  Cancelar
+                </button>
+                <button type="submit" class="btn btn-sm btn-primary">Guardar</button>
+              </div>
+            </form>
+          } @else {
+            <div class="dato">
+              <i class="bi bi-exclamation-circle icono"></i>
+              <span class="texto">{{ fila.texto }}</span>
+              @if (fila.autor) {
+                <small class="autor">cargado por {{ fila.autor }}</small>
+              }
+            </div>
+            <div class="item-acciones">
+              <button
+                type="button"
+                class="btn btn-sm btn-outline-primary"
+                title="Corregir"
+                (click)="editar(fila)"
+              >
+                <i class="bi bi-pencil"></i>
+                <span class="visually-hidden">Corregir</span>
+              </button>
+              <button
+                type="button"
+                class="btn btn-sm btn-outline-danger"
+                title="Quitar"
+                (click)="quitar(fila)"
+              >
+                <i class="bi bi-trash3"></i>
+                <span class="visually-hidden">Quitar</span>
+              </button>
+            </div>
+          }
+        </li>
+      }
+    </ul>
+  }
+
+  <form class="agregar" [formGroup]="formularioAgregar" (ngSubmit)="agregar()" novalidate>
+    <div class="input-group">
+      <span class="input-group-text"><i class="bi bi-plus-lg"></i></span>
+      <input
+        class="form-control form-control-sm"
+        type="text"
+        maxlength="500"
+        placeholder="Ej. Alérgico a la penicilina"
+        aria-label="Nueva condición del paciente"
+        formControlName="descripcion"
+      />
+      <button class="btn btn-outline-primary btn-sm" type="submit">Agregar</button>
+    </div>
+  </form>
+</div>

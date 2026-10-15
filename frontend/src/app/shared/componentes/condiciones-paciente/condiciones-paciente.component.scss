@@ -1,0 +1,96 @@
+$color-primario: #2563eb;
+$color-texto: #1e293b;
+$color-texto-suave: #64748b;
+$color-borde: #e2e8f0;
+$color-fondo: #f1f5f9;
+
+.sin-condiciones {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin: 0 0 0.75rem;
+  padding: 0.65rem 0.8rem;
+  border: 1px dashed $color-borde;
+  border-radius: 8px;
+  background: $color-fondo;
+  color: $color-texto-suave;
+  font-size: 0.82rem;
+
+  i {
+    color: $color-primario;
+    margin-top: 0.1rem;
+  }
+}
+
+.lista {
+  list-style: none;
+  margin: 0 0 0.75rem;
+  padding: 0;
+}
+
+.item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed $color-borde;
+
+  &:last-child {
+    border-bottom: 0;
+  }
+}
+
+.dato {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.icono {
+  color: $color-primario;
+}
+
+.texto {
+  color: $color-texto;
+  font-size: 0.88rem;
+}
+
+.autor {
+  color: $color-texto-suave;
+  font-size: 0.72rem;
+}
+
+.item-acciones {
+  display: flex;
+  gap: 0.25rem;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.editor {
+  flex: 1;
+}
+
+.editor-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.4rem;
+  margin-top: 0.35rem;
+}
+
+.agregar {
+  margin-top: 0.5rem;
+}
+
+.estado-vacio {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 0;
+  color: $color-texto-suave;
+  font-size: 0.85rem;
+}

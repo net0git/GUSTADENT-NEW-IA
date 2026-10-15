@@ -17,6 +17,7 @@ import {
   EstadoSesion,
   Sesion,
 } from '../../../core/services/atenciones.service';
+import { CondicionesPacienteComponent } from '../../../shared/componentes/condiciones-paciente/condiciones-paciente.component';
 import { SesionModalComponent } from '../../../shared/componentes/sesion-modal/sesion-modal.component';
 import { campoInvalido, mensajeDeError } from '../../../shared/formularios/validacion';
 
@@ -28,7 +29,7 @@ interface Odontologo {
 
 @Component({
   selector: 'app-atencion-detalle',
-  imports: [ReactiveFormsModule, RouterLink, SesionModalComponent],
+  imports: [ReactiveFormsModule, RouterLink, SesionModalComponent, CondicionesPacienteComponent],
   templateUrl: './atencion-detalle.component.html',
   styleUrl: './atencion-detalle.component.scss',
 })

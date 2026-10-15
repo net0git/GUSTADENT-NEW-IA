@@ -9,6 +9,7 @@ import { DatosPaciente, Sexo } from '../domain/paciente';
 
 const FORMATO_FECHA = /^\d{4}-\d{2}-\d{2}$/;
 const ANIO_MINIMO = 1900;
+const LONGITUD_MAXIMA_CONDICION = 500;
 
 function fechaNacimiento(opcional: string | null): string | null {
   if (opcional === null) {
@@ -53,6 +54,12 @@ function procedencia(valor: unknown): number | null {
     throw new AppError(400, 'VALIDACION', 'El campo idProcedencia no es válido');
   }
   return valor;
+}
+
+/** El texto de una condicion es libre, pero no puede quedar vacío. */
+export function validarDescripcionCondicion(cuerpo: unknown): string {
+  const datos = objetoDeCuerpo(cuerpo);
+  return textoOpcional(datos.descripcion, 'descripcion', LONGITUD_MAXIMA_CONDICION) ?? '';
 }
 
 export function validarDatosPaciente(cuerpo: unknown): DatosPaciente {

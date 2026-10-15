@@ -91,6 +91,20 @@
         </div>
       }
 
+      <h2 class="formulario-titulo">Condiciones del paciente</h2>
+      <p class="ayuda">
+        Alergias, enfermedades crónicas, medicamentos, reacciones a la anestesia o cualquier
+        dato que el odontólogo deba saber antes de atender.
+      </p>
+      @if (id) {
+        <app-condiciones-paciente [idPaciente]="id" />
+      } @else {
+        <app-condiciones-paciente
+          [idPaciente]="null"
+          (condicionesPendientes)="condicionesPendientes.set($event)"
+        />
+      }
+
       <div class="acciones">
         <a class="btn btn-outline-secondary" routerLink="/pacientes">Cancelar</a>
         <button type="submit" class="btn btn-primary" [disabled]="guardando()">

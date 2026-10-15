@@ -1,7 +1,7 @@
 import { pool } from '../../../database/pool';
 import { traducirErrorBd } from '../../../shared/database/errores-bd';
 import { PacientesRepository } from '../application/ports/pacientes.repository';
-import { DatosPaciente, Paciente, Sexo } from '../domain/paciente';
+import { DatosPaciente, CondicionPaciente, Paciente, Sexo } from '../domain/paciente';
 
 interface PacienteFila {
   id_paciente: number;
@@ -17,8 +17,28 @@ interface PacienteFila {
   nombre_completo: string;
 }
 
+interface CondicionFila {
+  id_condicion: number;
+  descripcion: string;
+  activo: boolean;
+  id_atencion_alta: number | null;
+  id_usuario: number | null;
+  nombre_usuario: string | null;
+}
+
 const MENSAJE_PROCEDENCIA_INEXISTENTE = 'La procedencia indicada no existe';
 const LIMITE_RESULTADOS = 50;
+
+function aCondicion(fila: CondicionFila): CondicionPaciente {
+  return {
+    id: fila.id_condicion,
+    descripcion: fila.descripcion,
+    activo: fila.activo,
+    idAtencionAlta: fila.id_atencion_alta,
+    idUsuario: fila.id_usuario,
+    nombreUsuario: fila.nombre_usuario,
+  };
+}
 
 const COLUMNAS = `
   p.id_paciente,
@@ -165,5 +185,78 @@ export class PgPacientesRepository implements PacientesRepository {
     } catch (error) {
       throw traducirErrorBd(error, MENSAJE_PROCEDENCIA_INEXISTENTE);
     }
+  }
+
+  async listarCondiciones(idPaciente: number, soloActivas: boolean): Promise<CondicionPaciente[]> {
+    const resultado = await pool.query<CondicionFila>(
+      `SELECT c.id_condicion,
+              c.descripcion,
+              c.activo,
+              c.id_atencion_alta,
+              c.id_usuario,
+              u.nombre_completo AS nombre_usuario
+         FROM condiciones_paciente c
+         LEFT JOIN usuarios u ON u.id_usuario = c.id_usuario
+        WHERE c.id_paciente = $1
+          AND ($2::boolean IS FALSE OR c.activo)
+        ORDER BY c.id_condicion DESC`,
+      [idPaciente, soloActivas]
+    );
+
+    return resultado.rows.map(aCondicion);
+  }
+
+  async obtenerCondicion(id: number): Promise<CondicionPaciente | null> {
+    const resultado = await pool.query<CondicionFila>(
+      `SELECT c.id_condicion,
+              c.descripcion,
+              c.activo,
+              c.id_atencion_alta,
+              c.id_usuario,
+              u.nombre_completo AS nombre_usuario
+         FROM condiciones_paciente c
+         LEFT JOIN usuarios u ON u.id_usuario = c.id_usuario
+        WHERE c.id_condicion = $1`,
+      [id]
+    );
+    const fila = resultado.rows[0];
+    return fila ? aCondicion(fila) : null;
+  }
+
+  async crearCondicion(
+    idPaciente: number,
+    descripcion: string,
+    idUsuario: number,
+    idAtencionAlta: number | null
+  ): Promise<number> {
+    try {
+      const resultado = await pool.query<{ id_condicion: number }>(
+        `INSERT INTO condiciones_paciente
+           (id_paciente, descripcion, id_atencion_alta, id_usuario)
+         VALUES ($1, $2, $3, $4)
+         RETURNING id_condicion`,
+        [idPaciente, descripcion, idAtencionAlta, idUsuario]
+      );
+      return resultado.rows[0].id_condicion;
+    } catch (error) {
+      throw traducirErrorBd(error, MENSAJE_PROCEDENCIA_INEXISTENTE);
+    }
+  }
+
+  async actualizarCondicion(id: number, descripcion: string): Promise<boolean> {
+    const resultado = await pool.query(
+      'UPDATE condiciones_paciente SET descripcion = $2 WHERE id_condicion = $1',
+      [id, descripcion]
+    );
+    return (resultado.rowCount ?? 0) > 0;
+  }
+
+  /** Quitar no borra: la condicion queda desactivada para conservar la historia. */
+  async cambiarEstadoCondicion(id: number, activo: boolean): Promise<boolean> {
+    const resultado = await pool.query(
+      'UPDATE condiciones_paciente SET activo = $2 WHERE id_condicion = $1',
+      [id, activo]
+    );
+    return (resultado.rowCount ?? 0) > 0;
   }
 }
