@@ -8,7 +8,7 @@
 
     <form [formGroup]="formulario" (ngSubmit)="iniciarSesion()" novalidate>
       <div class="mb-3">
-        <label for="username" class="form-label">Usuario</label>
+        <label for="username" class="form-label">Usuario <span class="obligatorio">*</span></label>
         <input
           id="username"
           class="form-control"
@@ -20,7 +20,7 @@
       </div>
 
       <div class="mb-4">
-        <label for="password" class="form-label">Contraseña</label>
+        <label for="password" class="form-label">Contraseña <span class="obligatorio">*</span></label>
         <input
           id="password"
           type="password"

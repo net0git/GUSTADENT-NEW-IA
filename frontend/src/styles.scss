@@ -41,7 +41,7 @@ h6 {
 
 /* Botones tipo pildora. */
 .btn {
-  --bs-btn-border-radius: 999px;
+  --bs-btn-border-radius: 8px;
   font-family: 'Plus Jakarta Sans', 'Nunito', 'Segoe UI', system-ui, sans-serif;
   font-weight: 600;
 }
@@ -70,6 +70,25 @@ h6 {
 .form-control,
 .form-select {
   border-radius: 8px;
+  min-height: 42px;
+}
+
+.form-control-sm,
+.form-select-sm {
+  min-height: 0;
+}
+
+/* Etiquetas semibold oscuras, como en los formularios de referencia. */
+.form-label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #253844;
+}
+
+/* Asterisco rojo de campo obligatorio. */
+.obligatorio {
+  color: #dc2626;
+  font-weight: 700;
 }
 
 .form-control:focus,
