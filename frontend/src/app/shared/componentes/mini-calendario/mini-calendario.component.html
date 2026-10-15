@@ -1,6 +1,6 @@
 <div class="calendario">
   <div class="calendario-cabecera">
-    <span class="calendario-titulo">{{ tituloMes() }}</span>
+    <span class="calendario-titulo">{{ tituloMeses() }}</span>
     <div class="calendario-navegacion">
       <button type="button" class="btn-navegacion" aria-label="Mes anterior" (click)="mesAnterior()">
         <i class="bi bi-chevron-left"></i>
@@ -11,24 +11,29 @@
     </div>
   </div>
 
-  <div class="calendario-rejilla">
-    @for (nombre of nombresDias; track $index) {
-      <span class="dia-nombre">{{ nombre }}</span>
+  @for (grilla of meses(); track grilla.base.getTime()) {
+    @if (meses().length > 1) {
+      <p class="calendario-subtitulo">{{ nombreMes(grilla.base) }}</p>
     }
+    <div class="calendario-rejilla">
+      @for (nombre of nombresDias; track $index) {
+        <span class="dia-nombre">{{ nombre }}</span>
+      }
 
-    @for (dia of dias(); track dia.fecha.getTime()) {
-      <button
-        type="button"
-        class="dia"
-        [class.dia-fuera-mes]="!dia.esDelMes"
-        [class.dia-hoy]="dia.esHoy"
-        [class.dia-seleccionado]="dia.esSeleccionado"
-        [class.dia-con-citas]="dia.citas > 0"
-        [attr.title]="dia.citas > 0 ? dia.citas + (dia.citas === 1 ? ' cita pendiente' : ' citas pendientes') : null"
-        (click)="seleccionar(dia)"
-      >
-        {{ dia.numero }}
-      </button>
-    }
-  </div>
+      @for (dia of grilla.dias; track dia.fecha.getTime()) {
+        <button
+          type="button"
+          class="dia"
+          [class.dia-fuera-mes]="!dia.esDelMes"
+          [class.dia-hoy]="dia.esHoy"
+          [class.dia-seleccionado]="dia.esSeleccionado"
+          [class.dia-con-citas]="dia.citas > 0"
+          [attr.title]="dia.citas > 0 ? dia.citas + (dia.citas === 1 ? ' cita pendiente' : ' citas pendientes') : null"
+          (click)="seleccionar(dia)"
+        >
+          {{ dia.numero }}
+        </button>
+      }
+    </div>
+  }
 </div>

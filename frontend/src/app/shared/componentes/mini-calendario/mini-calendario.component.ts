@@ -11,6 +11,11 @@ interface DiaCalendario {
   citas: number;
 }
 
+interface GrillaMes {
+  base: Date;
+  dias: DiaCalendario[];
+}
+
 const NOMBRES_DIAS = ['D', 'L', 'M', 'M', 'J', 'V', 'S'];
 
 function mismoDia(a: Date, b: Date): boolean {
@@ -23,6 +28,33 @@ function aIso(fecha: Date): string {
   return `${fecha.getFullYear()}-${mes}-${dia}`;
 }
 
+/** Celdas de un mes, incluidas las de los meses vecinos que completan las semanas. */
+function celdasDe(base: Date): Date[] {
+  const inicioSemana = base.getDay();
+  const diasDelMes = new Date(base.getFullYear(), base.getMonth() + 1, 0).getDate();
+  const fechas: Date[] = [];
+
+  for (let indice = inicioSemana; indice > 0; indice--) {
+    fechas.push(new Date(base.getFullYear(), base.getMonth(), 1 - indice));
+  }
+
+  for (let numero = 1; numero <= diasDelMes; numero++) {
+    fechas.push(new Date(base.getFullYear(), base.getMonth(), numero));
+  }
+
+  while (fechas.length % 7 !== 0) {
+    const ultima = fechas[fechas.length - 1];
+    fechas.push(new Date(ultima.getFullYear(), ultima.getMonth(), ultima.getDate() + 1));
+  }
+
+  return fechas;
+}
+
+function nombreMes(base: Date): string {
+  const texto = base.toLocaleDateString('es-PE', { month: 'long' });
+  return texto.charAt(0).toUpperCase() + texto.slice(1);
+}
+
 @Component({
   selector: 'app-mini-calendario',
   templateUrl: './mini-calendario.component.html',
@@ -31,6 +63,8 @@ function aIso(fecha: Date): string {
 export class MiniCalendarioComponent {
   /** Fecha seleccionada en formato AAAA-MM-DD. Se escribe para reflejarla desde fuera. */
   readonly fechaSeleccionada = input<string | null>(null);
+  /** Cuantos meses seguidos se muestran. En la barra lateral es uno. */
+  readonly mesesVisibles = input(1);
   readonly cambioFecha = output<string>();
 
   protected readonly nombresDias = NOMBRES_DIAS;
@@ -38,10 +72,12 @@ export class MiniCalendarioComponent {
 
   private readonly atenciones = inject(AtencionesService);
   private readonly seleccion = signal<Date>(new Date());
+  /** Primer mes visible; los siguientes son consecutivos. */
   protected readonly mes = signal(new Date(this.hoy.getFullYear(), this.hoy.getMonth(), 1));
 
-  /** Citas pendientes por dia, guardadas una vez por cada mes visto. */
-  private readonly citasPorRango = signal<Record<string, Record<string, number>>>({});
+  /** Citas pendientes por dia, acumuladas de todos los rangos ya pedidos. */
+  private readonly citas = signal<Record<string, number>>({});
+  private readonly rangosCargados = new Set<string>();
 
   constructor() {
     effect(() => {
@@ -60,70 +96,70 @@ export class MiniCalendarioComponent {
       }
     });
 
-    // Al cambiar de mes se piden los dias con citas de la rejilla completa.
+    // Al cambiar de mes se piden los dias con citas de cada grilla visible.
+    // Se pide por mes y no todo junto para no superar el limite del servidor.
     effect(() => {
-      const celdas = this.celdas();
-      this.cargarCitas(aIso(celdas[0]), aIso(celdas[celdas.length - 1]));
+      for (const grilla of this.grillas()) {
+        const celdas = grilla.celdas;
+        this.cargarCitas(aIso(celdas[0]), aIso(celdas[celdas.length - 1]));
+      }
     });
 
-    // Tras un cambio se pide de nuevo el mes visible.
+    // Tras un cambio se piden de nuevo los meses visibles.
     this.atenciones
       .sesionesModificadas.pipe(takeUntilDestroyed())
       .subscribe(() => {
-        const celdas = this.celdas();
-        this.cargarCitas(aIso(celdas[0]), aIso(celdas[celdas.length - 1]), true);
+        this.rangosCargados.clear();
+        for (const grilla of this.grillas()) {
+          const celdas = grilla.celdas;
+          this.cargarCitas(aIso(celdas[0]), aIso(celdas[celdas.length - 1]), true);
+        }
       });
   }
 
-  /** Todas las celdas del mes, incluidas las de los meses vecinos. */
-  private readonly celdas = computed<Date[]>(() => {
-    const primerDia = this.mes();
-    const inicioSemana = primerDia.getDay();
-    const diasDelMes = new Date(primerDia.getFullYear(), primerDia.getMonth() + 1, 0).getDate();
-    const fechas: Date[] = [];
-
-    for (let indice = inicioSemana; indice > 0; indice--) {
-      fechas.push(new Date(primerDia.getFullYear(), primerDia.getMonth(), 1 - indice));
-    }
-
-    for (let numero = 1; numero <= diasDelMes; numero++) {
-      fechas.push(new Date(primerDia.getFullYear(), primerDia.getMonth(), numero));
-    }
-
-    while (fechas.length % 7 !== 0) {
-      const ultima = fechas[fechas.length - 1];
-      fechas.push(new Date(ultima.getFullYear(), ultima.getMonth(), ultima.getDate() + 1));
-    }
-
-    return fechas;
+  /** Una grilla por cada mes visible, a partir del mes base. */
+  private readonly grillas = computed(() => {
+    const cantidad = Math.max(1, this.mesesVisibles());
+    const base = this.mes();
+    return Array.from({ length: cantidad }, (_, indice) => {
+      const inicio = new Date(base.getFullYear(), base.getMonth() + indice, 1);
+      return { base: inicio, celdas: celdasDe(inicio) };
+    });
   });
 
-  private readonly desde = computed(() => this.celdas()[0]);
-  private readonly hasta = computed(() => this.celdas()[this.celdas().length - 1]);
+  protected readonly tituloMeses = computed(() => {
+    const grillas = this.grillas();
+    const primera = grillas[0].base;
+    const ultima = grillas[grillas.length - 1].base;
 
-  private readonly claveRango = computed(() => `${aIso(this.desde())}|${aIso(this.hasta())}`);
-
-  /** Las citas del mes que se esta viendo; si aun no se piden, no hay puntos. */
-  private readonly citasPorDia = computed(() => this.citasPorRango()[this.claveRango()] ?? {});
-
-  protected readonly tituloMes = computed(() => {
-    const texto = this.mes().toLocaleDateString('es-PE', { month: 'long', year: 'numeric' });
-    return texto.charAt(0).toUpperCase() + texto.slice(1);
+    if (primera.getMonth() === ultima.getMonth() && primera.getFullYear() === ultima.getFullYear()) {
+      return `${nombreMes(primera)} de ${primera.getFullYear()}`;
+    }
+    if (primera.getFullYear() === ultima.getFullYear()) {
+      return `${nombreMes(primera)} – ${nombreMes(ultima)} de ${primera.getFullYear()}`;
+    }
+    return `${nombreMes(primera)} de ${primera.getFullYear()} – ${nombreMes(ultima)} de ${ultima.getFullYear()}`;
   });
 
-  protected readonly dias = computed<DiaCalendario[]>(() => {
-    const citas = this.citasPorDia();
-    const mesVisible = this.mes();
+  protected readonly meses = computed<GrillaMes[]>(() => {
+    const citas = this.citas();
 
-    return this.celdas().map((fecha) => ({
-      fecha,
-      numero: fecha.getDate(),
-      esDelMes: fecha.getMonth() === mesVisible.getMonth(),
-      esHoy: mismoDia(fecha, this.hoy),
-      esSeleccionado: mismoDia(fecha, this.seleccion()),
-      citas: citas[aIso(fecha)] ?? 0,
+    return this.grillas().map((grilla) => ({
+      base: grilla.base,
+      dias: grilla.celdas.map((fecha) => ({
+        fecha,
+        numero: fecha.getDate(),
+        esDelMes: fecha.getMonth() === grilla.base.getMonth(),
+        esHoy: mismoDia(fecha, this.hoy),
+        esSeleccionado: mismoDia(fecha, this.seleccion()),
+        citas: citas[aIso(fecha)] ?? 0,
+      })),
     }));
   });
+
+  protected nombreMes(base: Date): string {
+    return nombreMes(base);
+  }
 
   protected mesAnterior(): void {
     const actual = this.mes();
@@ -144,20 +180,22 @@ export class MiniCalendarioComponent {
   }
 
   /**
- * Cada mes se pide una sola vez y su respuesta se guarda aparte: al volver a un
- * mes ya visto se pintan sus puntos al instante, sin volver a consultar.
- */
+   * Cada rango se pide una sola vez y su respuesta se suma a las demas: al
+   * volver a un mes ya visto se pintan sus puntos al instante.
+   */
   private cargarCitas(desde: string, hasta: string, forzar = false): void {
     const clave = `${desde}|${hasta}`;
-    if (!forzar && this.citasPorRango()[clave]) {
+    if (!forzar && this.rangosCargados.has(clave)) {
       return;
     }
+    this.rangosCargados.add(clave);
 
     this.atenciones.resumenCalendario(desde, hasta).subscribe({
       next: (resumen) => {
         const dias = Object.fromEntries(resumen.map((dia) => [dia.fecha, dia.total]));
-        this.citasPorRango.update((rangos) => ({ ...rangos, [clave]: dias }));
+        this.citas.update((actuales) => ({ ...actuales, ...dias }));
       },
+      error: () => this.rangosCargados.delete(clave),
     });
   }
 }

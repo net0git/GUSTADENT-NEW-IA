@@ -149,6 +149,7 @@
         <div class="cita-rejilla">
           <div class="cita-calendario">
             <app-mini-calendario
+              [mesesVisibles]="2"
               [fechaSeleccionada]="formulario.controls.fecha.value"
               (cambioFecha)="elegirFechaDelCalendario($event)"
             />

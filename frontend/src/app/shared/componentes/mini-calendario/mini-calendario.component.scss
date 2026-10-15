@@ -39,6 +39,18 @@ $color-texto-suave: #94a3b8;
   text-align: center;
 }
 
+/* Nombre del mes de cada grilla cuando se muestra mas de uno. */
+.calendario-subtitulo {
+  margin: 0.6rem 0 0.3rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: $color-texto-suave;
+}
+
+.calendario-subtitulo:first-of-type {
+  margin-top: 0;
+}
+
 .dia-nombre {
   font-size: 0.65rem;
   font-weight: 600;
