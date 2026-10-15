@@ -12,7 +12,7 @@
   --dc-tinta: #253844;
   --dc-sombra: rgba(0, 139, 159, 0.22);
 
-  --bs-primary: #008b9f;
+  --bs-primary: #008a9fd2;
   --bs-primary-rgb: 0, 139, 159;
   --bs-link-color: #008b9f;
   --bs-link-color-rgb: 0, 139, 159;
@@ -20,8 +20,10 @@
   --bs-link-hover-color-rgb: 0, 169, 197;
   --bs-border-color: #d7e7ee;
   --bs-body-font-family: 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif;
-  --bs-body-color: #253844;
-  --bs-body-bg: #f0f7f9;
+  --bs-body-color: #253844c9;
+  // --bs-body-bg: #f0f7f9;
+  --bs-body-bg: #fafafadc;
+ 
 }
 
 body {
