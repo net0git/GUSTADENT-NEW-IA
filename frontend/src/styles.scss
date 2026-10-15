@@ -88,10 +88,12 @@ h6 {
 
 .tabla-contenedor.tabla-contenedor thead th {
   border-bottom: 0;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .tabla-contenedor.tabla-contenedor tbody td {
-  padding: 0.7rem 0.75rem;
+  padding: 0.7rem 10px;
   vertical-align: middle;
   border-color: #e8f1f4;
 }
