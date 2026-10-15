@@ -98,6 +98,19 @@ h6 {
   border-color: #e8f1f4;
 }
 
+/* Primera y ultima columna centradas en todas las tablas. */
+.tabla-contenedor.tabla-contenedor thead th:first-child,
+.tabla-contenedor.tabla-contenedor tbody td:first-child,
+.tabla-contenedor.tabla-contenedor thead th:last-child,
+.tabla-contenedor.tabla-contenedor tbody td:last-child {
+  text-align: center;
+}
+
+/* Las celdas con avatar y nombre tambien se centran como grupo. */
+.tabla-contenedor.tabla-contenedor tbody td:first-child .celda-paciente {
+  justify-content: center;
+}
+
 .tabla-contenedor.tabla-contenedor .table-hover > tbody > tr:hover > * {
   --bs-table-accent-bg: #eaf7fa;
 }

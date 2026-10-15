@@ -202,7 +202,7 @@
             <th>Sucursal</th>
             <th>Médico</th>
             <th>Estado</th>
-            <th class="text-end acciones-celda">Acciones</th>
+            <th class="acciones-celda">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -236,7 +236,7 @@
                   {{ etiquetasEstadoSesion[fila.estado] }}
                 </span>
               </td>
-              <td class="text-end acciones-celda">
+              <td class="acciones-celda">
                 <a class="btn btn-sm btn-outline-primary" [routerLink]="['/atenciones', fila.idAtencion]">
                   <i class="bi bi-arrow-right"></i> Abrir
                 </a>

@@ -49,7 +49,7 @@
           <th>Sexo</th>
           <th>Teléfono</th>
           <th>Procedencia</th>
-          <th class="text-end acciones-celda">Acciones</th>
+          <th class="acciones-celda">Acciones</th>
         </tr>
       </thead>
       <tbody>
@@ -69,7 +69,7 @@
             <td>{{ paciente.sexo === 'M' ? 'Masculino' : paciente.sexo === 'F' ? 'Femenino' : '-' }}</td>
             <td class="texto-suave">{{ paciente.telefono || '-' }}</td>
             <td class="texto-suave">{{ paciente.procedencia || '-' }}</td>
-            <td class="text-end acciones-celda">
+            <td class="acciones-celda">
               <a class="btn btn-outline-primary btn-sm" [routerLink]="['/pacientes', paciente.id, 'editar']">
                 <i class="bi bi-pencil"></i> Editar
               </a>
