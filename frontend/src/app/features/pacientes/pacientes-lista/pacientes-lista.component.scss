@@ -41,6 +41,15 @@ $color-borde: #d7e7ee;
   gap: 0.6rem;
 }
 
+/* Solo en esta tabla, el cuerpo de la primera columna va a la izquierda. */
+.tabla-contenedor.tabla-contenedor tbody td:first-child {
+  text-align: left;
+}
+
+.tabla-contenedor.tabla-contenedor tbody td:first-child .celda-paciente {
+  justify-content: flex-start;
+}
+
 .avatar {
   display: inline-flex;
   align-items: center;
