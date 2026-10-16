@@ -393,6 +393,72 @@ td .hora-lista {
   white-space: nowrap;
 }
 
+/* Chips de accion: gris en reposo y color al pasar el cursor. */
+.accion-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: #f0f4f7;
+  color: #526b7a;
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.4;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primario;
+    outline-offset: 2px;
+  }
+}
+
+/* Los botones de la fila son solo el icono, como en usuarios y catalogos. */
+.acciones-celda .accion-chip {
+  width: 1.9rem;
+  height: 1.9rem;
+  padding: 0;
+  font-size: 0.85rem;
+}
+
+.acciones-celda .accion-chip:hover,
+.acciones-celda .accion-chip:focus-visible {
+  background: $color-primario;
+  color: #fff;
+}
+
+/* Los de filtrar y limpiar llevan texto. */
+.accion-con-texto:hover:not(:disabled),
+.accion-con-texto:focus-visible {
+  background: $color-primario;
+  color: #fff;
+}
+
+/* Como el "Salir" de la referencia: solo texto gris. */
+.accion-txt {
+  padding: 0.35rem 0.5rem;
+  border: 0;
+  background: transparent;
+  color: $color-texto-suave;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  cursor: pointer;
+
+  &:hover {
+    color: $color-texto;
+    text-decoration: underline;
+  }
+}
+
 .badge-estado {
   display: inline-block;
   padding: 0.15rem 0.5rem;
