@@ -49,14 +49,14 @@ $color-borde: #d7e7ee;
   padding-right: 10px;
 }
 
-.celda-paciente {
+.celda-usuario {
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
 /* Igual que en pacientes: el contenido arranca a 30px del borde. */
-.tabla-contenedor.tabla-contenedor tbody td:first-child .celda-paciente {
+.tabla-contenedor.tabla-contenedor tbody td:first-child .celda-usuario {
   justify-content: start;
   padding-left: 30px;
 }
