@@ -61,9 +61,85 @@ $color-fondo: #f0f7f9;
 
 .item-acciones {
   display: flex;
-  gap: 0.25rem;
+  gap: 0.15rem;
   flex-shrink: 0;
   white-space: nowrap;
+  opacity: 0.55;
+  transition: opacity 0.15s ease;
+}
+
+/* Solo se destacan cuando el cursor esta sobre la fila o el boton. */
+.item:hover .item-acciones,
+.item-acciones:focus-within {
+  opacity: 1;
+}
+
+/* Botones de icono: solo el glifo, en gris, sin marco. */
+.btn-icono {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: $color-texto-suave;
+  font-size: 0.8rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    background: #e2eef3;
+  }
+}
+
+.btn-icono-editar:hover {
+  color: $color-primario;
+}
+
+.btn-icono-quitar:hover {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* Chips pequenos con fondo tenue, como los botones de accion de las tablas. */
+.btn-chip {
+  padding: 0.3rem 0.85rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-chip-primario {
+  background: #dff7fa;
+  color: #00768a;
+
+  &:hover {
+    background: $color-primario;
+    color: #fff;
+  }
+}
+
+/* Como el "Salir" de la referencia: solo texto gris. */
+.btn-accion-txt {
+  padding: 0.3rem 0.5rem;
+  border: 0;
+  background: transparent;
+  color: $color-texto-suave;
+  font-size: 0.78rem;
+  cursor: pointer;
+
+  &:hover {
+    color: $color-texto;
+    text-decoration: underline;
+  }
 }
 
 .editor {
@@ -72,6 +148,7 @@ $color-fondo: #f0f7f9;
 
 .editor-acciones {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
   gap: 0.4rem;
   margin-top: 0.35rem;
@@ -79,6 +156,10 @@ $color-fondo: #f0f7f9;
 
 .agregar {
   margin-top: 0.5rem;
+
+  ::ng-deep .btn-chip {
+    border-radius: 0 999px 999px 0;
+  }
 }
 
 .estado-vacio {

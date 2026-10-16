@@ -37,14 +37,10 @@
                 </div>
               }
               <div class="editor-acciones">
-                <button
-                  type="button"
-                  class="btn btn-sm btn-outline-secondary"
-                  (click)="cancelarEdicion()"
-                >
+                <button type="button" class="btn-accion-txt" (click)="cancelarEdicion()">
                   Cancelar
                 </button>
-                <button type="submit" class="btn btn-sm btn-primary">Guardar</button>
+                <button type="submit" class="btn-chip btn-chip-primario">Guardar</button>
               </div>
             </form>
           } @else {
@@ -55,7 +51,7 @@
             <div class="item-acciones">
               <button
                 type="button"
-                class="btn btn-sm btn-outline-primary"
+                class="btn-icono btn-icono-editar"
                 title="Corregir"
                 (click)="editar(fila)"
               >
@@ -64,7 +60,7 @@
               </button>
               <button
                 type="button"
-                class="btn btn-sm btn-outline-danger"
+                class="btn-icono btn-icono-quitar"
                 title="Quitar"
                 (click)="quitar(fila)"
               >
@@ -89,7 +85,7 @@
         aria-label="Nueva condición del paciente"
         formControlName="descripcion"
       />
-      <button class="btn btn-outline-primary btn-sm" type="submit">Agregar</button>
+      <button class="btn-chip btn-chip-primario" type="submit">Agregar</button>
     </div>
   </form>
 </div>
