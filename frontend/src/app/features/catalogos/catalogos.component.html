@@ -140,7 +140,7 @@
                 [disabled]="accionPendiente(item.id)"
                 (click)="alternarEstado(item)"
               >
-                <i class="bi" [class.bi-person-slash]="item.activo" [class.bi-person-check]="!item.activo"></i>
+                <i class="bi" [class.bi-ban]="item.activo" [class.bi-person-check]="!item.activo"></i>
                 <span class="visually-hidden">{{ item.activo ? 'Desactivar' : 'Activar' }}</span>
               </button>
             </div>
