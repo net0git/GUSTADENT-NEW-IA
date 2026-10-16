@@ -91,36 +91,36 @@ $breakpoint-movil: 992px;
     margin-bottom: 0;
   }
 
-  /* Hover discreto: solo un tono mas oscuro, sin rellenos fuertes. */
+  /* Hover discreto en gris claro: solo se oscurece un poco. */
   &:hover:not(:disabled) {
-    background: #f2f8fa;
-    border-color: #b6d8e2;
+    background: #f1f4f7;
+    border-color: #d5dde3;
     transform: translateX(1px);
 
     .accion-icono {
-      background: #cfedf3;
-      color: #00768a;
+      background: #e6ecf0;
+      color: #64748b;
     }
 
     strong {
-      color: #00768a;
+      color: #475569;
     }
   }
 
-  /* "Nueva cita" conserva el aspecto del hover mientras se este en esa
-     pantalla. Sin el desplazamiento, que solo tiene sentido al pasar el
-     cursor. */
+  /* "Nueva cita" conserva esta marca mientras se este en esa pantalla, con un
+     tono mas marcado que el hover para que se note de un vistazo. Sin el
+     desplazamiento, que solo tiene sentido al pasar el cursor. */
   &.accion-activa {
-    background: #f2f8fa;
-    border-color: #b6d8e2;
+    background: #d9f2f7;
+    border-color: #5cbccb;
 
     .accion-icono {
-      background: #cfedf3;
-      color: #00768a;
+      background: #b6e4ee;
+      color: #005f70;
     }
 
     strong {
-      color: #00768a;
+      color: #005f70;
     }
   }
 
