@@ -43,6 +43,12 @@ $color-borde: #d7e7ee;
   white-space: nowrap;
 }
 
+/* Solo en esta tabla, el nombre y la especialidad van a la izquierda. */
+.tabla-contenedor.tabla-contenedor tbody td:first-child {
+  text-align: left;
+  padding-right: 10px;
+}
+
 .texto-suave {
   font-size: 0.8rem;
   color: $color-texto-suave;
