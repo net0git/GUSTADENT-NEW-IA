@@ -45,11 +45,10 @@
         <tr>
           <th>Paciente</th>
           <th>DNI</th>
-          <th>Edad</th>
           <th>Sexo</th>
           <th>Teléfono</th>
           <th>Procedencia</th>
-          <th class="text-end acciones-celda">Acciones</th>
+          <th class="acciones-celda">Acciones</th>
         </tr>
       </thead>
       <tbody>
@@ -60,18 +59,22 @@
                 <span class="avatar">{{ iniciales(paciente) }}</span>
                 <span class="datos-paciente">
                   <strong>{{ paciente.nombreCompleto }}</strong>
-                  <small>{{ paciente.nombres }} {{ paciente.apPaterno }}{{ paciente.apMaterno ? ' ' + paciente.apMaterno : '' }}</small>
+                  <small>{{ edad(paciente) }}</small>
                 </span>
               </div>
             </td>
             <td>{{ paciente.dni }}</td>
-            <td class="texto-suave">{{ edad(paciente) }}</td>
             <td>{{ paciente.sexo === 'M' ? 'Masculino' : paciente.sexo === 'F' ? 'Femenino' : '-' }}</td>
             <td class="texto-suave">{{ paciente.telefono || '-' }}</td>
             <td class="texto-suave">{{ paciente.procedencia || '-' }}</td>
-            <td class="text-end acciones-celda">
-              <a class="btn btn-outline-primary btn-sm" [routerLink]="['/pacientes', paciente.id, 'editar']">
-                <i class="bi bi-pencil"></i> Editar
+            <td class="acciones-celda">
+              <a
+                class="accion-chip"
+                title="Editar"
+                [routerLink]="['/pacientes', paciente.id, 'editar']"
+              >
+                <i class="bi bi-pencil"></i>
+                <span class="visually-hidden">Editar</span>
               </a>
             </td>
           </tr>

@@ -9,15 +9,15 @@
         aria-label="Buscar atenciones por paciente"
         formControlName="termino"
       />
-      <button class="btn btn-outline-primary" type="submit" [disabled]="buscando()">
+      <button class="btn btn-primary" type="submit" [disabled]="buscando()">
         @if (buscando()) {
           <span class="spinner-border spinner-border-sm" role="status"></span>
         } @else {
-          Buscar
+          <i class="bi bi-search me-1"></i> Buscar
         }
       </button>
       @if (pacienteElegido()) {
-        <button class="btn btn-outline-secondary" type="button" (click)="salirDeBusqueda()">
+        <button class="accion-txt" type="button" (click)="salirDeBusqueda()">
           Ver todas
         </button>
       }
@@ -167,8 +167,12 @@
       }
     </select>
 
-    <button type="submit" class="btn btn-sm btn-outline-secondary">Filtrar</button>
-    <button type="button" class="btn btn-sm btn-outline-secondary" (click)="limpiarFiltros()">Limpiar</button>
+    <button type="submit" class="accion-chip accion-con-texto">
+      <i class="bi bi-funnel"></i> Filtrar
+    </button>
+    <button type="button" class="accion-chip accion-con-texto" (click)="limpiarFiltros()">
+      <i class="bi bi-x-circle"></i> Limpiar
+    </button>
   </form>
 
   @if (formulario.controls.fecha.value) {
@@ -202,7 +206,7 @@
             <th>Sucursal</th>
             <th>Médico</th>
             <th>Estado</th>
-            <th class="text-end acciones-celda">Acciones</th>
+            <th class="acciones-celda">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -236,9 +240,14 @@
                   {{ etiquetasEstadoSesion[fila.estado] }}
                 </span>
               </td>
-              <td class="text-end acciones-celda">
-                <a class="btn btn-sm btn-outline-primary" [routerLink]="['/atenciones', fila.idAtencion]">
-                  <i class="bi bi-arrow-right"></i> Abrir
+              <td class="acciones-celda">
+                <a
+                  class="accion-chip"
+                  title="Abrir atención"
+                  [routerLink]="['/atenciones', fila.idAtencion]"
+                >
+                  <i class="bi bi-arrow-right"></i>
+                  <span class="visually-hidden">Abrir atención</span>
                 </a>
               </td>
             </tr>

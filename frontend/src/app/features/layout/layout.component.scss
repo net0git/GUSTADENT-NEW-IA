@@ -1,8 +1,9 @@
 $color-primario: #008b9f;
 $color-texto: #253844;
 $color-texto-suave: #64748b;
-$color-borde: #d7e7ee;
-$color-fondo: #f0f7f9;
+$color-borde: hsl(198, 40%, 89%);
+// $color-fondo: #f0f7f9;
+$color-fondo: #f1f5f96c ;
 $ancho-barra: 260px;
 $breakpoint-movil: 992px;
 
@@ -272,6 +273,13 @@ $breakpoint-movil: 992px;
   border-radius: 8px;
   background: #fff;
   color: $color-texto-suave;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+
+  &:hover:not(:disabled) {
+    background: #f0f4f7;
+    color: $color-texto;
+  }
 
   &:disabled {
     opacity: 0.6;
@@ -279,9 +287,21 @@ $breakpoint-movil: 992px;
   }
 }
 
+/* Engranaje: gris neutro, para que no compita con el salir. */
+.btn-config {
+  color: $color-texto-suave;
+  border-color: $color-borde;
+}
+
 .btn-salir {
   color: #dc2626;
   border-color: #fecaca;
+
+  &:hover:not(:disabled) {
+    background: #fee2e2;
+    color: #b91c1c;
+    border-color: #fca5a5;
+  }
 }
 
 .contenido {

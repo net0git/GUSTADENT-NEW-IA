@@ -245,7 +245,7 @@
             <th class="text-end">Canceladas</th>
             <th class="text-end">Pacientes</th>
             <th class="text-end">Monto atendido</th>
-            <th class="text-end">Promedio</th>
+            <th>Promedio</th>
           </tr>
         </thead>
         <tbody>
@@ -266,7 +266,7 @@
               <td class="text-end">{{ fila.canceladas }}</td>
               <td class="text-end">{{ fila.pacientes }}</td>
               <td class="text-end monto-verde">{{ monto(fila.montoAtendido) }}</td>
-              <td class="text-end texto-suave">{{ monto(fila.promedio) }}</td>
+              <td class="texto-suave">{{ monto(fila.promedio) }}</td>
             </tr>
           }
         </tbody>
@@ -311,7 +311,7 @@
             <th class="text-end">Total</th>
             <th class="text-end">Pagado</th>
             <th class="text-end">Deuda</th>
-            <th class="text-end acciones-celda">Detalle</th>
+            <th class="acciones-celda">Detalle</th>
           </tr>
         </thead>
         <tbody>
@@ -330,7 +330,7 @@
               <td class="text-end">{{ monto(fila.total) }}</td>
               <td class="text-end monto-verde">{{ monto(fila.pagado) }}</td>
               <td class="text-end monto-rojo">{{ monto(fila.deuda) }}</td>
-              <td class="text-end acciones-celda">
+              <td class="acciones-celda">
                 <button type="button" class="btn btn-sm btn-outline-primary" (click)="alternarDetalle(fila.idPaciente)">
                   <i class="bi" [class.bi-chevron-down]="pacienteAbierto() !== fila.idPaciente" [class.bi-chevron-up]="pacienteAbierto() === fila.idPaciente"></i>
                   Ver
@@ -350,7 +350,7 @@
                         <th>Estado</th>
                         <th class="text-end">Total</th>
                         <th class="text-end">Pagado</th>
-                        <th class="text-end">Deuda</th>
+                        <th>Deuda</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -369,7 +369,7 @@
                           </td>
                           <td class="text-end">{{ monto(atencion.total) }}</td>
                           <td class="text-end monto-verde">{{ monto(atencion.pagado) }}</td>
-                          <td class="text-end monto-rojo">{{ monto(atencion.deuda) }}</td>
+                          <td class="monto-rojo">{{ monto(atencion.deuda) }}</td>
                         </tr>
                       }
                     </tbody>
@@ -449,7 +449,7 @@
             <th class="text-end">Atendidas</th>
             <th class="text-end">Costo</th>
             <th class="text-end">Ingresado</th>
-            <th class="text-end">Deuda</th>
+            <th>Deuda</th>
           </tr>
         </thead>
         <tbody>
@@ -462,7 +462,7 @@
               <td class="text-end">{{ fila.atendidas }}</td>
               <td class="text-end">{{ monto(fila.costo) }}</td>
               <td class="text-end monto-verde">{{ monto(fila.monto) }}</td>
-              <td class="text-end monto-rojo">{{ monto(fila.deuda) }}</td>
+              <td class="monto-rojo">{{ monto(fila.deuda) }}</td>
             </tr>
           }
         </tbody>

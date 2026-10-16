@@ -35,10 +35,56 @@ $color-borde: #d7e7ee;
   }
 }
 
+/* En pantallas angostas la tabla se desplaza en vez de recortar los botones. */
+@media (max-width: 992px) {
+  .tabla-contenedor {
+    overflow-x: auto;
+  }
+}
+
+/* Acciones de la fila: solo el icono, en gris, y toma color al pasar el cursor. */
+.accion-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: #f0f4f7;
+  color: #526b7a;
+  font-size: 0.85rem;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+
+  &:hover,
+  &:focus-visible {
+    background: $color-primario;
+    color: #fff;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primario;
+    outline-offset: 2px;
+  }
+}
+
 .celda-paciente {
   display: flex;
   align-items: center;
   gap: 0.6rem;
+}
+
+/* Solo en esta tabla, el cuerpo de la primera columna va a la izquierda. */
+.tabla-contenedor.tabla-contenedor tbody td:first-child {
+  text-align: left;
+}
+
+.tabla-contenedor.tabla-contenedor tbody td:first-child .celda-paciente {
+  justify-content: flex-start;
 }
 
 .avatar {

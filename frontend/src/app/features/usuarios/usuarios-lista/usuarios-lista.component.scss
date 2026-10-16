@@ -1,3 +1,4 @@
+$color-primario: #008b9f;
 $color-texto-suave: #64748b;
 $color-borde: #d7e7ee;
 
@@ -39,8 +40,91 @@ $color-borde: #d7e7ee;
   }
 }
 
+/* En pantallas angostas la tabla se desplaza en vez de recortar los botones. */
+@media (max-width: 992px) {
+  .tabla-contenedor {
+    overflow-x: auto;
+  }
+}
+
 .acciones-celda {
   white-space: nowrap;
+}
+
+/* Acciones de la fila: solo el icono, en gris, y toma color al pasar el cursor. */
+.accion-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  padding: 0;
+  margin-right: 0.25rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: #f0f4f7;
+  color: #526b7a;
+  font-size: 0.85rem;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+}
+
+.accion-editar:hover:not(:disabled),
+.accion-editar:focus-visible {
+  background: $color-primario;
+  color: #fff;
+}
+
+.accion-llave:hover:not(:disabled),
+.accion-llave:focus-visible {
+  background: #d97706;
+  color: #fff;
+}
+
+.accion-baja:hover:not(:disabled),
+.accion-baja:focus-visible {
+  background: #b91c1c;
+  color: #fff;
+}
+
+.accion-alta:hover:not(:disabled),
+.accion-alta:focus-visible {
+  background: #16a34a;
+  color: #fff;
+}
+
+.accion-chip:focus-visible {
+  outline: 2px solid $color-primario;
+  outline-offset: 2px;
+}
+
+/* Solo en esta tabla, el nombre y la especialidad van a la izquierda. */
+.tabla-contenedor.tabla-contenedor tbody td:first-child {
+  text-align: left;
+  padding-right: 10px;
+}
+
+.celda-usuario {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Igual que en pacientes: el contenido arranca a 30px del borde. */
+.tabla-contenedor.tabla-contenedor tbody td:first-child .celda-usuario {
+  justify-content: start;
+  padding-left: 30px;
 }
 
 .texto-suave {

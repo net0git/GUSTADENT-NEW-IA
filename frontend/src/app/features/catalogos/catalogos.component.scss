@@ -17,10 +17,19 @@ $color-borde: #d7e7ee;
   color: $color-texto-suave;
   font-size: 0.9rem;
   border-bottom: 2px solid transparent;
+  border-radius: 8px 8px 0 0;
   margin-bottom: -1px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
 
-  &:hover {
+  &:hover:not(.pestana-activa) {
+    background: #f0f7f9;
     color: $color-texto;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primario;
+    outline-offset: -2px;
   }
 }
 
@@ -116,15 +125,87 @@ $color-borde: #d7e7ee;
 
 .item-acciones {
   display: flex;
-  gap: 0.35rem;
+  gap: 0.15rem;
   flex-shrink: 0;
   white-space: nowrap;
+  opacity: 0.55;
+  transition: opacity 0.15s ease;
+}
+
+/* Solo se destacan cuando el cursor esta sobre la fila o el boton. */
+.item:hover .item-acciones,
+.item-acciones:focus-within {
+  opacity: 1;
+}
+
+/* Acciones de la fila: solo el icono, en gris, y toma color al pasar el cursor. */
+.accion-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: #f0f4f7;
+  color: #526b7a;
+  font-size: 0.85rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primario;
+    outline-offset: 2px;
+  }
+}
+
+.accion-editar:hover:not(:disabled) {
+  background: $color-primario;
+  color: #fff;
+}
+
+.accion-baja:hover:not(:disabled) {
+  background: #b91c1c;
+  color: #fff;
+}
+
+.accion-alta:hover:not(:disabled) {
+  background: #16a34a;
+  color: #fff;
 }
 
 .acciones {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
   gap: 0.5rem;
+}
+
+/* Como el "Salir" de la referencia: solo texto gris. */
+.accion-txt {
+  padding: 0.35rem 0.5rem;
+  border: 0;
+  background: transparent;
+  color: $color-texto-suave;
+  font-size: 0.85rem;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    color: $color-texto;
+    text-decoration: underline;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
 }
 
 .nota {

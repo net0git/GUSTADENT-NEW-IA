@@ -58,13 +58,15 @@
 
       <div class="acciones">
         @if (editandoId() !== null) {
-          <button type="button" class="btn btn-outline-secondary" (click)="cancelarEdicion()" [disabled]="guardando()">
+          <button type="button" class="accion-txt" (click)="cancelarEdicion()" [disabled]="guardando()">
             Cancelar
           </button>
         }
         <button type="submit" class="btn btn-primary" [disabled]="guardando()">
           @if (guardando()) {
             <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+          } @else {
+            <i class="bi me-1" [class.bi-plus-lg]="editandoId() === null" [class.bi-check-lg]="editandoId() !== null"></i>
           }
           {{ editandoId() === null ? 'Agregar' : 'Guardar cambios' }}
         </button>
@@ -121,7 +123,8 @@
             <div class="item-acciones">
               <button
                 type="button"
-                class="btn btn-sm btn-outline-primary"
+                class="accion-chip accion-editar"
+                title="Editar"
                 [disabled]="accionPendiente(item.id)"
                 (click)="editar(item)"
               >
@@ -130,13 +133,15 @@
               </button>
               <button
                 type="button"
-                class="btn btn-sm"
-                [class.btn-outline-danger]="item.activo"
-                [class.btn-outline-success]="!item.activo"
+                class="accion-chip"
+                [class.accion-baja]="item.activo"
+                [class.accion-alta]="!item.activo"
+                [title]="item.activo ? 'Desactivar' : 'Activar'"
                 [disabled]="accionPendiente(item.id)"
                 (click)="alternarEstado(item)"
               >
-                {{ item.activo ? 'Desactivar' : 'Activar' }}
+                <i class="bi" [class.bi-ban]="item.activo" [class.bi-person-check]="!item.activo"></i>
+                <span class="visually-hidden">{{ item.activo ? 'Desactivar' : 'Activar' }}</span>
               </button>
             </div>
           </li>

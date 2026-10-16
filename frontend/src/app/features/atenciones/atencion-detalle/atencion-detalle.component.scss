@@ -373,6 +373,11 @@ $color-fondo: #f0f7f9;
   color: #f8fafc;
 }
 
+/* El card de condiciones va separado del resumen de cuenta. */
+.condiciones-card {
+  margin-top: 1rem;
+}
+
 .estado-vacio {
   display: flex;
   flex-direction: column;
