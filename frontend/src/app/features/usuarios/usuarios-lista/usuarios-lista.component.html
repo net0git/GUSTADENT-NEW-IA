@@ -68,8 +68,13 @@
               }
             </td>
             <td class="acciones-celda">
-              <a class="accion-chip accion-editar" [routerLink]="['/usuarios', usuario.id, 'editar']">
-                <i class="bi bi-pencil"></i> Editar
+              <a
+                class="accion-chip accion-editar"
+                title="Editar"
+                [routerLink]="['/usuarios', usuario.id, 'editar']"
+              >
+                <i class="bi bi-pencil"></i>
+                <span class="visually-hidden">Editar</span>
               </a>
               <button
                 type="button"
@@ -87,11 +92,17 @@
                 [class.accion-baja]="usuario.activo"
                 [class.accion-alta]="!usuario.activo"
                 [disabled]="esUsuarioActual(usuario) || enProceso() === usuario.id"
-                [title]="esUsuarioActual(usuario) ? 'No puedes desactivar tu propia cuenta' : ''"
+                [title]="
+                  esUsuarioActual(usuario)
+                    ? 'No puedes desactivar tu propia cuenta'
+                    : usuario.activo
+                      ? 'Desactivar'
+                      : 'Activar'
+                "
                 (click)="alternarEstado(usuario)"
               >
                 <i class="bi" [class.bi-person-slash]="usuario.activo" [class.bi-person-check]="!usuario.activo"></i>
-                {{ usuario.activo ? 'Desactivar' : 'Activar' }}
+                <span class="visually-hidden">{{ usuario.activo ? 'Desactivar' : 'Activar' }}</span>
               </button>
             </td>
           </tr>
