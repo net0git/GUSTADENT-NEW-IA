@@ -68,8 +68,13 @@
             <td class="texto-suave">{{ paciente.telefono || '-' }}</td>
             <td class="texto-suave">{{ paciente.procedencia || '-' }}</td>
             <td class="acciones-celda">
-              <a class="btn btn-outline-primary btn-sm" [routerLink]="['/pacientes', paciente.id, 'editar']">
-                <i class="bi bi-pencil"></i> Editar
+              <a
+                class="accion-chip"
+                title="Editar"
+                [routerLink]="['/pacientes', paciente.id, 'editar']"
+              >
+                <i class="bi bi-pencil"></i>
+                <span class="visually-hidden">Editar</span>
               </a>
             </td>
           </tr>
