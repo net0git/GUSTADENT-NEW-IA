@@ -49,10 +49,12 @@
         @for (usuario of usuarios(); track usuario.id) {
           <tr>
             <td>
-              <strong>{{ usuario.nombreCompleto }}</strong>
-              @if (usuario.especialidad) {
-                <div class="texto-suave">{{ usuario.especialidad }}</div>
-              }
+              <div class="celda-paciente">
+                <strong>{{ usuario.nombreCompleto }}</strong>
+                @if (usuario.especialidad) {
+                  <div class="texto-suave">{{ usuario.especialidad }}</div>
+                }
+              </div>
             </td>
             <td>{{ usuario.username }}</td>
             <td>{{ usuario.dni }}</td>
