@@ -91,18 +91,19 @@ $breakpoint-movil: 992px;
     margin-bottom: 0;
   }
 
+  /* Hover discreto: solo un tono mas oscuro, sin rellenos fuertes. */
   &:hover:not(:disabled) {
-    background: #dff7fa;
-    border-color: $color-primario;
-    transform: translateX(2px);
+    background: #f2f8fa;
+    border-color: #b6d8e2;
+    transform: translateX(1px);
 
     .accion-icono {
-      background: $color-primario;
-      color: #fff;
+      background: #cfedf3;
+      color: #00768a;
     }
 
     strong {
-      color: $color-primario;
+      color: #00768a;
     }
   }
 
@@ -110,16 +111,16 @@ $breakpoint-movil: 992px;
      pantalla. Sin el desplazamiento, que solo tiene sentido al pasar el
      cursor. */
   &.accion-activa {
-    background: #dff7fa;
-    border-color: $color-primario;
+    background: #f2f8fa;
+    border-color: #b6d8e2;
 
     .accion-icono {
-      background: $color-primario;
-      color: #fff;
+      background: #cfedf3;
+      color: #00768a;
     }
 
     strong {
-      color: $color-primario;
+      color: #00768a;
     }
   }
 
