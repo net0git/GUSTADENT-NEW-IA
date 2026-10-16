@@ -7,7 +7,13 @@
 
     <section class="acciones-rapidas">
       <p class="seccion-titulo">Acciones rápidas</p>
-      <button type="button" class="accion" (click)="nuevaCita()" title="Registrar una atención">
+      <button
+        type="button"
+        class="accion"
+        [class.accion-activa]="nuevaCitaActiva()"
+        (click)="nuevaCita()"
+        title="Registrar una atención"
+      >
         <span class="accion-icono"><i class="bi bi-plus-lg"></i></span>
         <span>
           <strong>Nueva cita</strong>
