@@ -68,27 +68,29 @@
               }
             </td>
             <td class="acciones-celda">
-              <a class="btn btn-outline-primary btn-sm me-1" [routerLink]="['/usuarios', usuario.id, 'editar']">
+              <a class="accion-chip accion-editar" [routerLink]="['/usuarios', usuario.id, 'editar']">
                 <i class="bi bi-pencil"></i> Editar
               </a>
               <button
                 type="button"
-                class="btn btn-outline-warning btn-sm me-1"
+                class="accion-chip accion-llave"
                 title="Generar una contraseña temporal"
                 [disabled]="enProceso() === usuario.id"
                 (click)="pedirResetearPassword(usuario)"
               >
                 <i class="bi bi-key"></i>
+                <span class="visually-hidden">Generar contraseña temporal</span>
               </button>
               <button
                 type="button"
-                class="btn btn-sm"
-                [class.btn-outline-danger]="usuario.activo"
-                [class.btn-outline-success]="!usuario.activo"
+                class="accion-chip"
+                [class.accion-baja]="usuario.activo"
+                [class.accion-alta]="!usuario.activo"
                 [disabled]="esUsuarioActual(usuario) || enProceso() === usuario.id"
                 [title]="esUsuarioActual(usuario) ? 'No puedes desactivar tu propia cuenta' : ''"
                 (click)="alternarEstado(usuario)"
               >
+                <i class="bi" [class.bi-person-slash]="usuario.activo" [class.bi-person-check]="!usuario.activo"></i>
                 {{ usuario.activo ? 'Desactivar' : 'Activar' }}
               </button>
             </td>
