@@ -84,9 +84,31 @@ $breakpoint-movil: 992px;
   border-radius: 8px;
   background: #fff;
   text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
 
   &:last-child {
     margin-bottom: 0;
+  }
+
+  &:hover:not(:disabled) {
+    background: #dff7fa;
+    border-color: $color-primario;
+    transform: translateX(2px);
+
+    .accion-icono {
+      background: $color-primario;
+      color: #fff;
+    }
+
+    strong {
+      color: $color-primario;
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primario;
+    outline-offset: 2px;
   }
 
   &:disabled {
@@ -98,6 +120,7 @@ $breakpoint-movil: 992px;
     display: block;
     font-size: 0.85rem;
     color: $color-texto;
+    transition: color 0.15s ease;
   }
 
   small {
@@ -117,6 +140,7 @@ $breakpoint-movil: 992px;
   background: #dff7fa;
   color: $color-primario;
   flex-shrink: 0;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 .navegacion {
