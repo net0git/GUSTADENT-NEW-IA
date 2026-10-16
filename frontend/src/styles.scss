@@ -93,7 +93,7 @@ h6 {
 }
 
 .tabla-contenedor.tabla-contenedor tbody td {
-  padding: 0.7rem 10px;
+  padding: 0.7rem 10px ;
   vertical-align: middle;
   border-color: #e8f1f4;
 }
@@ -107,9 +107,11 @@ h6 {
 }
 
 /* Las celdas con avatar y nombre tambien se centran como grupo. */
-.tabla-contenedor.tabla-contenedor tbody td:first-child .celda-paciente {
-  justify-content: center;
+.tabla-contenedor.tabla-contenedor tbody td:first-child .celda-paciente  {
+  justify-content: start;
+  padding-left: 30px ;
 }
+
 
 .tabla-contenedor.tabla-contenedor .table-hover > tbody > tr:hover > * {
   --bs-table-accent-bg: #eaf7fa;
