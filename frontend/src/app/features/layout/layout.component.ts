@@ -35,8 +35,6 @@ export class LayoutComponent {
   protected readonly cerrando = signal(false);
   protected readonly busquedaPacienteAbierta = signal(false);
   protected readonly fechaActiva = signal<string | null>(null);
-  /** "Nueva cita" queda marcada mientras se está en esa pantalla. */
-  protected readonly nuevaCitaActiva = signal(false);
 
   constructor() {
     this.router.events
@@ -44,10 +42,8 @@ export class LayoutComponent {
       .subscribe(() => {
         this.actualizarCabecera();
         this.leerFechaDeLaRuta();
-        this.nuevaCitaActiva.set(this.esRutaNuevaCita());
       });
     this.leerFechaDeLaRuta();
-    this.nuevaCitaActiva.set(this.esRutaNuevaCita());
   }
 
   protected alternarMenu(): void {
@@ -72,7 +68,6 @@ export class LayoutComponent {
   /** "Nueva cita" abre el formulario; el paciente se elige dentro de la pantalla. */
   protected nuevaCita(): void {
     this.menuAbierto.set(false);
-    this.nuevaCitaActiva.set(true);
     this.router.navigate(['/atenciones/nueva']);
   }
 
@@ -97,10 +92,6 @@ export class LayoutComponent {
   private leerFechaDeLaRuta(): void {
     const fecha = this.router.routerState.snapshot.root.queryParamMap.get('fecha');
     this.fechaActiva.set(fecha);
-  }
-
-  private esRutaNuevaCita(): boolean {
-    return this.router.url.startsWith('/atenciones/nueva');
   }
 
   private actualizarCabecera(): void {
