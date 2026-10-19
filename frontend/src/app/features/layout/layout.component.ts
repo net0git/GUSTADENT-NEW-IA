@@ -120,8 +120,4 @@ export class LayoutComponent {
     }
     this.setup.cargarEmpresa().subscribe();
   }
-
-  irAConfiguracion(): void {
-    this.router.navigate(['/modulo-config']);
-  }
 }
