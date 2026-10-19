@@ -1,6 +1,6 @@
 <div class="app-contenedor">
   <aside class="barra-lateral" [class.abierta]="menuAbierto()">
-    <div class="marca">
+    <div class="marca" (click)="irAConfiguracion()">
       @if (datosEmpresa()?.logo) {
       <img [src]="datosEmpresa()!.logo" alt="Logo de la empresa" class="marca-logo" />
       } @else {

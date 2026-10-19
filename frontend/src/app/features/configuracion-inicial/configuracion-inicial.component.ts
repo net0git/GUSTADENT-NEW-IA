@@ -141,6 +141,7 @@ export class ConfiguracionInicialComponent implements OnInit {
           ruc: valores.ruc,
           direccion: valores.direccion.trim() || null,
           telefono: valores.telefono.trim() || null,
+          logo: '', // Campo añadido por el nuevo modelo EmpresaSetup
         },
         this.tokenControl.value
       ),

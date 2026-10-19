@@ -1,7 +1,7 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { filter, Observable } from 'rxjs';
+import { filter, Observable, of } from 'rxjs';
 import { AuthService, UsuarioSesion } from '../../core/services/auth.service';
 import { Paciente } from '../../core/services/pacientes.service';
 import { SetupService } from '../../core/services/setup.service';
@@ -124,6 +124,10 @@ export class LayoutComponent {
         this.empresaLogo.set(empresa?.logo ?? '');
       },
     });
+  }
+
+  irAConfiguracion(): void {
+    this.router.navigate(['/modulo-config']);
   }
 
   private obtenerEmpresa(): Observable<EmpresaSetup> {

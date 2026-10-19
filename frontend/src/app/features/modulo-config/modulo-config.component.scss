@@ -1,4 +1,8 @@
-@use sass:Se;
+$color-primario: #008b9f;
+$color-texto: #253844;
+$color-texto-suave: #64748b;
+$color-borde: #d7e7ee;
+$color-fondo: #f0f7f9;
 
 .seccion-titulo {
   margin-bottom: 1.5rem;
@@ -119,10 +123,6 @@
     &:hover {
       background: $color-fondo;
       border-color: shade($color-primario, 15%);
-    }
-
-    &.ocultar {
-      display: none;
     }
   }
 }

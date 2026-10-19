@@ -1,25 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { SetupService } from '../../core/services/setup.service';
 import { EmpresaSetup } from '../../core/models/setup.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-modulo-config',
   templateUrl: './modulo-config.component.html',
   styleUrl: './modulo-config.component.scss',
+  imports: [FormsModule],
 })
 export class ModuloConfigComponent {
   private readonly setup = inject(SetupService);
   private readonly empresa = this.setup.obtenerEstado().pipe(takeUntilDestroyed());
 
-  protected readonly empresaData = this.empresa.pipe(
-    takeUntilDestroyed(),
-    // Por ahora usaremos datos estáticos hasta que el backend proporcione la ruta completa
-    // En un futuro: mergeMap(estado => this.setup.obtenerEmpresa()) 
-  );
-
-  // Datos de empresa para el formulario (se cargarán del servicio o localStorage)
-  protected readonly datosEmpresa: EmpresaSetup = {
+  // Sin readonly para poder reasignar
+  protected datosEmpresa: EmpresaSetup = {
     nombreEmpresa: '',
     ruc: '',
     direccion: '',
@@ -27,8 +23,8 @@ export class ModuloConfigComponent {
     logo: '',
   };
 
-  protected readonly mostrandoFormulario = false;
-  protected readonly logoPreview = '';
+  protected mostrandoFormulario = false;
+  protected logoPreview = '';
 
   ngOnInit(): void {
     // Suscribirse para obtener datos de empresa cuando el backend esté listo

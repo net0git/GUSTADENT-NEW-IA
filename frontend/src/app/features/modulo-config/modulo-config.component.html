@@ -65,10 +65,9 @@
         type="file"
         accept="image/*"
         (change)="onLogoChange($event)"
-        [disabled]="mostrandoFormulario"
       />
       @if (logoPreview) {
-      <small class="ayuda">Vista previa: {{ logoPreview | truncate: 30 }}</small>
+      <small class="ayuda">Logo cargado</small>
       }
     </div>
   </form>
@@ -89,7 +88,6 @@
     type="button"
     class="btn-cancelar"
     (click)="guardarEmpresa()"
-    [ngClass]="{ ocultar: !mostrandoFormulario }"
   >
     <i class="bi bi-x"></i>
     Cancelar
