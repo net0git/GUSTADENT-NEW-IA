@@ -26,6 +26,8 @@ export class UsuariosListaComponent implements OnInit {
   protected readonly etiquetasPerfil = ETIQUETAS_PERFIL;
   protected readonly perfiles = Object.keys(ETIQUETAS_PERFIL) as Perfil[];
   protected readonly idActual = this.auth.obtenerUsuario()?.id;
+  /** Recepción consulta el personal; solo el administrador lo gestiona. */
+  protected readonly esAdministrador = this.auth.obtenerUsuario()?.perfil === 'administrador';
 
   protected readonly usuarios = signal<Usuario[]>([]);
   protected readonly cargando = signal(true);

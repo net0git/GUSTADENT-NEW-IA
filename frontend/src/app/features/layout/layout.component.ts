@@ -3,6 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
 import { AuthService, UsuarioSesion } from '../../core/services/auth.service';
+import { puedeVer } from '../../core/permisos';
 import { Paciente } from '../../core/services/pacientes.service';
 import { SetupService } from '../../core/services/setup.service';
 import { BusquedaPacientesModalComponent } from '../../shared/componentes/busqueda-pacientes-modal/busqueda-pacientes-modal.component';
@@ -29,7 +30,11 @@ export class LayoutComponent {
   protected readonly usuario = this.auth.obtenerUsuario();
   protected readonly iniciales = this.calcularIniciales(this.usuario?.nombreCompleto ?? '');
   protected readonly etiquetaPerfil = this.usuario ? ETIQUETAS_PERFIL[this.usuario.perfil] : '';
-  protected readonly esAdministrador = this.usuario?.perfil === 'administrador';
+
+  private readonly perfil = this.usuario?.perfil ?? null;
+  protected readonly esAdministrador = this.perfil === 'administrador';
+  protected readonly puedeVerCatalogos = puedeVer(this.perfil, 'catalogos');
+  protected readonly puedeVerUsuarios = puedeVer(this.perfil, 'usuarios');
 
   protected readonly titulo = signal('');
   protected readonly subtitulo = signal('');

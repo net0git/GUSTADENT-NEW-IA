@@ -26,6 +26,7 @@ setupRouter.post(
   registrarAdministrador
 );
 
-// Modulo de configuracion: el administrador ya autenticado lee y edita la empresa.
-setupRouter.get('/empresa', authenticate, authorize('administrador'), obtenerEmpresa);
+// Modulo de configuracion: cualquier perfil autenticado lee la empresa para
+// mostrar el nombre y el logo; solo el administrador la edita.
+setupRouter.get('/empresa', authenticate, obtenerEmpresa);
 setupRouter.put('/empresa', authenticate, authorize('administrador'), actualizarEmpresa);

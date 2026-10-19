@@ -27,25 +27,29 @@
       </button>
     </section>
 
-    @if (esAdministrador) {
-      <nav class="navegacion">
-        <p class="seccion-titulo">Administración</p>
-        <a class="enlace" routerLink="/atenciones" routerLinkActive="enlace-activo">
-          <i class="bi bi-clipboard2-pulse"></i>
-          <span>Atenciones</span>
-        </a>
-        <a class="enlace" routerLink="/pacientes" routerLinkActive="enlace-activo">
-          <i class="bi bi-people"></i>
-          <span>Pacientes</span>
-        </a>
+    <nav class="navegacion">
+      <p class="seccion-titulo">Administración</p>
+      <a class="enlace" routerLink="/atenciones" routerLinkActive="enlace-activo">
+        <i class="bi bi-clipboard2-pulse"></i>
+        <span>Atenciones</span>
+      </a>
+      <a class="enlace" routerLink="/pacientes" routerLinkActive="enlace-activo">
+        <i class="bi bi-people"></i>
+        <span>Pacientes</span>
+      </a>
+      @if (puedeVerCatalogos) {
         <a class="enlace" routerLink="/catalogos" routerLinkActive="enlace-activo">
           <i class="bi bi-building"></i>
           <span>Catálogos</span>
         </a>
+      }
+      @if (puedeVerUsuarios) {
         <a class="enlace" routerLink="/usuarios" routerLinkActive="enlace-activo">
           <i class="bi bi-person-badge"></i>
           <span>Usuarios</span>
         </a>
+      }
+      @if (esAdministrador) {
         <a class="enlace" routerLink="/reportes" routerLinkActive="enlace-activo">
           <i class="bi bi-graph-up-arrow"></i>
           <span>Reportes</span>
@@ -54,8 +58,8 @@
           <i class="bi bi-gear"></i>
           <span>Configuración</span>
         </a>
-      </nav>
-    }
+      }
+    </nav>
 
     <app-mini-calendario [fechaSeleccionada]="fechaActiva()" (cambioFecha)="filtrarPorFecha($event)" />
 
