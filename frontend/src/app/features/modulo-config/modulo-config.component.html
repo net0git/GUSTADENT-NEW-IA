@@ -1,0 +1,97 @@
+<h2 class="seccion-titulo">Configuración de Empresa</h2>
+
+<div class="formulario-empresa">
+  <!-- Resumen del logo -->
+  @if (logoPreview) {
+  <div class="preview-logo">
+    <img [src]="logoPreview" alt="Vista previa del logo de {{ datosEmpresa.nombreEmpresa }}" />
+    <button type="button" class="btn-quitar-logo" (click)="datosEmpresa.logo = ''; logoPreview = ''">×</button>
+  </div>
+  } @else {
+  <div class="placeholder-logo">
+    <i class="bi bi-image"></i>
+    <span>Sin logo</span>
+  </div>
+  }
+
+  <!-- Formulario de datos de empresa -->
+  <form class="datos-empresa">
+    <div class="campo-grupo">
+      <label for="nombreEmpresa">Razón social</label>
+      <input
+        id="nombreEmpresa"
+        type="text"
+        [(ngModel)]="datosEmpresa.nombreEmpresa"
+        placeholder="Nombre de la clínica"
+        required
+      />
+    </div>
+
+    <div class="campo-grupo">
+      <label for="ruc">RUC</label>
+      <input
+        id="ruc"
+        type="text"
+        [(ngModel)]="datosEmpresa.ruc"
+        placeholder="12345678901"
+        required
+      />
+    </div>
+
+    <div class="campo-grupo">
+      <label for="direccion">Dirección</label>
+      <input
+        id="direccion"
+        type="text"
+        [(ngModel)]="datosEmpresa.direccion"
+        placeholder="Av. Principal 123"
+      />
+    </div>
+
+    <div class="campo-grupo">
+      <label for="telefono">Teléfono</label>
+      <input
+        id="telefono"
+        type="text"
+        [(ngModel)]="datosEmpresa.telefono"
+        placeholder="+51 999 123 456"
+      />
+    </div>
+
+    <div class="campo-grupo">
+      <label for="logo">Logo</label>
+      <input
+        id="logo"
+        type="file"
+        accept="image/*"
+        (change)="onLogoChange($event)"
+        [disabled]="mostrandoFormulario"
+      />
+      @if (logoPreview) {
+      <small class="ayuda">Vista previa: {{ logoPreview | truncate: 30 }}</small>
+      }
+    </div>
+  </form>
+</div>
+
+<div class="acciones">
+  <button
+    type="button"
+    class="btn-guardar"
+    (click)="mostrandoFormulario = true"
+    [disabled]="!datosEmpresa.nombreEmpresa || !datosEmpresa.ruc"
+  >
+    <i class="bi bi-pencil-square"></i>
+    Editar datos de empresa
+  </button>
+
+  <button
+    type="button"
+    class="btn-cancelar"
+    (click)="guardarEmpresa()"
+    [ngClass]="{ ocultar: !mostrandoFormulario }"
+  >
+    <i class="bi bi-x"></i>
+    Cancelar
+  </button>
+</div>

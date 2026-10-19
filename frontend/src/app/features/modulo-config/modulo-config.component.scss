@@ -1,0 +1,128 @@
+@use sass:Se;
+
+.seccion-titulo {
+  margin-bottom: 1.5rem;
+  font-size: 1.25rem;
+  color: $color-primario;
+}
+
+.formulario-empresa {
+  max-width: 600px;
+  margin-bottom: 2rem;
+
+  .preview-logo {
+    margin-bottom: 1rem;
+    text-align: center;
+
+    img {
+      max-width: 150px;
+      max-height: 150px;
+      border: 1px solid $color-borde;
+      border-radius: 0.5rem;
+      object-fit: contain;
+    }
+
+    .btn-quitar-logo {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: transparent;
+      border: none;
+      color: $color-texto-suave;
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 0;
+    }
+  }
+
+  .placeholder-logo {
+    width: 150px;
+    height: 150px;
+    border: 2px dashed $color-borde;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $color-texto-suave;
+    margin: 0 auto 1rem;
+    font-size: 2rem;
+
+    span {
+      margin-left: 0.5rem;
+    }
+  }
+}
+
+.datos-empresa {
+  .campo-grupo {
+    margin-bottom: 1.5rem;
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: $color-texto;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid $color-borde;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      &::placeholder {
+        color: $color-texto-suave;
+      }
+    }
+  }
+}
+
+.ayuda {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: $color-texto-suave;
+}
+
+.acciones {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+
+  .btn-guardar {
+    background: $color-primario;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+
+    &:hover {
+      background: shade($color-primario, 10%);
+    }
+  }
+
+  .btn-cancelar {
+    background: transparent;
+    color: $color-texto;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid $color-borde;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      background: $color-fondo;
+      border-color: shade($color-primario, 15%);
+    }
+
+    &.ocultar {
+      display: none;
+    }
+  }
+}

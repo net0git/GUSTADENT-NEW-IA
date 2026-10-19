@@ -16,6 +16,14 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'modulo-config',
+    canActivate: [configuracionCompletadaGuard],
+    loadComponent: () =>
+      import('./features/modulo-config/modulo-config.component').then(
+        (m) => m.ModuloConfigComponent
+      ),
+  },
+  {
     path: 'login',
     canActivate: [configuracionCompletadaGuard],
     loadComponent: () =>

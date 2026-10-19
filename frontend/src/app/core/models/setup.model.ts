@@ -10,6 +10,7 @@ export interface EmpresaSetup {
   ruc: string;
   direccion: string | null;
   telefono: string | null;
+  logo: string | null; // URL o base64 del logo
 }
 
 export interface SucursalSetup {
