@@ -1,0 +1,51 @@
+@if (totalPaginas() > 1) {
+  <nav class="paginador" aria-label="Paginación de la tabla">
+    <span class="paginador-info">
+      Mostrando {{ desde() }}–{{ hasta() }} de {{ total() }} {{ sustantivo() }}
+    </span>
+
+    <ul class="paginador-controles">
+      <li>
+        <button
+          type="button"
+          class="pagina-btn"
+          [disabled]="pagina() === 1"
+          (click)="irAPagina(pagina() - 1)"
+          aria-label="Página anterior"
+        >
+          <i class="bi bi-chevron-left"></i>
+        </button>
+      </li>
+
+      @for (marca of marcas(); track $index) {
+        <li>
+          @if (marca === 'puntos') {
+            <span class="pagina-puntos">…</span>
+          } @else {
+            <button
+              type="button"
+              class="pagina-btn"
+              [class.activa]="marca === pagina()"
+              [attr.aria-current]="marca === pagina() ? 'page' : null"
+              (click)="irAPagina(marca)"
+            >
+              {{ marca }}
+            </button>
+          }
+        </li>
+      }
+
+      <li>
+        <button
+          type="button"
+          class="pagina-btn"
+          [disabled]="pagina() === totalPaginas()"
+          (click)="irAPagina(pagina() + 1)"
+          aria-label="Página siguiente"
+        >
+          <i class="bi bi-chevron-right"></i>
+        </button>
+      </li>
+    </ul>
+  </nav>
+}

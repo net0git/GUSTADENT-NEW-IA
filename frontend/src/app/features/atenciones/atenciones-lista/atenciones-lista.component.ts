@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -14,6 +14,10 @@ import {
   EstadoSesion,
   SesionCita,
 } from '../../../core/services/atenciones.service';
+import {
+  PaginadorComponent,
+  rebanarPagina,
+} from '../../../shared/componentes/paginador/paginador.component';
 import { aIso, horaIso } from '../../../shared/fechas/fechas';
 
 const ETIQUETAS_ESTADO_SESION: Record<EstadoSesion, string> = {
@@ -47,7 +51,7 @@ export interface PacienteBuscado {
 
 @Component({
   selector: 'app-atenciones-lista',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, PaginadorComponent],
   templateUrl: './atenciones-lista.component.html',
   styleUrl: './atenciones-lista.component.scss',
 })
@@ -65,6 +69,10 @@ export class AtencionesListaComponent implements OnInit {
   protected readonly filas = signal<FilaListado[]>([]);
   protected readonly sucursales = signal<Sucursal[]>([]);
   protected readonly cargando = signal(true);
+
+  /** Fragmento de la tabla de citas que se está viendo. */
+  protected readonly pagina = signal(1);
+  protected readonly filasPagina = computed(() => rebanarPagina(this.filas(), this.pagina()));
 
   // Busqueda de atenciones por paciente: reemplaza la tabla por tarjetas.
   protected readonly resultadosPaciente = signal<PacienteBuscado[]>([]);
@@ -221,6 +229,7 @@ protected monto(valor: number): string {
 
   private cargar(): void {
     this.cargando.set(true);
+    this.pagina.set(1);
     this.atencionesService.listarCitas({ fecha: this.formulario.controls.fecha.value || undefined }).subscribe({
       next: (citas) => {
         this.filas.set(this.aplicarFiltrosLocales(citas));

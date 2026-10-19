@@ -213,7 +213,7 @@
           </tr>
         </thead>
         <tbody>
-          @for (fila of filas(); track fila.clave) {
+          @for (fila of filasPagina(); track fila.clave) {
             <tr>
               <td>
                 @if (fila.esPrimera) {
@@ -258,5 +258,12 @@
         </tbody>
       </table>
     </div>
+
+    <app-paginador
+      [total]="filas().length"
+      [pagina]="pagina()"
+      sustantivo="citas"
+      (paginaCambia)="pagina.set($event)"
+    />
   }
 }

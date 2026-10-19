@@ -52,7 +52,7 @@
         </tr>
       </thead>
       <tbody>
-        @for (paciente of pacientes(); track paciente.id) {
+        @for (paciente of pacientesPagina(); track paciente.id) {
           <tr>
             <td>
               <div class="celda-paciente">
@@ -82,4 +82,11 @@
       </tbody>
     </table>
   </div>
+
+  <app-paginador
+    [total]="pacientes().length"
+    [pagina]="pagina()"
+    sustantivo="pacientes"
+    (paginaCambia)="pagina.set($event)"
+  />
 }

@@ -224,7 +224,7 @@
           </tr>
         </thead>
         <tbody>
-          @for (fila of productividad(); track fila.idUsuario) {
+          @for (fila of productividadPagina(); track fila.idUsuario) {
             <tr>
               <td>
                 <div class="celda-paciente">
@@ -247,6 +247,13 @@
         </tbody>
       </table>
     </div>
+
+    <app-paginador
+      [total]="productividad().length"
+      [pagina]="paginaProductividad()"
+      sustantivo="odontólogos"
+      (paginaCambia)="paginaProductividad.set($event)"
+    />
   }
 }
 
@@ -290,7 +297,7 @@
           </tr>
         </thead>
         <tbody>
-          @for (fila of reporte.filas; track fila.idPaciente) {
+          @for (fila of cuentasPagina(); track fila.idPaciente) {
             <tr>
               <td>
                 <div class="celda-paciente">
@@ -356,6 +363,13 @@
         </tbody>
       </table>
     </div>
+
+    <app-paginador
+      [total]="reporte.filas.length"
+      [pagina]="paginaCuentas()"
+      sustantivo="pacientes"
+      (paginaCambia)="paginaCuentas.set($event)"
+    />
   }
 }
 
@@ -403,7 +417,7 @@
           </tr>
         </thead>
         <tbody>
-          @for (fila of mensual(); track fila.anio + '-' + fila.mes) {
+          @for (fila of mensualPagina(); track fila.anio + '-' + fila.mes) {
             <tr>
               <td class="mes">{{ etiquetaMes(fila) }}</td>
               <td class="text-end">{{ fila.atenciones }}</td>
@@ -418,5 +432,12 @@
         </tbody>
       </table>
     </div>
+
+    <app-paginador
+      [total]="mensual().length"
+      [pagina]="paginaMensual()"
+      sustantivo="meses"
+      (paginaCambia)="paginaMensual.set($event)"
+    />
   }
 }

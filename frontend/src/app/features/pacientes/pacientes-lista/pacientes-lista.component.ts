@@ -1,13 +1,17 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import Swal from 'sweetalert2';
 import { errorApi } from '../../../core/http/error-api';
 import { Paciente, PacientesService } from '../../../core/services/pacientes.service';
+import {
+  PaginadorComponent,
+  rebanarPagina,
+} from '../../../shared/componentes/paginador/paginador.component';
 
 @Component({
   selector: 'app-pacientes-lista',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, PaginadorComponent],
   templateUrl: './pacientes-lista.component.html',
   styleUrl: './pacientes-lista.component.scss',
 })
@@ -20,6 +24,10 @@ export class PacientesListaComponent implements OnInit {
   protected readonly pacientes = signal<Paciente[]>([]);
   protected readonly cargando = signal(true);
   protected readonly hayBusqueda = signal(false);
+
+  /** Fragmento de la tabla que se está viendo. */
+  protected readonly pagina = signal(1);
+  protected readonly pacientesPagina = computed(() => rebanarPagina(this.pacientes(), this.pagina()));
 
   ngOnInit(): void {
     this.cargar();
@@ -66,6 +74,7 @@ export class PacientesListaComponent implements OnInit {
 
   private cargar(): void {
     this.cargando.set(true);
+    this.pagina.set(1);
     this.pacientesService.listar(this.hayBusqueda() ? this.terminoBusqueda() : null).subscribe({
       next: (pacientes) => {
         this.pacientes.set(pacientes);
