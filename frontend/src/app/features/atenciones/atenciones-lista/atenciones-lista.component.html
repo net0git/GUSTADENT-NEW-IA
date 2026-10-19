@@ -76,6 +76,9 @@
               <span class="tarjeta-numero">ATENCIÓN N° {{ atencion.id }}</span>
               <h3 class="tarjeta-titulo">{{ atencion.nombreCompletoPaciente }}</h3>
               <span class="texto-suave">DNI {{ atencion.dniPaciente }}</span>
+              @if (atencion.descripcion) {
+                <p class="tarjeta-descripcion">{{ atencion.descripcion }}</p>
+              }
             </div>
             <span class="badge-estado" [class]="'estado-' + atencion.estado">
               {{ etiquetasEstadoAtencion[atencion.estado] }}
@@ -88,13 +91,6 @@
             <span><i class="bi bi-geo-alt"></i> {{ atencion.nombreSucursal }}</span>
             <span><i class="bi bi-person-badge"></i> {{ atencion.nombreMedico }}</span>
           </div>
-
-          @if (atencion.descripcion) {
-            <p class="tarjeta-descripcion">
-              <i class="bi bi-clipboard2-pulse"></i>
-              <span>{{ atencion.descripcion }}</span>
-            </p>
-          }
 
           <section class="tarjeta-sesiones">
             <h4 class="tarjeta-subtitulo">
