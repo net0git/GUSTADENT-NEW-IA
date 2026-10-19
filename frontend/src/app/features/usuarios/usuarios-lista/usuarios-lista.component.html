@@ -114,7 +114,9 @@
   <app-paginador
     [total]="usuarios().length"
     [pagina]="pagina()"
+    [tamano]="tamano()"
     sustantivo="usuarios"
     (paginaCambia)="pagina.set($event)"
+    (tamanoCambia)="cambiarTamano($event)"
   />
 }

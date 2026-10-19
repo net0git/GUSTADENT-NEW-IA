@@ -251,8 +251,10 @@
     <app-paginador
       [total]="productividad().length"
       [pagina]="paginaProductividad()"
+      [tamano]="tamanoPagina()"
       sustantivo="odontólogos"
       (paginaCambia)="paginaProductividad.set($event)"
+      (tamanoCambia)="cambiarTamanoPagina($event)"
     />
   }
 }
@@ -367,8 +369,10 @@
     <app-paginador
       [total]="reporte.filas.length"
       [pagina]="paginaCuentas()"
+      [tamano]="tamanoPagina()"
       sustantivo="pacientes"
       (paginaCambia)="paginaCuentas.set($event)"
+      (tamanoCambia)="cambiarTamanoPagina($event)"
     />
   }
 }
@@ -436,8 +440,10 @@
     <app-paginador
       [total]="mensual().length"
       [pagina]="paginaMensual()"
+      [tamano]="tamanoPagina()"
       sustantivo="meses"
       (paginaCambia)="paginaMensual.set($event)"
+      (tamanoCambia)="cambiarTamanoPagina($event)"
     />
   }
 }

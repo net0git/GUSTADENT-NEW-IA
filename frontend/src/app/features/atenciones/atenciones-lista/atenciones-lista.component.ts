@@ -16,6 +16,7 @@ import {
 } from '../../../core/services/atenciones.service';
 import {
   PaginadorComponent,
+  TAMANO_PAGINA,
   rebanarPagina,
 } from '../../../shared/componentes/paginador/paginador.component';
 import { aIso, horaIso } from '../../../shared/fechas/fechas';
@@ -72,7 +73,10 @@ export class AtencionesListaComponent implements OnInit {
 
   /** Fragmento de la tabla de citas que se está viendo. */
   protected readonly pagina = signal(1);
-  protected readonly filasPagina = computed(() => rebanarPagina(this.filas(), this.pagina()));
+  protected readonly tamano = signal(TAMANO_PAGINA);
+  protected readonly filasPagina = computed(() =>
+    rebanarPagina(this.filas(), this.pagina(), this.tamano())
+  );
 
   // Busqueda de atenciones por paciente: reemplaza la tabla por tarjetas.
   protected readonly resultadosPaciente = signal<PacienteBuscado[]>([]);
@@ -168,6 +172,12 @@ export class AtencionesListaComponent implements OnInit {
     this.formulario.reset({ fecha: '', sucursal: '', estado: '' });
     this.sincronizarUrl();
     this.cargar();
+  }
+
+  /** Al cambiar cuántas filas se ven, se vuelve a la primera página. */
+  protected cambiarTamano(tamano: number): void {
+    this.tamano.set(tamano);
+    this.pagina.set(1);
   }
 
   protected quitarFiltroFecha(): void {

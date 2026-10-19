@@ -262,8 +262,10 @@
     <app-paginador
       [total]="filas().length"
       [pagina]="pagina()"
+      [tamano]="tamano()"
       sustantivo="citas"
       (paginaCambia)="pagina.set($event)"
+      (tamanoCambia)="cambiarTamano($event)"
     />
   }
 }

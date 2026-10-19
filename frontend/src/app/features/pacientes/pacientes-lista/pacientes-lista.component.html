@@ -86,7 +86,9 @@
   <app-paginador
     [total]="pacientes().length"
     [pagina]="pagina()"
+    [tamano]="tamano()"
     sustantivo="pacientes"
     (paginaCambia)="pagina.set($event)"
+    (tamanoCambia)="cambiarTamano($event)"
   />
 }

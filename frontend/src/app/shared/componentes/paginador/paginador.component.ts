@@ -1,6 +1,9 @@
 import { Component, computed, input, output } from '@angular/core';
 
-/** Filas que se muestran por fragmento en las tablas del sistema. */
+/** Tamaños de fragmento que el usuario puede elegir en las tablas. */
+export const TAMANOS_PAGINA = [5, 10, 20];
+
+/** Tamaño con el que abren las tablas. */
 export const TAMANO_PAGINA = 10;
 
 /** Recorta una lista a la página indicada (las páginas empiezan en 1). */
@@ -18,8 +21,7 @@ type Marca = number | 'puntos';
 
 /**
  * Carril de paginación que acompaña a las tablas: indica en qué fragmento de
- * filas se está y permite saltar a otra página. Solo aparece cuando hay más de
- * una página, para no ensuciar las tablas cortas.
+ * filas se está, permite saltar de página y elegir cuántas filas mostrar.
  */
 @Component({
   selector: 'app-paginador',
@@ -34,6 +36,12 @@ export class PaginadorComponent {
   readonly sustantivo = input<string>('registros');
 
   readonly paginaCambia = output<number>();
+  readonly tamanoCambia = output<number>();
+
+  protected readonly tamanos = TAMANOS_PAGINA;
+
+  /** Solo aparece si la tabla supera el fragmento más pequeño, para no ensuciar. */
+  protected readonly visible = computed(() => this.total() > Math.min(...TAMANOS_PAGINA));
 
   protected readonly totalPaginas = computed(() =>
     Math.max(1, Math.ceil(this.total() / this.tamano()))
@@ -74,6 +82,13 @@ export class PaginadorComponent {
     const destino = Math.min(Math.max(1, numero), this.totalPaginas());
     if (destino !== this.pagina()) {
       this.paginaCambia.emit(destino);
+    }
+  }
+
+  protected cambiarTamano(valor: string): void {
+    const tamano = Number(valor);
+    if (tamano !== this.tamano()) {
+      this.tamanoCambia.emit(tamano);
     }
   }
 }

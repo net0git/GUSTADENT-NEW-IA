@@ -6,6 +6,7 @@ import { errorApi } from '../../../core/http/error-api';
 import { Paciente, PacientesService } from '../../../core/services/pacientes.service';
 import {
   PaginadorComponent,
+  TAMANO_PAGINA,
   rebanarPagina,
 } from '../../../shared/componentes/paginador/paginador.component';
 
@@ -27,7 +28,10 @@ export class PacientesListaComponent implements OnInit {
 
   /** Fragmento de la tabla que se está viendo. */
   protected readonly pagina = signal(1);
-  protected readonly pacientesPagina = computed(() => rebanarPagina(this.pacientes(), this.pagina()));
+  protected readonly tamano = signal(TAMANO_PAGINA);
+  protected readonly pacientesPagina = computed(() =>
+    rebanarPagina(this.pacientes(), this.pagina(), this.tamano())
+  );
 
   ngOnInit(): void {
     this.cargar();
@@ -47,6 +51,12 @@ export class PacientesListaComponent implements OnInit {
 
   protected terminoBusqueda(): string {
     return this.formularioBusqueda.controls.termino.value.trim();
+  }
+
+  /** Al cambiar cuántas filas se ven, se vuelve a la primera página. */
+  protected cambiarTamano(tamano: number): void {
+    this.tamano.set(tamano);
+    this.pagina.set(1);
   }
 
   protected iniciales(paciente: Paciente): string {

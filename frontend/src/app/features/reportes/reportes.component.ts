@@ -19,6 +19,7 @@ import { Odontologo, UsuariosService } from '../../core/services/usuarios.servic
 import { GraficaApexComponent, SeriesGrafica } from '../../shared/componentes/grafica-apex/grafica-apex.component';
 import {
   PaginadorComponent,
+  TAMANO_PAGINA,
   rebanarPagina,
 } from '../../shared/componentes/paginador/paginador.component';
 import { hoyIso } from '../../shared/fechas/fechas';
@@ -95,15 +96,16 @@ export class ReportesComponent implements OnInit {
   protected readonly paginaProductividad = signal(1);
   protected readonly paginaCuentas = signal(1);
   protected readonly paginaMensual = signal(1);
+  protected readonly tamanoPagina = signal(TAMANO_PAGINA);
 
   protected readonly productividadPagina = computed(() =>
-    rebanarPagina(this.productividad(), this.paginaProductividad())
+    rebanarPagina(this.productividad(), this.paginaProductividad(), this.tamanoPagina())
   );
   protected readonly cuentasPagina = computed(() =>
-    rebanarPagina(this.cuentas()?.filas ?? [], this.paginaCuentas())
+    rebanarPagina(this.cuentas()?.filas ?? [], this.paginaCuentas(), this.tamanoPagina())
   );
   protected readonly mensualPagina = computed(() =>
-    rebanarPagina(this.mensual(), this.paginaMensual())
+    rebanarPagina(this.mensual(), this.paginaMensual(), this.tamanoPagina())
   );
 
   protected readonly etiquetasEstado = ETIQUETAS_ESTADO_ATENCION;
@@ -247,6 +249,14 @@ export class ReportesComponent implements OnInit {
 
   protected alternarDetalle(idPaciente: number): void {
     this.pacienteAbierto.update((actual) => (actual === idPaciente ? null : idPaciente));
+  }
+
+  /** Al cambiar cuántas filas se ven, las tablas vuelven a la primera página. */
+  protected cambiarTamanoPagina(tamano: number): void {
+    this.tamanoPagina.set(tamano);
+    this.paginaProductividad.set(1);
+    this.paginaCuentas.set(1);
+    this.paginaMensual.set(1);
   }
 
   protected monto(valor: number): string {

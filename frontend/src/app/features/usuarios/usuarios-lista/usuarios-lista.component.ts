@@ -7,6 +7,7 @@ import { AuthService } from '../../../core/services/auth.service';
 import { UsuariosService } from '../../../core/services/usuarios.service';
 import {
   PaginadorComponent,
+  TAMANO_PAGINA,
   rebanarPagina,
 } from '../../../shared/componentes/paginador/paginador.component';
 
@@ -34,7 +35,10 @@ export class UsuariosListaComponent implements OnInit {
 
   /** Fragmento de la tabla que se está viendo. */
   protected readonly pagina = signal(1);
-  protected readonly usuariosPagina = computed(() => rebanarPagina(this.usuarios(), this.pagina()));
+  protected readonly tamano = signal(TAMANO_PAGINA);
+  protected readonly usuariosPagina = computed(() =>
+    rebanarPagina(this.usuarios(), this.pagina(), this.tamano())
+  );
 
   ngOnInit(): void {
     this.cargar();
@@ -48,6 +52,12 @@ export class UsuariosListaComponent implements OnInit {
   protected cambiarFiltroEstado(valor: string): void {
     this.filtroEstado.set(valor as FiltroEstado);
     this.cargar();
+  }
+
+  /** Al cambiar cuántas filas se ven, se vuelve a la primera página. */
+  protected cambiarTamano(tamano: number): void {
+    this.tamano.set(tamano);
+    this.pagina.set(1);
   }
 
   protected alternarEstado(usuario: Usuario): void {
