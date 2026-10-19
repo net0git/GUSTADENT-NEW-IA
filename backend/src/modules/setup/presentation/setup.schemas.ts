@@ -6,7 +6,7 @@ import {
   textoRequerido,
 } from '../../../shared/validation/validadores';
 import { AdministradorSetupInput } from '../application/use-cases/configuracion-inicial.use-cases';
-import { EmpresaSetup, SucursalSetup } from '../application/ports/setup.repository';
+import { EmpresaRegistro, EmpresaSetup, SucursalSetup } from '../application/ports/setup.repository';
 
 const USERNAME_VALIDO = /^[A-Za-z0-9._-]+$/;
 
@@ -16,13 +16,26 @@ const USERNAME_VALIDO = /^[A-Za-z0-9._-]+$/;
  */
 const MAXIMO_LOGO = 900_000;
 
-export function validarEmpresa(cuerpo: unknown): EmpresaSetup {
-  const datos = objetoDeCuerpo(cuerpo);
+/** Campos de la clinica compartidos por el asistente inicial y la configuracion. */
+function datosBaseEmpresa(datos: Record<string, unknown>): EmpresaRegistro {
   return {
     nombreEmpresa: textoRequerido(datos.nombreEmpresa, 'nombreEmpresa', 50),
     ruc: conFormato(textoRequerido(datos.ruc, 'ruc', 11), /^\d{11}$/, 'ruc', 'debe tener 11 dígitos'),
     direccion: textoOpcional(datos.direccion, 'direccion', 80),
     telefono: textoOpcional(datos.telefono, 'telefono', 16),
+  };
+}
+
+/** Configuracion inicial: solo los datos de la clinica, sin logo. */
+export function validarEmpresaInicial(cuerpo: unknown): EmpresaRegistro {
+  return datosBaseEmpresa(objetoDeCuerpo(cuerpo));
+}
+
+/** Modulo de configuracion: los mismos datos mas el logo. */
+export function validarEmpresa(cuerpo: unknown): EmpresaSetup {
+  const datos = objetoDeCuerpo(cuerpo);
+  return {
+    ...datosBaseEmpresa(datos),
     logo: textoOpcional(datos.logo, 'logo', MAXIMO_LOGO),
   };
 }

@@ -2,6 +2,7 @@ import { pool } from '../../../database/pool';
 import { traducirErrorBd } from '../../../shared/database/errores-bd';
 import {
   AdministradorSetup,
+  EmpresaRegistro,
   EmpresaSetup,
   EstadoSetup,
   SetupRepository,
@@ -26,12 +27,12 @@ export class PgSetupRepository implements SetupRepository {
     };
   }
 
-  registrarEmpresa(datos: EmpresaSetup): Promise<boolean> {
+  registrarEmpresa(datos: EmpresaRegistro): Promise<boolean> {
     return this.insertarSiNoExiste(
       'SELECT EXISTS (SELECT 1 FROM empresa) AS existe',
-      `INSERT INTO empresa (nombre_empresa, ruc, direccion, telefono, logo)
-       VALUES ($1, $2, $3, $4, $5)`,
-      [datos.nombreEmpresa, datos.ruc, datos.direccion, datos.telefono, datos.logo]
+      `INSERT INTO empresa (nombre_empresa, ruc, direccion, telefono)
+       VALUES ($1, $2, $3, $4)`,
+      [datos.nombreEmpresa, datos.ruc, datos.direccion, datos.telefono]
     );
   }
 

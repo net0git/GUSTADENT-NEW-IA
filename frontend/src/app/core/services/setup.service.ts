@@ -3,6 +3,7 @@ import { Injectable, inject, signal } from '@angular/core';
 import { Observable, catchError, of, tap } from 'rxjs';
 import {
   AdministradorSetup,
+  EmpresaRegistro,
   EmpresaSetup,
   EstadoSetup,
   SucursalSetup,
@@ -36,7 +37,7 @@ export class SetupService {
     );
   }
 
-  registrarEmpresa(datos: EmpresaSetup, token: string): Observable<EstadoSetup> {
+  registrarEmpresa(datos: EmpresaRegistro, token: string): Observable<EstadoSetup> {
     return this.http.post<EstadoSetup>(`${RUTA_SETUP}/empresa`, datos, this.opciones(token));
   }
 
