@@ -56,13 +56,13 @@
     <app-mini-calendario [fechaSeleccionada]="fechaActiva()" (cambioFecha)="filtrarPorFecha($event)" />
 
     <footer class="usuario-pie">
-      <a class="usuario-enlace" routerLink="/mi-cuenta" title="Cambiar contraseña">
+      <a class="usuario-enlace" routerLink="/modulo-config" title="Configurar empresa">
         <span class="avatar">{{ iniciales }}</span>
         <span class="usuario-datos">
           <strong>{{ usuario?.nombreCompleto }}</strong>
           <small>{{ etiquetaPerfil }}</small>
         </span>
-        <i class="bi bi-key usuario-llave"></i>
+        <i class="bi bi-cog"></i>
       </a>
     </footer>
   </aside>
