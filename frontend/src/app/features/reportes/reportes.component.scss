@@ -156,81 +156,13 @@ $color-borde: #d7e7ee;
   margin: 0.5rem 0 0.25rem;
 }
 
-/* Grafica de barras: cada columna apila lo atendido sobre lo programado. */
+/* Las graficas las dibuja ApexCharts desde el componente compartido. */
 
-.grafica {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  gap: 2px;
-  height: 170px;
-  overflow-x: auto;
-  padding-bottom: 0.25rem;
-}
-
-.grafica-columna {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  flex: 1 1 0;
-  max-width: 38px;
-  min-width: 12px;
-  height: 100%;
-
-  small {
-    font-size: 0.6rem;
-    color: $color-texto-suave;
-    margin-top: 0.2rem;
-    white-space: nowrap;
-  }
-}
-
-.grafica-barras {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  width: 100%;
-  flex: 1;
-  min-height: 0;
-}
-
-.barra {
-  display: block;
-  width: 100%;
-  min-height: 2px;
-
-  &.atendida {
-    background: $color-verde;
-  }
-
-  &.pendiente {
-    background: #61d6e6;
-  }
-}
-
-.leyenda {
-  display: flex;
-  gap: 1rem;
+.nota-grafica {
   margin: 0.5rem 0 0;
   font-size: 0.76rem;
   color: $color-texto-suave;
-}
-
-.punto {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  margin-right: 0.25rem;
-
-  &.verde {
-    background: $color-verde;
-  }
-
-  &.azul {
-    background: #61d6e6;
-  }
+  text-align: center;
 }
 
 .tabla-contenedor {

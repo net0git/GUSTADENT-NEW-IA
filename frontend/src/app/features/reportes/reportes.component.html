@@ -194,35 +194,10 @@
     @if (maximoDia() === 0) {
       <p class="sin-datos">No hubo sesiones en el periodo.</p>
     } @else {
-      <div class="grafica">
-        @for (punto of puntosSesiones(); track punto.etiqueta + punto.total) {
-          <div
-            class="grafica-columna"
-            [title]="punto.etiqueta + ': ' + punto.total + ' sesiones, ' + punto.atendidas + ' atendidas'"
-          >
-            <div class="grafica-barras">
-              @if (punto.total > 0) {
-                <span
-                  class="barra atendida"
-                  [style.height.%]="porcentaje(punto.atendidas, maximoDia())"
-                ></span>
-                <span
-                  class="barra pendiente"
-                  [style.height.%]="porcentaje(punto.total - punto.atendidas, maximoDia())"
-                ></span>
-              }
-            </div>
-            <small>{{ rotulo($index) }}</small>
-          </div>
-        }
-      </div>
-      <p class="leyenda">
-        <span><i class="punto verde"></i> Atendidas</span>
-        <span><i class="punto azul"></i> Programadas</span>
-        @if (puntosSesiones().length < reporte.porDia.length) {
-          <span class="texto-suave">Rango largo: cada barra es una semana</span>
-        }
-      </p>
+      <app-grafica-apex [series]="seriesSesiones()" [categorias]="categoriasSesiones()" />
+      @if (puntosSesiones().length < reporte.porDia.length) {
+        <p class="nota-grafica">Rango largo: cada barra es una semana</p>
+      }
     }
   </section>
 }
@@ -409,32 +384,7 @@
       @if (maximoMes() === 0) {
         <p class="sin-datos">No hubo sesiones en el periodo.</p>
       } @else {
-        <div class="grafica">
-          @for (punto of puntosMes(); track punto.etiqueta) {
-            <div
-              class="grafica-columna"
-              [title]="punto.etiqueta + ': ' + punto.total + ' sesiones, ' + punto.atendidas + ' atendidas'"
-            >
-              <div class="grafica-barras">
-                @if (punto.total > 0) {
-                  <span
-                    class="barra atendida"
-                    [style.height.%]="porcentaje(punto.atendidas, maximoMes())"
-                  ></span>
-                  <span
-                    class="barra pendiente"
-                    [style.height.%]="porcentaje(punto.total - punto.atendidas, maximoMes())"
-                  ></span>
-                }
-              </div>
-              <small>{{ rotulo($index) }}</small>
-            </div>
-          }
-        </div>
-        <p class="leyenda">
-          <span><i class="punto verde"></i> Atendidas</span>
-          <span><i class="punto azul"></i> Programadas</span>
-        </p>
+        <app-grafica-apex [series]="seriesMes()" [categorias]="categoriasMes()" />
       }
     </section>
 

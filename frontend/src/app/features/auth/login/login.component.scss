@@ -4,41 +4,63 @@ $color-texto-suave: #64748b;
 $color-borde: #d7e7ee;
 $color-fondo: #f0f7f9;
 
+/* La figura se dibuja partida sobre el borde superior de la tarjeta: la mitad
+   de arriba cae fuera de la tarjeta y la mitad de abajo dentro. */
+$figura-alto: 190px;
+$figura-ancho: 230px;
+/* Ajustes de posicion: la bajan y la corrigen hacia la derecha. */
+$figura-bajar: 1.25rem;
+$figura-derecha: 0.75rem;
+
 .login-pagina {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem 1rem;
+  /* Arriba hay que dejar el hueco de la mitad de la figura que sobresale. */
+  padding: calc(#{$figura-alto} / 2 + 1.5rem) 1rem 2rem;
   background: linear-gradient(135deg, #dff7fa 0%, #f0f7f9 55%, #ffffff 100%);
 }
 
 .login-tarjeta {
+  position: relative;
   width: 100%;
   max-width: 400px;
   background: #fff;
   border: 1px solid $color-borde;
   border-radius: 1rem;
   box-shadow: 0 24px 48px -16px rgba(0, 139, 159, 0.3);
-  padding: 2rem;
+  padding-top: 130px;
+  padding-right: 2rem;
+  padding-bottom: 2rem;
+  padding-left: 2rem;
+}
+
+.login-figura {
+  position: absolute;
+  /* Media altura por encima del borde, menos el ajuste que la baja. */
+  top: calc(#{$figura-alto} / -2 + #{$figura-bajar});
+  /* Centrada con un desplazamiento corto hacia la derecha. */
+  left: calc(50% + #{$figura-derecha});
+  transform: translateX(-50%);
+  width: $figura-ancho;
+  max-width: 78%;
+  height: $figura-alto;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: bottom center;
+  }
 }
 
 .login-cabecera {
   text-align: center;
   margin-bottom: 1.5rem;
-}
-
-.marca-icono {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
-  background: $color-primario;
-  color: #fff;
-  font-size: 1.25rem;
-  margin-bottom: 0.75rem;
 }
 
 .titulo {

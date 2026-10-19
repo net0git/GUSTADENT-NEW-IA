@@ -1,6 +1,7 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import ApexCharts from 'apexcharts';
 import Swal from 'sweetalert2';
 import { errorApi } from '../../core/http/error-api';
 import { Sucursal } from '../../core/models/catalogo.model';
@@ -15,6 +16,7 @@ import {
 } from '../../core/services/reportes.service';
 import { ReportesService } from '../../core/services/reportes.service';
 import { Odontologo, UsuariosService } from '../../core/services/usuarios.service';
+import { GraficaApexComponent, SeriesGrafica } from '../../shared/componentes/grafica-apex/grafica-apex.component';
 import { hoyIso } from '../../shared/fechas/fechas';
 
 type Pestana = 'atenciones' | 'ingresos' | 'productividad' | 'cuentas' | 'mensual';
@@ -60,7 +62,7 @@ const ETIQUETAS_PERFIL: Record<string, string> = {
 
 @Component({
   selector: 'app-reportes',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, GraficaApexComponent],
   templateUrl: './reportes.component.html',
   styleUrl: './reportes.component.scss',
 })
@@ -134,6 +136,19 @@ export class ReportesComponent implements OnInit {
     return dias > DIAS_POR_BARRA ? 'Sesiones por semana' : 'Sesiones por día';
   });
 
+  /** Cada punto se apila sobre el anterior: lo atendido va arriba de lo pendiente. */
+  protected readonly seriesSesiones = computed<SeriesGrafica>(() => {
+    const puntos = this.puntosSesiones();
+    return [
+      { name: 'Atendidas', data: puntos.map((punto) => punto.atendidas) },
+      { name: 'Programadas', data: puntos.map((punto) => punto.total - punto.atendidas) },
+    ];
+  });
+
+  protected readonly categoriasSesiones = computed(() =>
+    this.puntosSesiones().map((punto) => punto.etiqueta)
+  );
+
   protected readonly puntosMes = computed<PuntoGrafica[]>(() =>
     this.mensual().map((fila) => ({
       etiqueta: `${MESES[fila.mes - 1]} ${fila.anio}`,
@@ -142,10 +157,15 @@ export class ReportesComponent implements OnInit {
     }))
   );
 
-  /** Los puntos de la grafica que se esta viendo, para rotularlos igual. */
-  protected readonly puntosGraficaActual = computed(() =>
-    this.pestana() === 'mensual' ? this.puntosMes() : this.puntosSesiones()
-  );
+  protected readonly seriesMes = computed<SeriesGrafica>(() => {
+    const puntos = this.puntosMes();
+    return [
+      { name: 'Atendidas', data: puntos.map((punto) => punto.atendidas) },
+      { name: 'Programadas', data: puntos.map((punto) => punto.total - punto.atendidas) },
+    ];
+  });
+
+  protected readonly categoriasMes = computed(() => this.puntosMes().map((punto) => punto.etiqueta));
 
   protected readonly maximoMes = computed(() =>
     this.puntosMes().reduce((maximo, punto) => Math.max(maximo, punto.total), 0)
@@ -214,29 +234,9 @@ export class ReportesComponent implements OnInit {
     return `S/ ${valor.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   }
 
-  protected porcentaje(valor: number, maximo: number): number {
-    if (maximo <= 0) {
-      return 0;
-    }
-    return Math.round((valor / maximo) * 100);
-  }
-
   protected diaCorto(fecha: string): string {
     const partes = fecha.split('-');
     return `${partes[2]}/${partes[1]}`;
-  }
-
-  /**
-   * Con muchas barras solo se rotula una de cada varias: si se rotula todo, los
-   * textos se pisan y no se leen.
-   */
-  protected rotulo(indice: number): string {
-    const puntos = this.puntosGraficaActual();
-    const paso = Math.ceil(puntos.length / 26);
-    if (indice % paso !== 0 && indice !== puntos.length - 1) {
-      return '';
-    }
-    return puntos[indice].etiqueta;
   }
 
   /** Lunes de la semana a la que pertenece una fecha AAAA-MM-DD. */
