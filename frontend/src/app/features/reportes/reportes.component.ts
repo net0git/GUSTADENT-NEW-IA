@@ -17,11 +17,6 @@ import {
 import { ReportesService } from '../../core/services/reportes.service';
 import { Odontologo, UsuariosService } from '../../core/services/usuarios.service';
 import { GraficaApexComponent, SeriesGrafica } from '../../shared/componentes/grafica-apex/grafica-apex.component';
-import {
-  PaginadorComponent,
-  TAMANO_PAGINA,
-  rebanarPagina,
-} from '../../shared/componentes/paginador/paginador.component';
 import { hoyIso } from '../../shared/fechas/fechas';
 
 type Pestana = 'atenciones' | 'ingresos' | 'productividad' | 'cuentas' | 'mensual';
@@ -67,7 +62,7 @@ const ETIQUETAS_PERFIL: Record<string, string> = {
 
 @Component({
   selector: 'app-reportes',
-  imports: [ReactiveFormsModule, RouterLink, GraficaApexComponent, PaginadorComponent],
+  imports: [ReactiveFormsModule, RouterLink, GraficaApexComponent],
   templateUrl: './reportes.component.html',
   styleUrl: './reportes.component.scss',
 })
@@ -91,22 +86,6 @@ export class ReportesComponent implements OnInit {
 
   /** Paciente desplegado para ver el detalle de sus atenciones con deuda. */
   protected readonly pacienteAbierto = signal<number | null>(null);
-
-  /** Fragmento visible de cada tabla de reporte. */
-  protected readonly paginaProductividad = signal(1);
-  protected readonly paginaCuentas = signal(1);
-  protected readonly paginaMensual = signal(1);
-  protected readonly tamanoPagina = signal(TAMANO_PAGINA);
-
-  protected readonly productividadPagina = computed(() =>
-    rebanarPagina(this.productividad(), this.paginaProductividad(), this.tamanoPagina())
-  );
-  protected readonly cuentasPagina = computed(() =>
-    rebanarPagina(this.cuentas()?.filas ?? [], this.paginaCuentas(), this.tamanoPagina())
-  );
-  protected readonly mensualPagina = computed(() =>
-    rebanarPagina(this.mensual(), this.paginaMensual(), this.tamanoPagina())
-  );
 
   protected readonly etiquetasEstado = ETIQUETAS_ESTADO_ATENCION;
 
@@ -251,14 +230,6 @@ export class ReportesComponent implements OnInit {
     this.pacienteAbierto.update((actual) => (actual === idPaciente ? null : idPaciente));
   }
 
-  /** Al cambiar cuántas filas se ven, las tablas vuelven a la primera página. */
-  protected cambiarTamanoPagina(tamano: number): void {
-    this.tamanoPagina.set(tamano);
-    this.paginaProductividad.set(1);
-    this.paginaCuentas.set(1);
-    this.paginaMensual.set(1);
-  }
-
   protected monto(valor: number): string {
     return `S/ ${valor.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   }
@@ -367,9 +338,6 @@ export class ReportesComponent implements OnInit {
 
   private cargar(): void {
     this.cargando.set(true);
-    this.paginaProductividad.set(1);
-    this.paginaCuentas.set(1);
-    this.paginaMensual.set(1);
 
     if (this.pestana() === 'cuentas') {
       this.cargarCuentas();
