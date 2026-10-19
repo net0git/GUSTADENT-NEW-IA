@@ -29,10 +29,42 @@ export class PgSetupRepository implements SetupRepository {
   registrarEmpresa(datos: EmpresaSetup): Promise<boolean> {
     return this.insertarSiNoExiste(
       'SELECT EXISTS (SELECT 1 FROM empresa) AS existe',
-      `INSERT INTO empresa (nombre_empresa, ruc, direccion, telefono)
-       VALUES ($1, $2, $3, $4)`,
-      [datos.nombreEmpresa, datos.ruc, datos.direccion, datos.telefono]
+      `INSERT INTO empresa (nombre_empresa, ruc, direccion, telefono, logo)
+       VALUES ($1, $2, $3, $4, $5)`,
+      [datos.nombreEmpresa, datos.ruc, datos.direccion, datos.telefono, datos.logo]
     );
+  }
+
+  async obtenerEmpresa(): Promise<EmpresaSetup | null> {
+    const resultado = await pool.query<{
+      nombre_empresa: string;
+      ruc: string;
+      direccion: string | null;
+      telefono: string | null;
+      logo: string | null;
+    }>('SELECT nombre_empresa, ruc, direccion, telefono, logo FROM empresa LIMIT 1');
+
+    const fila = resultado.rows[0];
+    if (!fila) {
+      return null;
+    }
+
+    return {
+      nombreEmpresa: fila.nombre_empresa,
+      ruc: fila.ruc,
+      direccion: fila.direccion,
+      telefono: fila.telefono,
+      logo: fila.logo,
+    };
+  }
+
+  async actualizarEmpresa(datos: EmpresaSetup): Promise<boolean> {
+    const resultado = await pool.query(
+      `UPDATE empresa
+          SET nombre_empresa = $1, ruc = $2, direccion = $3, telefono = $4, logo = $5`,
+      [datos.nombreEmpresa, datos.ruc, datos.direccion, datos.telefono, datos.logo]
+    );
+    return (resultado.rowCount ?? 0) > 0;
   }
 
   registrarSucursal(datos: SucursalSetup): Promise<boolean> {

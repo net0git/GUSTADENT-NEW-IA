@@ -9,6 +9,7 @@ export interface EmpresaSetup {
   ruc: string;
   direccion: string | null;
   telefono: string | null;
+  logo: string | null;
 }
 
 export interface SucursalSetup {
@@ -25,7 +26,9 @@ export interface AdministradorSetup {
 
 export interface SetupRepository {
   obtenerEstado(): Promise<EstadoSetup>;
+  obtenerEmpresa(): Promise<EmpresaSetup | null>;
   registrarEmpresa(datos: EmpresaSetup): Promise<boolean>;
+  actualizarEmpresa(datos: EmpresaSetup): Promise<boolean>;
   registrarSucursal(datos: SucursalSetup): Promise<boolean>;
   registrarAdministrador(datos: AdministradorSetup): Promise<boolean>;
 }

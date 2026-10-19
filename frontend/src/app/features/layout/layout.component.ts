@@ -1,11 +1,10 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { filter, Observable, of } from 'rxjs';
+import { filter } from 'rxjs';
 import { AuthService, UsuarioSesion } from '../../core/services/auth.service';
 import { Paciente } from '../../core/services/pacientes.service';
 import { SetupService } from '../../core/services/setup.service';
-import { EmpresaSetup } from '../../core/models/setup.model';
 import { BusquedaPacientesModalComponent } from '../../shared/componentes/busqueda-pacientes-modal/busqueda-pacientes-modal.component';
 import { MiniCalendarioComponent } from '../../shared/componentes/mini-calendario/mini-calendario.component';
 
@@ -38,8 +37,7 @@ export class LayoutComponent {
   protected readonly cerrando = signal(false);
   protected readonly busquedaPacienteAbierta = signal(false);
   protected readonly fechaActiva = signal<string | null>(null);
-  protected readonly empresaLogo = signal<string | null>('');
-  protected readonly datosEmpresa = signal<EmpresaSetup | null>(null);
+  protected readonly empresa = this.setup.empresa;
 
   constructor() {
     this.router.events
@@ -47,7 +45,6 @@ export class LayoutComponent {
       .subscribe(() => {
         this.actualizarCabecera();
         this.leerFechaDeLaRuta();
-        this.cargarEmpresa();
       });
     this.leerFechaDeLaRuta();
     this.cargarEmpresa();
@@ -118,27 +115,13 @@ export class LayoutComponent {
   }
 
   private cargarEmpresa(): void {
-    this.obtenerEmpresa().subscribe({
-      next: (empresa) => {
-        this.datosEmpresa.set(empresa);
-        this.empresaLogo.set(empresa?.logo ?? '');
-      },
-    });
+    if (this.empresa()) {
+      return;
+    }
+    this.setup.cargarEmpresa().subscribe();
   }
 
   irAConfiguracion(): void {
     this.router.navigate(['/modulo-config']);
-  }
-
-  private obtenerEmpresa(): Observable<EmpresaSetup> {
-    // En un futuro: return this.setup.obtenerEmpresa();
-    // Por ahora retornamos datos iniciales vacíos
-    return of({
-      nombreEmpresa: 'GUSTADENT',
-      ruc: '',
-      direccion: null,
-      telefono: null,
-      logo: '',
-    } as EmpresaSetup);
   }
 }

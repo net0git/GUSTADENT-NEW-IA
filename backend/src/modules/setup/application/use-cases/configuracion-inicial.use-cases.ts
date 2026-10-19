@@ -40,6 +40,31 @@ export class RegistrarEmpresaSetupUseCase {
   }
 }
 
+/** Datos de la empresa para el modulo de configuracion (ya no es un paso inicial). */
+export class ObtenerEmpresaUseCase {
+  constructor(private readonly setup: SetupRepository) {}
+
+  async execute(): Promise<EmpresaSetup> {
+    const empresa = await this.setup.obtenerEmpresa();
+    if (!empresa) {
+      throw new AppError(404, 'EMPRESA_NO_ENCONTRADA', 'No hay una empresa registrada');
+    }
+    return empresa;
+  }
+}
+
+export class ActualizarEmpresaUseCase {
+  constructor(private readonly setup: SetupRepository) {}
+
+  async execute(datos: EmpresaSetup): Promise<EmpresaSetup> {
+    const actualizada = await this.setup.actualizarEmpresa(datos);
+    if (!actualizada) {
+      throw new AppError(404, 'EMPRESA_NO_ENCONTRADA', 'No hay una empresa registrada');
+    }
+    return datos;
+  }
+}
+
 export class RegistrarSucursalSetupUseCase {
   constructor(private readonly setup: SetupRepository) {}
 

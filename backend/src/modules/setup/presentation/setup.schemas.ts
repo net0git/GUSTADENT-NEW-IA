@@ -10,6 +10,12 @@ import { EmpresaSetup, SucursalSetup } from '../application/ports/setup.reposito
 
 const USERNAME_VALIDO = /^[A-Za-z0-9._-]+$/;
 
+/**
+ * El logo viaja como data URL (base64). El limite del cuerpo JSON es 1 MB, asi
+ * que se deja un margen para no rechazar la solicitud por tamano.
+ */
+const MAXIMO_LOGO = 900_000;
+
 export function validarEmpresa(cuerpo: unknown): EmpresaSetup {
   const datos = objetoDeCuerpo(cuerpo);
   return {
@@ -17,6 +23,7 @@ export function validarEmpresa(cuerpo: unknown): EmpresaSetup {
     ruc: conFormato(textoRequerido(datos.ruc, 'ruc', 11), /^\d{11}$/, 'ruc', 'debe tener 11 dígitos'),
     direccion: textoOpcional(datos.direccion, 'direccion', 80),
     telefono: textoOpcional(datos.telefono, 'telefono', 16),
+    logo: textoOpcional(datos.logo, 'logo', MAXIMO_LOGO),
   };
 }
 

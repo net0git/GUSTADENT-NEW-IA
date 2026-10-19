@@ -1,95 +1,93 @@
-<h2 class="seccion-titulo">Configuración de Empresa</h2>
-
-<div class="formulario-empresa">
-  <!-- Resumen del logo -->
-  @if (logoPreview) {
-  <div class="preview-logo">
-    <img [src]="logoPreview" alt="Vista previa del logo de {{ datosEmpresa.nombreEmpresa }}" />
-    <button type="button" class="btn-quitar-logo" (click)="datosEmpresa.logo = ''; logoPreview = ''">×</button>
+@if (cargando()) {
+  <div class="estado-carga">
+    <div class="spinner-border spinner-border-sm" role="status"></div>
+    <span>Cargando datos de la empresa...</span>
   </div>
-  } @else {
-  <div class="placeholder-logo">
-    <i class="bi bi-image"></i>
-    <span>Sin logo</span>
-  </div>
-  }
-
-  <!-- Formulario de datos de empresa -->
-  <form class="datos-empresa">
-    <div class="campo-grupo">
-      <label for="nombreEmpresa">Razón social</label>
-      <input
-        id="nombreEmpresa"
-        type="text"
-        [(ngModel)]="datosEmpresa.nombreEmpresa"
-        placeholder="Nombre de la clínica"
-        required
-      />
+} @else {
+  <form class="tarjeta-empresa" [formGroup]="empresaForm" (ngSubmit)="guardar()" novalidate>
+    <div class="logo-bloque">
+      <div class="logo-marco">
+        @if (logoPreview()) {
+          <img [src]="logoPreview()" alt="Logo de la empresa" />
+          <button type="button" class="btn-quitar-logo" title="Quitar logo" (click)="quitarLogo()">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        } @else {
+          <span class="logo-vacio"><i class="bi bi-image"></i></span>
+        }
+      </div>
+      <div class="logo-datos">
+        <label class="form-label" for="logo">Logo de la empresa</label>
+        <input id="logo" type="file" class="form-control" accept="image/*" (change)="onLogoChange($event)" />
+        <small class="ayuda">Formato PNG o JPG, se muestra en la barra lateral.</small>
+      </div>
     </div>
 
-    <div class="campo-grupo">
-      <label for="ruc">RUC</label>
-      <input
-        id="ruc"
-        type="text"
-        [(ngModel)]="datosEmpresa.ruc"
-        placeholder="12345678901"
-        required
-      />
+    <div class="fila">
+      <div class="campo campo-amplio">
+        <label for="nombreEmpresa" class="form-label">Razón social</label>
+        <input
+          id="nombreEmpresa"
+          class="form-control"
+          formControlName="nombreEmpresa"
+          [class.is-invalid]="mostrarCampoInvalido(empresaForm.controls.nombreEmpresa)"
+        />
+        @if (mostrarCampoInvalido(empresaForm.controls.nombreEmpresa)) {
+          <div class="invalid-feedback">{{ mensajeCampo(empresaForm.controls.nombreEmpresa) }}</div>
+        }
+      </div>
+
+      <div class="campo">
+        <label for="ruc" class="form-label">RUC</label>
+        <input
+          id="ruc"
+          class="form-control"
+          inputmode="numeric"
+          maxlength="11"
+          formControlName="ruc"
+          [class.is-invalid]="mostrarCampoInvalido(empresaForm.controls.ruc)"
+        />
+        @if (mostrarCampoInvalido(empresaForm.controls.ruc)) {
+          <div class="invalid-feedback">{{ mensajeCampo(empresaForm.controls.ruc) }}</div>
+        }
+      </div>
     </div>
 
-    <div class="campo-grupo">
-      <label for="direccion">Dirección</label>
-      <input
-        id="direccion"
-        type="text"
-        [(ngModel)]="datosEmpresa.direccion"
-        placeholder="Av. Principal 123"
-      />
+    <div class="fila">
+      <div class="campo campo-amplio">
+        <label for="direccion" class="form-label">Dirección</label>
+        <input
+          id="direccion"
+          class="form-control"
+          formControlName="direccion"
+          [class.is-invalid]="mostrarCampoInvalido(empresaForm.controls.direccion)"
+        />
+        @if (mostrarCampoInvalido(empresaForm.controls.direccion)) {
+          <div class="invalid-feedback">{{ mensajeCampo(empresaForm.controls.direccion) }}</div>
+        }
+      </div>
+
+      <div class="campo">
+        <label for="telefono" class="form-label">Teléfono</label>
+        <input
+          id="telefono"
+          class="form-control"
+          formControlName="telefono"
+          [class.is-invalid]="mostrarCampoInvalido(empresaForm.controls.telefono)"
+        />
+        @if (mostrarCampoInvalido(empresaForm.controls.telefono)) {
+          <div class="invalid-feedback">{{ mensajeCampo(empresaForm.controls.telefono) }}</div>
+        }
+      </div>
     </div>
 
-    <div class="campo-grupo">
-      <label for="telefono">Teléfono</label>
-      <input
-        id="telefono"
-        type="text"
-        [(ngModel)]="datosEmpresa.telefono"
-        placeholder="+51 999 123 456"
-      />
-    </div>
-
-    <div class="campo-grupo">
-      <label for="logo">Logo</label>
-      <input
-        id="logo"
-        type="file"
-        accept="image/*"
-        (change)="onLogoChange($event)"
-      />
-      @if (logoPreview) {
-      <small class="ayuda">Logo cargado</small>
-      }
+    <div class="acciones">
+      <button type="submit" class="btn btn-primary" [disabled]="guardando()">
+        @if (guardando()) {
+          <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+        }
+        <i class="bi bi-check-lg me-1"></i> Guardar cambios
+      </button>
     </div>
   </form>
-</div>
-
-<div class="acciones">
-  <button
-    type="button"
-    class="btn-guardar"
-    (click)="mostrandoFormulario = true"
-    [disabled]="!datosEmpresa.nombreEmpresa || !datosEmpresa.ruc"
-  >
-    <i class="bi bi-pencil-square"></i>
-    Editar datos de empresa
-  </button>
-
-  <button
-    type="button"
-    class="btn-cancelar"
-    (click)="guardarEmpresa()"
-  >
-    <i class="bi bi-x"></i>
-    Cancelar
-  </button>
-</div>
+}
