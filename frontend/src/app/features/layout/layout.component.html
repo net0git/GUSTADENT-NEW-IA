@@ -60,7 +60,7 @@
     <app-mini-calendario [fechaSeleccionada]="fechaActiva()" (cambioFecha)="filtrarPorFecha($event)" />
 
     <footer class="usuario-pie">
-      <a class="usuario-enlace" title="Mi cuenta">
+      <a class="usuario-enlace" routerLink="/mi-cuenta" title="Mi cuenta">
         <span class="avatar">{{ iniciales }}</span>
         <span class="usuario-datos">
           <strong>{{ usuario?.nombreCompleto }}</strong>
