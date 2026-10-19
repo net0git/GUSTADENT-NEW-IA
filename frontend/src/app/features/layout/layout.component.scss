@@ -59,6 +59,15 @@ $breakpoint-movil: 992px;
   letter-spacing: 0.02em;
 }
 
+.marca-logo {
+  max-width: 40px;
+  max-height: 40px;
+  border-radius: 8px;
+  object-fit: contain;
+  border: 1px solid $color-borde;
+  background: $color-fondo;
+}
+
 .seccion-titulo {
   font-size: 0.7rem;
   font-weight: 600;

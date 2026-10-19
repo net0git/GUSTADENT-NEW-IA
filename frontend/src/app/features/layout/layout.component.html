@@ -1,8 +1,12 @@
 <div class="app-contenedor">
   <aside class="barra-lateral" [class.abierta]="menuAbierto()">
     <div class="marca">
+      @if (datosEmpresa()?.logo) {
+      <img [src]="datosEmpresa()!.logo" alt="Logo de la empresa" class="marca-logo" />
+      } @else {
       <span class="marca-icono"><i class="bi bi-grid-3x3-gap-fill"></i></span>
-      <span class="marca-nombre">GUSTADENT</span>
+      }
+      <span class="marca-nombre">{{ datosEmpresa()?.nombreEmpresa ?? 'GUSTADENT' }}</span>
     </div>
 
     <section class="acciones-rapidas">
