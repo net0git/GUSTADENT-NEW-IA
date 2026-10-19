@@ -152,6 +152,24 @@ $color-fondo: #f0f7f9;
   }
 }
 
+.tarjeta-descripcion {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+  margin: 0 0 0.7rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 0.6rem;
+  background: $color-fondo;
+  font-size: 0.8rem;
+  line-height: 1.35;
+  color: $color-texto;
+
+  i {
+    color: $color-primario;
+    line-height: 1.35;
+  }
+}
+
 .tarjeta-sesiones {
   flex: 1;
 }

@@ -89,6 +89,13 @@
             <span><i class="bi bi-person-badge"></i> {{ atencion.nombreMedico }}</span>
           </div>
 
+          @if (atencion.descripcion) {
+            <p class="tarjeta-descripcion">
+              <i class="bi bi-clipboard2-pulse"></i>
+              <span>{{ atencion.descripcion }}</span>
+            </p>
+          }
+
           <section class="tarjeta-sesiones">
             <h4 class="tarjeta-subtitulo">
               <i class="bi bi-calendar-check"></i> Sesiones ({{ atencion.sesiones.length }})
