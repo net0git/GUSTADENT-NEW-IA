@@ -16,14 +16,6 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'modulo-config',
-    canActivate: [configuracionCompletadaGuard],
-    loadComponent: () =>
-      import('./features/modulo-config/modulo-config.component').then(
-        (m) => m.ModuloConfigComponent
-      ),
-  },
-  {
     path: 'login',
     canActivate: [configuracionCompletadaGuard],
     loadComponent: () =>
@@ -85,6 +77,15 @@ export const routes: Routes = [
         data: { titulo: 'Reportes', subtitulo: 'Atenciones, ingresos y cuentas por cobrar' },
         loadComponent: () =>
           import('./features/reportes/reportes.component').then((m) => m.ReportesComponent),
+      },
+      {
+        path: 'modulo-config',
+        canActivate: [perfilRequeridoGuard('administrador')],
+        data: { titulo: 'Configuración', subtitulo: 'Datos de la empresa y logo' },
+        loadComponent: () =>
+          import('./features/modulo-config/modulo-config.component').then(
+            (m) => m.ModuloConfigComponent
+          ),
       },
       {
         path: 'pacientes',
