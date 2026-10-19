@@ -59,6 +59,15 @@ $breakpoint-movil: 992px;
   letter-spacing: 0.02em;
 }
 
+.marca-logo {
+  max-width: 40px;
+  max-height: 40px;
+  border-radius: 8px;
+  object-fit: contain;
+  border: 1px solid $color-borde;
+  background: $color-fondo;
+}
+
 .seccion-titulo {
   font-size: 0.7rem;
   font-weight: 600;
@@ -285,12 +294,6 @@ $breakpoint-movil: 992px;
     opacity: 0.6;
     cursor: not-allowed;
   }
-}
-
-/* Engranaje: gris neutro, para que no compita con el salir. */
-.btn-config {
-  color: $color-texto-suave;
-  border-color: $color-borde;
 }
 
 .btn-salir {

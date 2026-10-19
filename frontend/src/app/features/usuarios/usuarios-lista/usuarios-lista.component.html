@@ -16,9 +16,11 @@
     </select>
   </div>
 
-  <a class="btn btn-primary btn-sm" routerLink="/usuarios/nuevo">
-    <i class="bi bi-plus-lg me-1"></i> Nuevo usuario
-  </a>
+  @if (esAdministrador) {
+    <a class="btn btn-primary btn-sm" routerLink="/usuarios/nuevo">
+      <i class="bi bi-plus-lg me-1"></i> Nuevo usuario
+    </a>
+  }
 </section>
 
 @if (cargando()) {
@@ -42,11 +44,13 @@
           <th>Perfil</th>
           <th>Sucursales</th>
           <th>Estado</th>
-          <th>Acciones</th>
+          @if (esAdministrador) {
+            <th>Acciones</th>
+          }
         </tr>
       </thead>
       <tbody>
-        @for (usuario of usuarios(); track usuario.id) {
+        @for (usuario of usuariosPagina(); track usuario.id) {
           <tr>
             <td>
               <div class="celda-usuario">
@@ -67,47 +71,58 @@
                 <span class="badge text-bg-secondary">Inactivo</span>
               }
             </td>
-            <td class="acciones-celda">
-              <a
-                class="accion-chip accion-editar"
-                title="Editar"
-                [routerLink]="['/usuarios', usuario.id, 'editar']"
-              >
-                <i class="bi bi-pencil"></i>
-                <span class="visually-hidden">Editar</span>
-              </a>
-              <button
-                type="button"
-                class="accion-chip accion-llave"
-                title="Generar una contraseña temporal"
-                [disabled]="enProceso() === usuario.id"
-                (click)="pedirResetearPassword(usuario)"
-              >
-                <i class="bi bi-key"></i>
-                <span class="visually-hidden">Generar contraseña temporal</span>
-              </button>
-              <button
-                type="button"
-                class="accion-chip"
-                [class.accion-baja]="usuario.activo"
-                [class.accion-alta]="!usuario.activo"
-                [disabled]="esUsuarioActual(usuario) || enProceso() === usuario.id"
-                [title]="
-                  esUsuarioActual(usuario)
-                    ? 'No puedes desactivar tu propia cuenta'
-                    : usuario.activo
-                      ? 'Desactivar'
-                      : 'Activar'
-                "
-                (click)="alternarEstado(usuario)"
-              >
-                <i class="bi" [class.bi-person-slash]="usuario.activo" [class.bi-person-check]="!usuario.activo"></i>
-                <span class="visually-hidden">{{ usuario.activo ? 'Desactivar' : 'Activar' }}</span>
-              </button>
-            </td>
+            @if (esAdministrador) {
+              <td class="acciones-celda">
+                <a
+                  class="accion-chip accion-editar"
+                  title="Editar"
+                  [routerLink]="['/usuarios', usuario.id, 'editar']"
+                >
+                  <i class="bi bi-pencil"></i>
+                  <span class="visually-hidden">Editar</span>
+                </a>
+                <button
+                  type="button"
+                  class="accion-chip accion-llave"
+                  title="Generar una contraseña temporal"
+                  [disabled]="enProceso() === usuario.id"
+                  (click)="pedirResetearPassword(usuario)"
+                >
+                  <i class="bi bi-key"></i>
+                  <span class="visually-hidden">Generar contraseña temporal</span>
+                </button>
+                <button
+                  type="button"
+                  class="accion-chip"
+                  [class.accion-baja]="usuario.activo"
+                  [class.accion-alta]="!usuario.activo"
+                  [disabled]="esUsuarioActual(usuario) || enProceso() === usuario.id"
+                  [title]="
+                    esUsuarioActual(usuario)
+                      ? 'No puedes desactivar tu propia cuenta'
+                      : usuario.activo
+                        ? 'Desactivar'
+                        : 'Activar'
+                  "
+                  (click)="alternarEstado(usuario)"
+                >
+                  <i class="bi" [class.bi-person-slash]="usuario.activo" [class.bi-person-check]="!usuario.activo"></i>
+                  <span class="visually-hidden">{{ usuario.activo ? 'Desactivar' : 'Activar' }}</span>
+                </button>
+              </td>
+            }
           </tr>
         }
       </tbody>
     </table>
   </div>
+
+  <app-paginador
+    [total]="usuarios().length"
+    [pagina]="pagina()"
+    [tamano]="tamano()"
+    sustantivo="usuarios"
+    (paginaCambia)="pagina.set($event)"
+    (tamanoCambia)="cambiarTamano($event)"
+  />
 }

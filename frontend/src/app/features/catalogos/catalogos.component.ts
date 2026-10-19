@@ -3,6 +3,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import Swal from 'sweetalert2';
 import { errorApi } from '../../core/http/error-api';
 import { EntradaCatalogo, ItemCatalogo, Sucursal } from '../../core/models/catalogo.model';
+import { AuthService } from '../../core/services/auth.service';
 import { CatalogosService } from '../../core/services/catalogos.service';
 import { campoInvalido, mensajeDeError } from '../../shared/formularios/validacion';
 
@@ -17,6 +18,10 @@ type FiltroEstado = '' | 'true' | 'false';
 })
 export class CatalogosComponent implements OnInit {
   private readonly catalogos = inject(CatalogosService);
+
+  /** Recepción consulta los catálogos; solo el administrador los edita. */
+  protected readonly esAdministrador =
+    inject(AuthService).obtenerUsuario()?.perfil === 'administrador';
 
   protected readonly mensajeCampo = mensajeDeError;
   protected readonly mostrarCampoInvalido = campoInvalido;

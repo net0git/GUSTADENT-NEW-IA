@@ -3,7 +3,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
 import { AuthService, UsuarioSesion } from '../../core/services/auth.service';
+import { puedeVer } from '../../core/permisos';
 import { Paciente } from '../../core/services/pacientes.service';
+import { SetupService } from '../../core/services/setup.service';
 import { BusquedaPacientesModalComponent } from '../../shared/componentes/busqueda-pacientes-modal/busqueda-pacientes-modal.component';
 import { MiniCalendarioComponent } from '../../shared/componentes/mini-calendario/mini-calendario.component';
 
@@ -22,12 +24,17 @@ const ETIQUETAS_PERFIL: Record<UsuarioSesion['perfil'], string> = {
 export class LayoutComponent {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly setup = inject(SetupService);
   private readonly destruir = inject(DestroyRef);
 
   protected readonly usuario = this.auth.obtenerUsuario();
   protected readonly iniciales = this.calcularIniciales(this.usuario?.nombreCompleto ?? '');
   protected readonly etiquetaPerfil = this.usuario ? ETIQUETAS_PERFIL[this.usuario.perfil] : '';
-  protected readonly esAdministrador = this.usuario?.perfil === 'administrador';
+
+  private readonly perfil = this.usuario?.perfil ?? null;
+  protected readonly esAdministrador = this.perfil === 'administrador';
+  protected readonly puedeVerCatalogos = puedeVer(this.perfil, 'catalogos');
+  protected readonly puedeVerUsuarios = puedeVer(this.perfil, 'usuarios');
 
   protected readonly titulo = signal('');
   protected readonly subtitulo = signal('');
@@ -35,6 +42,7 @@ export class LayoutComponent {
   protected readonly cerrando = signal(false);
   protected readonly busquedaPacienteAbierta = signal(false);
   protected readonly fechaActiva = signal<string | null>(null);
+  protected readonly empresa = this.setup.empresa;
 
   constructor() {
     this.router.events
@@ -44,6 +52,7 @@ export class LayoutComponent {
         this.leerFechaDeLaRuta();
       });
     this.leerFechaDeLaRuta();
+    this.cargarEmpresa();
   }
 
   protected alternarMenu(): void {
@@ -108,5 +117,12 @@ export class LayoutComponent {
     const partes = nombreCompleto.trim().split(/\s+/).filter(Boolean);
     const primeras = partes.slice(0, 2).map((parte) => parte.charAt(0).toUpperCase());
     return primeras.join('') || '?';
+  }
+
+  private cargarEmpresa(): void {
+    if (this.empresa()) {
+      return;
+    }
+    this.setup.cargarEmpresa().subscribe();
   }
 }

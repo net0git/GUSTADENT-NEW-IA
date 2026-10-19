@@ -2,6 +2,7 @@ import { AppError } from '../../../../shared/errors/app-error';
 import { PasswordHasher } from '../../../auth/application/ports/password-hasher.port';
 import {
   AdministradorSetup,
+  EmpresaRegistro,
   EmpresaSetup,
   EstadoSetup,
   SetupRepository,
@@ -32,11 +33,36 @@ export class ObtenerEstadoSetupUseCase {
 export class RegistrarEmpresaSetupUseCase {
   constructor(private readonly setup: SetupRepository) {}
 
-  async execute(datos: EmpresaSetup): Promise<void> {
+  async execute(datos: EmpresaRegistro): Promise<void> {
     const registrada = await this.setup.registrarEmpresa(datos);
     if (!registrada) {
       throw new AppError(409, 'PASO_YA_CONFIGURADO', PASO_YA_CONFIGURADO);
     }
+  }
+}
+
+/** Datos de la empresa para el modulo de configuracion (ya no es un paso inicial). */
+export class ObtenerEmpresaUseCase {
+  constructor(private readonly setup: SetupRepository) {}
+
+  async execute(): Promise<EmpresaSetup> {
+    const empresa = await this.setup.obtenerEmpresa();
+    if (!empresa) {
+      throw new AppError(404, 'EMPRESA_NO_ENCONTRADA', 'No hay una empresa registrada');
+    }
+    return empresa;
+  }
+}
+
+export class ActualizarEmpresaUseCase {
+  constructor(private readonly setup: SetupRepository) {}
+
+  async execute(datos: EmpresaSetup): Promise<EmpresaSetup> {
+    const actualizada = await this.setup.actualizarEmpresa(datos);
+    if (!actualizada) {
+      throw new AppError(404, 'EMPRESA_NO_ENCONTRADA', 'No hay una empresa registrada');
+    }
+    return datos;
   }
 }
 

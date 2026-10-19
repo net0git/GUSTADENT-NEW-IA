@@ -46,6 +46,11 @@ $color-borde: #d7e7ee;
   align-items: start;
 }
 
+/* Cuando el perfil solo consulta, la lista ocupa todo el ancho. */
+.contenido-catalogo.solo-lista {
+  grid-template-columns: 1fr;
+}
+
 .panel-formulario,
 .panel-lista {
   background: #fff;

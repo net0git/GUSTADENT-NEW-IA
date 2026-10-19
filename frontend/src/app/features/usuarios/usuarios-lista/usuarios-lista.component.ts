@@ -1,16 +1,21 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import Swal from 'sweetalert2';
 import { errorApi } from '../../../core/http/error-api';
 import { ETIQUETAS_PERFIL, Perfil, Usuario } from '../../../core/models/usuario.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { UsuariosService } from '../../../core/services/usuarios.service';
+import {
+  PaginadorComponent,
+  TAMANO_PAGINA,
+  rebanarPagina,
+} from '../../../shared/componentes/paginador/paginador.component';
 
 type FiltroEstado = '' | 'true' | 'false';
 
 @Component({
   selector: 'app-usuarios-lista',
-  imports: [RouterLink],
+  imports: [RouterLink, PaginadorComponent],
   templateUrl: './usuarios-lista.component.html',
   styleUrl: './usuarios-lista.component.scss',
 })
@@ -21,12 +26,21 @@ export class UsuariosListaComponent implements OnInit {
   protected readonly etiquetasPerfil = ETIQUETAS_PERFIL;
   protected readonly perfiles = Object.keys(ETIQUETAS_PERFIL) as Perfil[];
   protected readonly idActual = this.auth.obtenerUsuario()?.id;
+  /** Recepción consulta el personal; solo el administrador lo gestiona. */
+  protected readonly esAdministrador = this.auth.obtenerUsuario()?.perfil === 'administrador';
 
   protected readonly usuarios = signal<Usuario[]>([]);
   protected readonly cargando = signal(true);
   protected readonly filtroPerfil = signal<Perfil | ''>('');
   protected readonly filtroEstado = signal<FiltroEstado>('');
   protected readonly enProceso = signal<number | null>(null);
+
+  /** Fragmento de la tabla que se está viendo. */
+  protected readonly pagina = signal(1);
+  protected readonly tamano = signal(TAMANO_PAGINA);
+  protected readonly usuariosPagina = computed(() =>
+    rebanarPagina(this.usuarios(), this.pagina(), this.tamano())
+  );
 
   ngOnInit(): void {
     this.cargar();
@@ -40,6 +54,12 @@ export class UsuariosListaComponent implements OnInit {
   protected cambiarFiltroEstado(valor: string): void {
     this.filtroEstado.set(valor as FiltroEstado);
     this.cargar();
+  }
+
+  /** Al cambiar cuántas filas se ven, se vuelve a la primera página. */
+  protected cambiarTamano(tamano: number): void {
+    this.tamano.set(tamano);
+    this.pagina.set(1);
   }
 
   protected alternarEstado(usuario: Usuario): void {
@@ -102,6 +122,7 @@ protected sucursalesDe(usuario: Usuario): string {
   private cargar(): void {
     const estado = this.filtroEstado();
     this.cargando.set(true);
+    this.pagina.set(1);
     this.usuariosService
       .listar({
         perfil: this.filtroPerfil() || undefined,

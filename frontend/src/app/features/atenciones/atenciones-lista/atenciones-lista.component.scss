@@ -152,6 +152,18 @@ $color-fondo: #f0f7f9;
   }
 }
 
+.tarjeta-descripcion {
+  display: block;
+  width: fit-content;
+  margin: 0.4rem 0 0;
+  padding: 0.3rem 0.55rem;
+  border-radius: 0.5rem;
+  background: $color-fondo;
+  font-size: 0.78rem;
+  line-height: 1.3;
+  color: $color-texto;
+}
+
 .tarjeta-sesiones {
   flex: 1;
 }

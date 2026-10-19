@@ -5,6 +5,7 @@ import {
   sesionActivaGuard,
 } from './core/guards/configuracion.guard';
 import { perfilRequeridoGuard } from './core/guards/perfil.guard';
+import { ACCESO } from './core/permisos';
 
 export const routes: Routes = [
   {
@@ -36,7 +37,7 @@ export const routes: Routes = [
       },
       {
         path: 'catalogos',
-        canActivate: [perfilRequeridoGuard('administrador')],
+        canActivate: [perfilRequeridoGuard(...ACCESO.catalogos)],
         data: { titulo: 'Catálogos', subtitulo: 'Sucursales y procedencias' },
         loadComponent: () =>
           import('./features/catalogos/catalogos.component').then((m) => m.CatalogosComponent),
@@ -79,6 +80,15 @@ export const routes: Routes = [
           import('./features/reportes/reportes.component').then((m) => m.ReportesComponent),
       },
       {
+        path: 'modulo-config',
+        canActivate: [perfilRequeridoGuard('administrador')],
+        data: { titulo: 'Configuración', subtitulo: 'Datos de la empresa y logo' },
+        loadComponent: () =>
+          import('./features/modulo-config/modulo-config.component').then(
+            (m) => m.ModuloConfigComponent
+          ),
+      },
+      {
         path: 'pacientes',
         data: { titulo: 'Pacientes', subtitulo: 'Registro y búsqueda' },
         loadComponent: () =>
@@ -104,7 +114,7 @@ export const routes: Routes = [
       },
       {
         path: 'usuarios',
-        canActivate: [perfilRequeridoGuard('administrador')],
+        canActivate: [perfilRequeridoGuard(...ACCESO.usuarios)],
         data: { titulo: 'Usuarios', subtitulo: 'Personal de la clínica' },
         loadComponent: () =>
           import('./features/usuarios/usuarios-lista/usuarios-lista.component').then(

@@ -76,6 +76,9 @@
               <span class="tarjeta-numero">ATENCIÓN N° {{ atencion.id }}</span>
               <h3 class="tarjeta-titulo">{{ atencion.nombreCompletoPaciente }}</h3>
               <span class="texto-suave">DNI {{ atencion.dniPaciente }}</span>
+              @if (atencion.descripcion) {
+                <p class="tarjeta-descripcion">{{ atencion.descripcion }}</p>
+              }
             </div>
             <span class="badge-estado" [class]="'estado-' + atencion.estado">
               {{ etiquetasEstadoAtencion[atencion.estado] }}
@@ -210,7 +213,7 @@
           </tr>
         </thead>
         <tbody>
-          @for (fila of filas(); track fila.clave) {
+          @for (fila of filasPagina(); track fila.clave) {
             <tr>
               <td>
                 @if (fila.esPrimera) {
@@ -255,5 +258,14 @@
         </tbody>
       </table>
     </div>
+
+    <app-paginador
+      [total]="filas().length"
+      [pagina]="pagina()"
+      [tamano]="tamano()"
+      sustantivo="citas"
+      (paginaCambia)="pagina.set($event)"
+      (tamanoCambia)="cambiarTamano($event)"
+    />
   }
 }

@@ -9,7 +9,14 @@ export interface EmpresaSetup {
   ruc: string;
   direccion: string | null;
   telefono: string | null;
+  logo: string | null;
 }
+
+/**
+ * Datos de la clinica que pide el asistente inicial. El logo no forma parte de
+ * la configuracion inicial: se define despues, en el modulo de configuracion.
+ */
+export type EmpresaRegistro = Omit<EmpresaSetup, 'logo'>;
 
 export interface SucursalSetup {
   nombre: string;
@@ -25,7 +32,9 @@ export interface AdministradorSetup {
 
 export interface SetupRepository {
   obtenerEstado(): Promise<EstadoSetup>;
-  registrarEmpresa(datos: EmpresaSetup): Promise<boolean>;
+  obtenerEmpresa(): Promise<EmpresaSetup | null>;
+  registrarEmpresa(datos: EmpresaRegistro): Promise<boolean>;
+  actualizarEmpresa(datos: EmpresaSetup): Promise<boolean>;
   registrarSucursal(datos: SucursalSetup): Promise<boolean>;
   registrarAdministrador(datos: AdministradorSetup): Promise<boolean>;
 }

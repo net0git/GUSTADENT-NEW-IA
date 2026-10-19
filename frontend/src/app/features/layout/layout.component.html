@@ -1,8 +1,12 @@
 <div class="app-contenedor">
   <aside class="barra-lateral" [class.abierta]="menuAbierto()">
     <div class="marca">
+      @if (empresa()?.logo) {
+      <img [src]="empresa()!.logo" alt="Logo de la empresa" class="marca-logo" />
+      } @else {
       <span class="marca-icono"><i class="bi bi-grid-3x3-gap-fill"></i></span>
-      <span class="marca-nombre">GUSTADENT</span>
+      }
+      <span class="marca-nombre">{{ empresa()?.nombreEmpresa ?? 'GUSTADENT' }}</span>
     </div>
 
     <section class="acciones-rapidas">
@@ -23,36 +27,44 @@
       </button>
     </section>
 
-    @if (esAdministrador) {
-      <nav class="navegacion">
-        <p class="seccion-titulo">Administración</p>
-        <a class="enlace" routerLink="/atenciones" routerLinkActive="enlace-activo">
-          <i class="bi bi-clipboard2-pulse"></i>
-          <span>Atenciones</span>
-        </a>
-        <a class="enlace" routerLink="/pacientes" routerLinkActive="enlace-activo">
-          <i class="bi bi-people"></i>
-          <span>Pacientes</span>
-        </a>
+    <nav class="navegacion">
+      <p class="seccion-titulo">Administración</p>
+      <a class="enlace" routerLink="/atenciones" routerLinkActive="enlace-activo">
+        <i class="bi bi-clipboard2-pulse"></i>
+        <span>Atenciones</span>
+      </a>
+      <a class="enlace" routerLink="/pacientes" routerLinkActive="enlace-activo">
+        <i class="bi bi-people"></i>
+        <span>Pacientes</span>
+      </a>
+      @if (puedeVerCatalogos) {
         <a class="enlace" routerLink="/catalogos" routerLinkActive="enlace-activo">
           <i class="bi bi-building"></i>
           <span>Catálogos</span>
         </a>
+      }
+      @if (puedeVerUsuarios) {
         <a class="enlace" routerLink="/usuarios" routerLinkActive="enlace-activo">
           <i class="bi bi-person-badge"></i>
           <span>Usuarios</span>
         </a>
+      }
+      @if (esAdministrador) {
         <a class="enlace" routerLink="/reportes" routerLinkActive="enlace-activo">
           <i class="bi bi-graph-up-arrow"></i>
           <span>Reportes</span>
         </a>
-      </nav>
-    }
+        <a class="enlace" routerLink="/modulo-config" routerLinkActive="enlace-activo">
+          <i class="bi bi-gear"></i>
+          <span>Configuración</span>
+        </a>
+      }
+    </nav>
 
     <app-mini-calendario [fechaSeleccionada]="fechaActiva()" (cambioFecha)="filtrarPorFecha($event)" />
 
     <footer class="usuario-pie">
-      <a class="usuario-enlace" routerLink="/mi-cuenta" title="Cambiar contraseña">
+      <a class="usuario-enlace" routerLink="/mi-cuenta" title="Mi cuenta">
         <span class="avatar">{{ iniciales }}</span>
         <span class="usuario-datos">
           <strong>{{ usuario?.nombreCompleto }}</strong>
@@ -81,14 +93,6 @@
       </div>
 
       <div class="cabecera-acciones">
-        <button
-          type="button"
-          class="btn-icono btn-config"
-          title="Configuración"
-          aria-label="Configuración"
-        >
-          <i class="bi bi-gear"></i>
-        </button>
         <button
           type="button"
           class="btn-icono btn-salir"

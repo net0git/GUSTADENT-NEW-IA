@@ -18,10 +18,15 @@ export const usuariosRouter = Router();
 // al odontologo responsable.
 usuariosRouter.get('/odontologos', authenticate, listarOdontologos);
 
-usuariosRouter.use(authenticate, authorize('administrador'));
+usuariosRouter.use(authenticate);
 
-usuariosRouter.get('/', listarUsuarios);
-usuariosRouter.get('/:id', obtenerUsuario);
+// El administrador y recepcion consultan el personal; solo el administrador
+// puede crear, editar, resetear contrasenas o asignar sucursales.
+usuariosRouter.get('/', authorize('administrador', 'recepcion'), listarUsuarios);
+usuariosRouter.get('/:id', authorize('administrador', 'recepcion'), obtenerUsuario);
+
+usuariosRouter.use(authorize('administrador'));
+
 usuariosRouter.post('/', crearUsuario);
 usuariosRouter.put('/:id', actualizarUsuario);
 usuariosRouter.patch('/:id/estado', cambiarEstadoUsuario);

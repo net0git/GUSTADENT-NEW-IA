@@ -1,0 +1,104 @@
+$color-primario: #008b9f;
+$color-texto-suave: #64748b;
+$color-borde: #d7e7ee;
+
+/* Carril de paginación bajo las tablas. */
+.paginador {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-top: 0.85rem;
+}
+
+.paginador-info {
+  font-size: 0.78rem;
+  color: $color-texto-suave;
+}
+
+.paginador-acciones {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Selector de filas por página. */
+.paginador-tamano {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+}
+
+.tamano-select {
+  width: auto;
+  height: 1.6rem;
+  padding: 0 1.5rem 0 0.45rem;
+  border: 1px solid $color-borde;
+  border-radius: 0.45rem;
+  background-color: #fff;
+  color: #526b7a;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tamano-texto {
+  font-size: 0.75rem;
+  color: $color-texto-suave;
+  white-space: nowrap;
+}
+
+.paginador-controles {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pagina-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.55rem;
+  height: 1.55rem;
+  padding: 0 0.35rem;
+  border: 1px solid $color-borde;
+  border-radius: 0.4rem;
+  background: #fff;
+  color: #526b7a;
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+
+  &:hover:not(:disabled) {
+    border-color: $color-primario;
+    color: $color-primario;
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  &.activa {
+    background: $color-primario;
+    border-color: $color-primario;
+    color: #fff;
+  }
+}
+
+.pagina-puntos {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.2rem;
+  height: 1.55rem;
+  color: $color-texto-suave;
+  font-size: 0.72rem;
+}

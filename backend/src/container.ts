@@ -7,6 +7,8 @@ import { LogoutUseCase } from './modules/auth/application/use-cases/logout.use-c
 import { VerificarSesionUseCase } from './modules/auth/application/use-cases/verificar-sesion.use-case';
 import { PgSetupRepository } from './modules/setup/infrastructure/pg-setup.repository';
 import {
+  ActualizarEmpresaUseCase,
+  ObtenerEmpresaUseCase,
   ObtenerEstadoSetupUseCase,
   RegistrarAdministradorSetupUseCase,
   RegistrarEmpresaSetupUseCase,
@@ -79,6 +81,8 @@ const setupRepository = new PgSetupRepository();
 export const setupContainer = {
   obtenerEstado: new ObtenerEstadoSetupUseCase(setupRepository),
   registrarEmpresa: new RegistrarEmpresaSetupUseCase(setupRepository),
+  obtenerEmpresa: new ObtenerEmpresaUseCase(setupRepository),
+  actualizarEmpresa: new ActualizarEmpresaUseCase(setupRepository),
   registrarSucursal: new RegistrarSucursalSetupUseCase(setupRepository),
   registrarAdministrador: new RegistrarAdministradorSetupUseCase(setupRepository, passwordHasher),
 };
